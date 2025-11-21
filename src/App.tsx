@@ -1,6 +1,9 @@
-import DarkModeToggle from "./components/DarkModeToggle";
+import { DarkModeToggle } from "./components";
+import { useTheme } from "./theme";
 
 function App() {
+  const { isDarkMode, toggleTheme } = useTheme();
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800">
       {/* Header */}
@@ -15,7 +18,7 @@ function App() {
                 A showcase of Tailwind utility classes
               </p>
             </div>
-            <DarkModeToggle />
+            <DarkModeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           </div>
         </div>
       </header>

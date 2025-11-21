@@ -1,8 +1,11 @@
 import React from 'react';
-import { useTheme } from '../theme';
 
-const DarkModeToggle: React.FC = () => {
-  const { isDarkMode, toggleTheme } = useTheme();
+interface DarkModeToggleProps {
+  isDarkMode: boolean;
+  toggleTheme: () => void;
+}
+
+const DarkModeToggle: React.FC<DarkModeToggleProps> = ({ isDarkMode, toggleTheme }) => {
 
   return (
     <button
