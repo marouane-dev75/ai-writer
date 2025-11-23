@@ -1,5 +1,6 @@
 import { DarkModeToggle } from "./components";
 import { useTheme } from "./theme";
+import { Editor } from "./features/editor";
 
 function App() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -25,6 +26,11 @@ function App() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-12">
+        {/* Editor Section */}
+        <div className="mb-12">
+          <Editor placeholder="Start writing your content..." />
+        </div>
+
         {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {/* Card 1 */}
