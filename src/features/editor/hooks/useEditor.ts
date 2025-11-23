@@ -14,6 +14,22 @@ export const useEditor = (config: EditorConfig): UseEditorReturn => {
         holder: config.holder,
         placeholder: config.placeholder || 'Start writing your content...',
         minHeight: config.minHeight || 300,
+        data: {
+          blocks: [
+            {
+              type: 'header',
+              data: { text: 'Welcome', level: 2 },
+            },
+            {
+              type: 'paragraph',
+              data: { text: 'This is the first paragraph of default content.' },
+            },
+            {
+              type: 'paragraph',
+              data: { text: 'This is the second paragraph of default content.' },
+            },
+          ],
+        },
         tools: {
           header: {
             class: Header as unknown as ToolConstructable,
