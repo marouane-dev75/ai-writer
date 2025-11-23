@@ -1,4 +1,5 @@
 import { useEditor } from '../hooks/useEditor';
+import '../editor.css'
 
 interface EditorProps {
   placeholder?: string;
