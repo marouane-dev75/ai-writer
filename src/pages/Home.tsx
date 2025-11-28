@@ -1,13 +1,6 @@
-import { Editor } from "../features/editor";
-
 export const Home = () => {
   return (
     <>
-      {/* Editor Section */}
-      <div className="mb-12">
-        <Editor placeholder="Start writing your content..." />
-      </div>
-
       {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {/* Card 1 */}
