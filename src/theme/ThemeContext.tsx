@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import type { ThemeStorage } from './ThemeStorage.interface';
 import "./theme.css";
 
 interface ThemeContextType {
@@ -10,11 +11,31 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
   children: ReactNode;
+  storage: ThemeStorage; // Dependency injection (DIP)
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, storage }) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Load theme from storage on mount
+  useEffect(() => {
+    const loadTheme = async () => {
+      try {
+        const theme = await storage.loadTheme();
+        setIsDarkMode(theme.dark_mode);
+      } catch (error) {
+        console.error('Failed to load theme:', error);
+        // Use default value on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTheme();
+  }, [storage]);
+
+  // Apply theme to DOM
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -23,8 +44,17 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
   }, [isDarkMode]);
 
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
+  const toggleTheme = async () => {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    
+    try {
+      await storage.saveTheme({ dark_mode: newMode });
+    } catch (error) {
+      console.error('Failed to save theme:', error);
+      // Revert on error
+      setIsDarkMode(!newMode);
+    }
   };
 
   const value: ThemeContextType = {
@@ -32,12 +62,19 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     toggleTheme,
   };
 
+  // Don't render children until theme is loaded
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
 };
+
+ThemeProvider.displayName = 'ThemeProvider';
 
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
