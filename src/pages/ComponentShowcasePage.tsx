@@ -5,7 +5,7 @@ export const ComponentShowcasePage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {/* Card 1 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mb-4">
+          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-4">
             <span className="text-white text-xl font-bold">1</span>
           </div>
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
@@ -31,7 +31,7 @@ export const ComponentShowcasePage = () => {
 
         {/* Card 3 */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6 hover:shadow-xl transition-shadow duration-300">
-          <div className="w-12 h-12 bg-info rounded-full flex items-center justify-center mb-4">
+          <div className="w-12 h-12 bg-cyan-500 rounded-full flex items-center justify-center mb-4">
             <span className="text-white text-xl font-bold">3</span>
           </div>
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
@@ -100,22 +100,22 @@ export const ComponentShowcasePage = () => {
           Badges & Tags
         </h2>
         <div className="flex flex-wrap gap-3">
-          <span className="px-4 py-2 bg-primary-light text-primary-dark rounded-full text-sm font-semibold">
+          <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
             Primary Badge
           </span>
-          <span className="px-4 py-2 bg-success-light text-success-dark rounded-full text-sm font-semibold">
+          <span className="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
             Success Badge
           </span>
-          <span className="px-4 py-2 bg-warning-light text-warning-dark rounded-full text-sm font-semibold">
+          <span className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold">
             Warning Badge
           </span>
-          <span className="px-4 py-2 bg-danger-light text-danger-dark rounded-full text-sm font-semibold">
+          <span className="px-4 py-2 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
             Danger Badge
           </span>
-          <span className="px-4 py-2 bg-info-light text-info-dark rounded-full text-sm font-semibold">
+          <span className="px-4 py-2 bg-cyan-100 text-cyan-800 rounded-full text-sm font-semibold">
             Info Badge
           </span>
-          <span className="px-4 py-2 bg-secondary-light text-secondary-dark rounded-full text-sm font-semibold">
+          <span className="px-4 py-2 bg-gray-100 text-gray-800 rounded-full text-sm font-semibold">
             Secondary Badge
           </span>
         </div>

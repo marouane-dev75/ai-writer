@@ -38,40 +38,6 @@ export const SettingsPage = () => {
         </div>
       </div>
 
-      {/* Editor Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-          Editor Preferences
-        </h2>
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-semibold text-gray-800 dark:text-white mb-2">
-              Font Size
-            </label>
-            <select className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
-              <option>Small</option>
-              <option selected>Medium</option>
-              <option>Large</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-800 dark:text-white mb-2">
-              Auto-save
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="w-5 h-5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
-              />
-              <span className="text-sm text-gray-600 dark:text-gray-300">
-                Automatically save changes
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Application Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-8">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
@@ -88,32 +54,6 @@ export const SettingsPage = () => {
               <option>French</option>
               <option>German</option>
             </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-800 dark:text-white mb-2">
-              Notifications
-            </label>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  defaultChecked
-                  className="w-5 h-5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  Enable desktop notifications
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="w-5 h-5 text-blue-600 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-600 dark:text-gray-300">
-                  Enable sound alerts
-                </span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
