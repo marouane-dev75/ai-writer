@@ -1,6 +1,6 @@
 import { useTheme } from "../theme";
 
-export const Settings = () => {
+export const SettingsPage = () => {
   const { isDarkMode } = useTheme();
 
   return (

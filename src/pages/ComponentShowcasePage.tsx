@@ -1,4 +1,4 @@
-export const Home = () => {
+export const ComponentShowcasePage = () => {
   return (
     <>
       {/* Cards Grid */}
