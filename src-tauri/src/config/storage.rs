@@ -16,34 +16,65 @@ pub struct FileConfigStorage {
 
 impl FileConfigStorage {
     pub fn new(file_path: PathBuf) -> Result<Self, ConfigError> {
+        log::debug!("Initializing FileConfigStorage at path: {:?}", file_path);
+        
         // Ensure parent directory exists
         if let Some(parent) = file_path.parent() {
+            log::debug!("Creating config directory: {:?}", parent);
             fs::create_dir_all(parent).map_err(|e| {
+                log::error!("Failed to create config directory: {}", e);
                 ConfigError::IoError(format!("Failed to create config directory: {}", e))
             })?;
         }
 
+        log::info!("FileConfigStorage initialized successfully");
         Ok(Self { file_path })
     }
 }
 
 impl ConfigStorage for FileConfigStorage {
     fn load(&self) -> Result<AppConfig, ConfigError> {
+        log::debug!("Loading config from file: {:?}", self.file_path);
+        
         // If file doesn't exist, return default config
         if !self.file_path.exists() {
+            log::info!("Config file does not exist, using default configuration");
             return Ok(AppConfig::default());
         }
 
-        let contents = fs::read_to_string(&self.file_path)?;
-        let config: AppConfig = serde_json::from_str(&contents)?;
+        log::trace!("Reading config file contents");
+        let contents = fs::read_to_string(&self.file_path).map_err(|e| {
+            log::error!("Failed to read config file: {}", e);
+            ConfigError::from(e)
+        })?;
+        
+        log::trace!("Deserializing config from JSON");
+        let config: AppConfig = serde_json::from_str(&contents).map_err(|e| {
+            log::error!("Failed to deserialize config: {}", e);
+            ConfigError::from(e)
+        })?;
+        
+        log::debug!("Config loaded from file successfully");
         Ok(config)
     }
 
     fn save(&self, config: &AppConfig) -> Result<(), ConfigError> {
+        log::debug!("Saving config to file: {:?}", self.file_path);
+        
+        log::trace!("Serializing config to JSON");
         let json = serde_json::to_string_pretty(config)
-            .map_err(|e| ConfigError::SerializationError(e.to_string()))?;
+            .map_err(|e| {
+                log::error!("Failed to serialize config: {}", e);
+                ConfigError::SerializationError(e.to_string())
+            })?;
 
-        fs::write(&self.file_path, json)?;
+        log::trace!("Writing config to file");
+        fs::write(&self.file_path, json).map_err(|e| {
+            log::error!("Failed to write config file: {}", e);
+            ConfigError::from(e)
+        })?;
+        
+        log::debug!("Config saved to file successfully");
         Ok(())
     }
 }
