@@ -27,3 +27,19 @@ pub async fn get_all_logs(log_manager: State<'_, LogManager>) -> Result<LogRespo
         }
     }
 }
+
+#[tauri::command]
+pub async fn clear_logs(log_manager: State<'_, LogManager>) -> Result<(), String> {
+    log::debug!("clear_logs command invoked");
+    
+    match log_manager.clear_logs() {
+        Ok(_) => {
+            log::info!("clear_logs command completed successfully");
+            Ok(())
+        }
+        Err(e) => {
+            log::error!("clear_logs command failed: {}", e);
+            Err(e)
+        }
+    }
+}

@@ -53,9 +53,15 @@ export const useLogStream = (options: UseLogStreamOptions = {}): UseLogStreamRet
     }
   }, []);
 
-  const clearLogs = useCallback(() => {
-    setLogs([]);
-    setCursor(0);
+  const clearLogs = useCallback(async () => {
+    try {
+      await logService.clearLogs();
+      setLogs([]);
+      setCursor(0);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to clear logs');
+    }
   }, []);
 
   const toggleAutoScroll = useCallback(() => {

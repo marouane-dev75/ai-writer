@@ -15,4 +15,11 @@ export const logService = {
   async getAllLogs(): Promise<LogResponse> {
     return await invoke<LogResponse>('get_all_logs');
   },
+
+  /**
+   * Clear all logs
+   */
+  async clearLogs(): Promise<void> {
+    return await invoke<void>('clear_logs');
+  },
 };

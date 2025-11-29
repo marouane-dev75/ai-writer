@@ -3,7 +3,7 @@ mod commands;
 mod logging;
 
 use config::{ConfigManager, FileConfigStorage};
-use commands::{load_config, save_config, get_logs, get_all_logs};
+use commands::{load_config, save_config, get_logs, get_all_logs, clear_logs};
 use logging::{init_logger, LogManager};
 use tauri::Manager;
 
@@ -13,6 +13,7 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+// TODO clean up
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -24,7 +25,7 @@ pub fn run() {
             
             // Initialize logger
             let log_path = app_data_dir.join("logs.txt");
-            init_logger(log_path.clone(), log::Level::Trace)
+            let logger = init_logger(log_path.clone(), log::Level::Trace)
                 .expect("Failed to initialize logger");
             
             log::info!("Application started");
@@ -38,7 +39,7 @@ pub fn run() {
             let config_manager = ConfigManager::new(storage);
             
             // Create log manager
-            let log_manager = LogManager::new(log_path);
+            let log_manager = LogManager::new(logger);
             
             // Manage state
             app.manage(config_manager);
@@ -48,7 +49,7 @@ pub fn run() {
             
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, load_config, save_config, get_logs, get_all_logs])
+        .invoke_handler(tauri::generate_handler![greet, load_config, save_config, get_logs, get_all_logs, clear_logs])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
