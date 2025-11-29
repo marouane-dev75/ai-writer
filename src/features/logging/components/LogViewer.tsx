@@ -96,35 +96,23 @@ export const LogViewer: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '20px' }}>
-      <div style={{ marginBottom: '20px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '10px' }}>
+    <div className="flex flex-col h-full p-5">
+      <div className="mb-5">
+        <h1 className="text-2xl font-bold mb-2.5 text-gray-900 dark:text-gray-100">
           {t('logs.title', 'Application Logs')}
         </h1>
-        <p style={{ color: '#6b7280' }}>
+        <p className="text-gray-600 dark:text-gray-400">
           {t('logs.description', 'Real-time application logs with filtering and search')}
         </p>
       </div>
 
       {/* Controls */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '10px', 
-        marginBottom: '20px',
-        flexWrap: 'wrap',
-        alignItems: 'center'
-      }}>
+      <div className="flex gap-2.5 mb-5 flex-wrap items-center">
         {/* Level Filter */}
         <select
           value={selectedLevel}
           onChange={(e) => handleLevelChange(e.target.value as LogLevel)}
-          style={{
-            padding: '8px 12px',
-            borderRadius: '6px',
-            border: '1px solid #d1d5db',
-            backgroundColor: 'white',
-            cursor: 'pointer',
-          }}
+          className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           {LOG_LEVELS.map((level) => (
             <option key={level} value={level}>
@@ -139,27 +127,17 @@ export const LogViewer: React.FC = () => {
           placeholder={t('logs.search', 'Search logs...')}
           value={search}
           onChange={handleSearchChange}
-          style={{
-            flex: 1,
-            minWidth: '200px',
-            padding: '8px 12px',
-            borderRadius: '6px',
-            border: '1px solid #d1d5db',
-          }}
+          className="flex-1 min-w-[200px] px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         {/* Auto-scroll Toggle */}
         <button
           onClick={toggleAutoScroll}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid #d1d5db',
-            backgroundColor: autoScroll ? '#3b82f6' : 'white',
-            color: autoScroll ? 'white' : '#374151',
-            cursor: 'pointer',
-            fontWeight: '500',
-          }}
+          className={`px-4 py-2 rounded-md border font-medium cursor-pointer transition-colors ${
+            autoScroll
+              ? 'bg-blue-500 text-white border-blue-500 hover:bg-blue-600'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
         >
           {autoScroll ? '📌 ' : '📍 '}
           {t('logs.autoScroll', 'Auto-scroll')}
@@ -168,14 +146,7 @@ export const LogViewer: React.FC = () => {
         {/* Clear */}
         <button
           onClick={clearLogs}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid #d1d5db',
-            backgroundColor: 'white',
-            cursor: 'pointer',
-            fontWeight: '500',
-          }}
+          className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-pointer font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
           🗑️ {t('logs.clear', 'Clear')}
         </button>
@@ -183,14 +154,7 @@ export const LogViewer: React.FC = () => {
         {/* Copy */}
         <button
           onClick={handleCopyLogs}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid #d1d5db',
-            backgroundColor: 'white',
-            cursor: 'pointer',
-            fontWeight: '500',
-          }}
+          className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-pointer font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
           📋 {t('logs.copy', 'Copy')}
         </button>
@@ -198,41 +162,27 @@ export const LogViewer: React.FC = () => {
         {/* Download */}
         <button
           onClick={handleDownloadLogs}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '6px',
-            border: '1px solid #d1d5db',
-            backgroundColor: 'white',
-            cursor: 'pointer',
-            fontWeight: '500',
-          }}
+          className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-pointer font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
           💾 {t('logs.download', 'Download')}
         </button>
       </div>
 
       {/* Log Count */}
-      <div style={{ marginBottom: '10px', color: '#6b7280', fontSize: '14px' }}>
+      <div className="mb-2.5 text-gray-600 dark:text-gray-400 text-sm">
         {t('logs.showing', 'Showing')} {filteredLogs.length} {t('logs.entries', 'entries')}
       </div>
 
       {/* Error Display */}
       {error && (
-        <div style={{
-          padding: '12px',
-          marginBottom: '10px',
-          backgroundColor: '#fee2e2',
-          color: '#991b1b',
-          borderRadius: '6px',
-          border: '1px solid #fecaca',
-        }}>
+        <div className="p-3 mb-2.5 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-md border border-red-200 dark:border-red-800">
           {error}
         </div>
       )}
 
       {/* Loading State */}
       {isLoading && filteredLogs.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '40px', color: '#6b7280' }}>
+        <div className="text-center py-10 text-gray-600 dark:text-gray-400">
           {t('logs.loading', 'Loading logs...')}
         </div>
       )}
@@ -240,40 +190,27 @@ export const LogViewer: React.FC = () => {
       {/* Logs Container */}
       <div
         ref={logContainerRef}
-        style={{
-          flex: 1,
-          overflow: 'auto',
-          backgroundColor: '#1f2937',
-          borderRadius: '8px',
-          padding: '16px',
-          fontFamily: 'monospace',
-          fontSize: '13px',
-          lineHeight: '1.6',
-        }}
+        className="flex-1 overflow-auto bg-gray-900 dark:bg-gray-950 rounded-lg p-4 font-mono text-[13px] leading-relaxed"
       >
         {filteredLogs.length === 0 && !isLoading ? (
-          <div style={{ color: '#9ca3af', textAlign: 'center', padding: '20px' }}>
+          <div className="text-gray-400 dark:text-gray-500 text-center py-5">
             {t('logs.noLogs', 'No logs to display')}
           </div>
         ) : (
           filteredLogs.map((log, index) => (
             <div
               key={index}
-              style={{
-                marginBottom: '4px',
-                padding: '4px 0',
-                borderBottom: '1px solid #374151',
-              }}
+              className="mb-1 py-1 border-b border-gray-700 dark:border-gray-800"
             >
-              <span style={{ color: '#9ca3af' }}>[{formatTimestamp(log.timestamp)}]</span>
+              <span className="text-gray-400 dark:text-gray-500">[{formatTimestamp(log.timestamp)}]</span>
               {' '}
-              <span style={{ color: getLogLevelColor(log.level), fontWeight: 'bold' }}>
+              <span style={{ color: getLogLevelColor(log.level) }} className="font-bold">
                 [{log.level}]
               </span>
               {' '}
-              <span style={{ color: '#60a5fa' }}>[{log.target}]</span>
+              <span className="text-blue-400 dark:text-blue-500">[{log.target}]</span>
               {' '}
-              <span style={{ color: '#e5e7eb' }}>{log.message}</span>
+              <span className="text-gray-200 dark:text-gray-300">{log.message}</span>
             </div>
           ))
         )}

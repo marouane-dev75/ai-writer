@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppConfig {
     pub theme: ThemeConfig,
+    #[serde(default)]
     pub locale: LocaleConfig,
 }
 
