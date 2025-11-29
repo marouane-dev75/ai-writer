@@ -92,8 +92,8 @@ impl FileLogger {
         }
 
         let timestamp = parts[0].trim_start_matches('[').trim().to_string();
-        let level = parts[1].trim_start_matches('[').trim().to_string();
-        let target = parts[2].trim_start_matches('[').trim().to_string();
+        let level = parts[1].trim().trim_start_matches('[').trim().to_string();
+        let target = parts[2].trim().trim_start_matches('[').trim().to_string();
         let message = parts[3].trim().to_string();
 
         Some(LogEntry::new(timestamp, level, target, message))
