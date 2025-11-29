@@ -25,17 +25,6 @@ impl<S: ConfigStorage> ConfigManager<S> {
     pub fn save_config(&self, config: &AppConfig) -> Result<(), ConfigError> {
         self.storage.save(config)
     }
-
-    /// Update a specific part of the configuration
-    pub fn update_config<F>(&self, updater: F) -> Result<AppConfig, ConfigError>
-    where
-        F: FnOnce(&mut AppConfig),
-    {
-        let mut config = self.load_config()?;
-        updater(&mut config);
-        self.save_config(&config)?;
-        Ok(config)
-    }
 }
 
 impl<S: ConfigStorage> Clone for ConfigManager<S> {

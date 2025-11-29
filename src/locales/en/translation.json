@@ -1,0 +1,77 @@
+{
+  "app": {
+    "title": "AI Editor",
+    "subtitle": "A Tauri-powered application"
+  },
+  "nav": {
+    "home": "Home",
+    "components": "Components",
+    "settings": "Settings"
+  },
+  "home": {
+    "welcome": "Welcome to AI Editor",
+    "description": "Start editing with our powerful editor"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your application preferences",
+    "appearance": "Appearance",
+    "themeMode": "Theme Mode",
+    "currentTheme": "Current theme",
+    "dark": "Dark",
+    "light": "Light",
+    "useToggle": "Use the toggle in the navigation bar",
+    "application": "Application",
+    "language": "Language",
+    "actions": "Actions",
+    "saveSettings": "Save Settings",
+    "resetDefaults": "Reset to Defaults",
+    "clearData": "Clear All Data"
+  },
+  "showcase": {
+    "card1": {
+      "title": "Responsive Design",
+      "description": "Tailwind makes it easy to build responsive layouts with mobile-first utilities."
+    },
+    "card2": {
+      "title": "Utility-First",
+      "description": "Build complex components from a constrained set of primitive utilities."
+    },
+    "card3": {
+      "title": "Fast Development",
+      "description": "Rapidly build modern websites without leaving your HTML."
+    },
+    "buttons": {
+      "title": "Button Styles",
+      "primary": "Primary Button",
+      "secondary": "Secondary Button",
+      "success": "Success Button",
+      "danger": "Danger Button",
+      "outline": "Outline Button"
+    },
+    "typography": {
+      "title": "Typography Examples",
+      "extraLarge": "Extra Large Heading",
+      "large": "Large Heading",
+      "medium": "Medium Heading",
+      "regular": "Regular text with some content",
+      "small": "Small text for captions or footnotes",
+      "extraSmall": "Extra small text"
+    },
+    "badges": {
+      "title": "Badges & Tags",
+      "primary": "Primary Badge",
+      "success": "Success Badge",
+      "warning": "Warning Badge",
+      "danger": "Danger Badge",
+      "info": "Info Badge",
+      "secondary": "Secondary Badge"
+    }
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  }
+}

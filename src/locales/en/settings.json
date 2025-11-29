@@ -1,0 +1,18 @@
+{
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Configure your application preferences",
+    "appearance": "Appearance",
+    "themeMode": "Theme Mode",
+    "currentTheme": "Current theme",
+    "dark": "Dark",
+    "light": "Light",
+    "useToggle": "Use the toggle in the navigation bar",
+    "application": "Application",
+    "language": "Language",
+    "actions": "Actions",
+    "saveSettings": "Save Settings",
+    "resetDefaults": "Reset to Defaults",
+    "clearData": "Clear All Data"
+  }
+}

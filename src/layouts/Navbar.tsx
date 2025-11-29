@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router";
-import { DarkModeToggle } from "../components";
+import { DarkModeToggle, LanguageSelector } from "../components/ui";
 import { useTheme } from "../theme";
+import { useTranslation } from "../locales/contexts";
 
 export const Navbar = () => {
   const location = useLocation();
   const { isDarkMode, toggleTheme } = useTheme();
+  const { t } = useTranslation();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -14,10 +16,10 @@ export const Navbar = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              AI Editor
+              {t('app.title')}
             </h1>
             <p className="text-gray-600 dark:text-gray-300 mt-2">
-              A Tauri-powered application
+              {t('app.subtitle')}
             </p>
           </div>
           
@@ -30,7 +32,7 @@ export const Navbar = () => {
                   : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
-              Home
+              {t('nav.home')}
             </Link>
             <Link
               to="/showcase"
@@ -40,7 +42,7 @@ export const Navbar = () => {
                   : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
-              Components
+              {t('nav.components')}
             </Link>
             <Link
               to="/settings"
@@ -50,8 +52,9 @@ export const Navbar = () => {
                   : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
               }`}
             >
-              Settings
+              {t('nav.settings')}
             </Link>
+            <LanguageSelector />
             <DarkModeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           </nav>
         </div>
