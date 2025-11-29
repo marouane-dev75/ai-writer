@@ -3,8 +3,13 @@
 
 export interface AppConfig {
   theme: ThemeConfig;
+  locale: LocaleConfig;
 }
 
 export interface ThemeConfig {
   dark_mode: boolean;
+}
+
+export interface LocaleConfig {
+  language: string;
 }

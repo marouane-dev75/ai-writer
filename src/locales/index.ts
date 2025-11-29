@@ -16,7 +16,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: localStorage.getItem('language') || 'en',
+    lng: 'en', // Default language, will be updated by I18nProvider from backend
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
