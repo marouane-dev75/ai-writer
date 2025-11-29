@@ -1,0 +1,15 @@
+{
+  "logs": {
+    "title": "Application Logs",
+    "description": "Real-time application logs with filtering and search",
+    "search": "Search logs...",
+    "autoScroll": "Auto-scroll",
+    "clear": "Clear",
+    "copy": "Copy",
+    "download": "Download",
+    "showing": "Showing",
+    "entries": "entries",
+    "loading": "Loading logs...",
+    "noLogs": "No logs to display"
+  }
+}

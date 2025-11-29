@@ -1,0 +1,15 @@
+{
+  "logs": {
+    "title": "Journaux de l'application",
+    "description": "Journaux de l'application en temps réel avec filtrage et recherche",
+    "search": "Rechercher dans les journaux...",
+    "autoScroll": "Défilement auto",
+    "clear": "Effacer",
+    "copy": "Copier",
+    "download": "Télécharger",
+    "showing": "Affichage de",
+    "entries": "entrées",
+    "loading": "Chargement des journaux...",
+    "noLogs": "Aucun journal à afficher"
+  }
+}

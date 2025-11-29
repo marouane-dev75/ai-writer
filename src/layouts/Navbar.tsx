@@ -54,6 +54,16 @@ export const Navbar = () => {
             >
               {t('nav.settings')}
             </Link>
+            <Link
+              to="/logs"
+              className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
+                isActive("/logs")
+                  ? "bg-blue-600 text-white"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              }`}
+            >
+              {t('nav.logs')}
+            </Link>
             <LanguageSelector />
             <DarkModeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           </nav>

@@ -4,6 +4,7 @@ import home from './home.json';
 import settings from './settings.json';
 import showcase from './showcase.json';
 import common from './common.json';
+import logs from './logs.json';
 
 export default {
   ...app,
@@ -12,4 +13,5 @@ export default {
   ...settings,
   ...showcase,
   ...common,
+  ...logs,
 };

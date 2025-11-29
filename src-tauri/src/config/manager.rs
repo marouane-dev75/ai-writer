@@ -11,6 +11,7 @@ pub struct ConfigManager<S: ConfigStorage> {
 
 impl<S: ConfigStorage> ConfigManager<S> {
     pub fn new(storage: S) -> Self {
+        log::debug!("Creating new ConfigManager instance");
         Self {
             storage: Arc::new(storage),
         }
@@ -18,12 +19,34 @@ impl<S: ConfigStorage> ConfigManager<S> {
 
     /// Load configuration from storage
     pub fn load_config(&self) -> Result<AppConfig, ConfigError> {
-        self.storage.load()
+        log::debug!("Loading configuration");
+        match self.storage.load() {
+            Ok(config) => {
+                log::info!("Configuration loaded successfully");
+                log::trace!("Loaded config: {:?}", config);
+                Ok(config)
+            }
+            Err(e) => {
+                log::error!("Failed to load configuration: {}", e);
+                Err(e)
+            }
+        }
     }
 
     /// Save configuration to storage
     pub fn save_config(&self, config: &AppConfig) -> Result<(), ConfigError> {
-        self.storage.save(config)
+        log::debug!("Saving configuration");
+        log::trace!("Config to save: {:?}", config);
+        match self.storage.save(config) {
+            Ok(_) => {
+                log::info!("Configuration saved successfully");
+                Ok(())
+            }
+            Err(e) => {
+                log::error!("Failed to save configuration: {}", e);
+                Err(e)
+            }
+        }
     }
 }
 
