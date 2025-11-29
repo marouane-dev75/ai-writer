@@ -1,0 +1,42 @@
+{
+  "showcase": {
+    "card1": {
+      "title": "Responsive Design",
+      "description": "Tailwind makes it easy to build responsive layouts with mobile-first utilities."
+    },
+    "card2": {
+      "title": "Utility-First",
+      "description": "Build complex components from a constrained set of primitive utilities."
+    },
+    "card3": {
+      "title": "Fast Development",
+      "description": "Rapidly build modern websites without leaving your HTML."
+    },
+    "buttons": {
+      "title": "Button Styles",
+      "primary": "Primary Button",
+      "secondary": "Secondary Button",
+      "success": "Success Button",
+      "danger": "Danger Button",
+      "outline": "Outline Button"
+    },
+    "typography": {
+      "title": "Typography Examples",
+      "extraLarge": "Extra Large Heading",
+      "large": "Large Heading",
+      "medium": "Medium Heading",
+      "regular": "Regular text with some content",
+      "small": "Small text for captions or footnotes",
+      "extraSmall": "Extra small text"
+    },
+    "badges": {
+      "title": "Badges & Tags",
+      "primary": "Primary Badge",
+      "success": "Success Badge",
+      "warning": "Warning Badge",
+      "danger": "Danger Badge",
+      "info": "Info Badge",
+      "secondary": "Secondary Badge"
+    }
+  }
+}

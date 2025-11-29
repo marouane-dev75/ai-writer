@@ -3,12 +3,16 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import App from "./App";
 import { ThemeProvider, configThemeStorage } from "./theme";
+import { I18nProvider } from "./locales/contexts";
+import "./locales";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider storage={configThemeStorage}>
-        <App />
+        <I18nProvider>
+          <App />
+        </I18nProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
