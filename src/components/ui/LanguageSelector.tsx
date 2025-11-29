@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { IoChevronDown, IoCheckmark } from 'react-icons/io5';
 import { useTranslation } from '../../locales/contexts';
 
 interface Language {
@@ -67,17 +68,11 @@ export const LanguageSelector: React.FC = () => {
         <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
           {currentLanguage.label}
         </span>
-        <svg
+        <IoChevronDown
           className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        />
       </button>
 
       {isOpen && (
@@ -103,18 +98,7 @@ export const LanguageSelector: React.FC = () => {
                 </span>
                 <span className="font-medium">{lang.label}</span>
                 {lang.code === language && (
-                  <svg
-                    className="ml-auto w-4 h-4 text-blue-600 dark:text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <IoCheckmark className="ml-auto w-4 h-4 text-blue-600 dark:text-blue-400" />
                 )}
               </button>
             ))}
