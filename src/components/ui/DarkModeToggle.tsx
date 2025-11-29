@@ -6,7 +6,7 @@ interface DarkModeToggleProps {
   toggleTheme: () => void;
 }
 
-const DarkModeToggle: React.FC<DarkModeToggleProps> = ({ isDarkMode, toggleTheme }) => {
+export const DarkModeToggle: React.FC<DarkModeToggleProps> = ({ isDarkMode, toggleTheme }) => {
 
   return (
     <button
@@ -23,5 +23,3 @@ const DarkModeToggle: React.FC<DarkModeToggleProps> = ({ isDarkMode, toggleTheme
     </button>
   );
 };
-
-export default DarkModeToggle;

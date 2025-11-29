@@ -1,14 +1,10 @@
-import { Link, useLocation } from "react-router";
-import { DarkModeToggle, LanguageSelector } from "../components/ui";
+import { DarkModeToggle, LanguageSelector, NavLink } from "../components/ui";
 import { useTheme } from "../theme";
 import { useTranslation } from "../locales/contexts";
 
 export const Navbar = () => {
-  const location = useLocation();
   const { isDarkMode, toggleTheme } = useTheme();
   const { t } = useTranslation();
-
-  const isActive = (path: string) => location.pathname === path;
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-md">
@@ -24,46 +20,10 @@ export const Navbar = () => {
           </div>
           
           <nav className="flex items-center gap-6">
-            <Link
-              to="/"
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
-                isActive("/")
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-            >
-              {t('nav.home')}
-            </Link>
-            <Link
-              to="/showcase"
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
-                isActive("/showcase")
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-            >
-              {t('nav.components')}
-            </Link>
-            <Link
-              to="/settings"
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
-                isActive("/settings")
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-            >
-              {t('nav.settings')}
-            </Link>
-            <Link
-              to="/logs"
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors duration-200 ${
-                isActive("/logs")
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-            >
-              {t('nav.logs')}
-            </Link>
+            <NavLink to="/">{t('nav.home')}</NavLink>
+            <NavLink to="/showcase">{t('nav.components')}</NavLink>
+            <NavLink to="/settings">{t('nav.settings')}</NavLink>
+            <NavLink to="/logs">{t('nav.logs')}</NavLink>
             <LanguageSelector />
             <DarkModeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           </nav>

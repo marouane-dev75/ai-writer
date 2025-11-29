@@ -1,2 +1,3 @@
-export { default as DarkModeToggle } from './DarkModeToggle';
+export { DarkModeToggle } from './DarkModeToggle';
 export { LanguageSelector } from './LanguageSelector';
+export { NavLink } from './NavLink';
