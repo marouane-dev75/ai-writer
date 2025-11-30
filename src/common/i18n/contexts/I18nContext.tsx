@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useContext, useCallback, useEffect } from 'react';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
 import { configLocaleStorage } from '../ConfigLocaleStorage';
 
@@ -16,7 +16,6 @@ interface I18nProviderProps {
 
 export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   const { t, i18n } = useI18nTranslation();
-  const [language, setCurrentLanguage] = useState(i18n.language);
 
   // Load saved language on mount
   useEffect(() => {
@@ -25,15 +24,14 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
       .catch(error => console.error('Failed to load language:', error));
   }, [i18n]);
 
-  const changeLanguage = useCallback(async (lng: string) => {
-    await i18n.changeLanguage(lng);
-    await configLocaleStorage.saveLocale({ language: lng })
+  const changeLanguage = useCallback((lng: string) => {
+    i18n.changeLanguage(lng);
+    configLocaleStorage.saveLocale({ language: lng })
       .catch(error => console.error('Failed to save language:', error));
-    setCurrentLanguage(lng)
   }, [i18n]);
 
   const value = {
-    language,
+    language: i18n.language,
     changeLanguage,
     t,
   };
