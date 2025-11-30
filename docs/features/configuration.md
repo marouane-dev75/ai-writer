@@ -2,103 +2,41 @@
 
 ## Overview
 
-The Configuration Management System provides persistent storage for application settings using a Rust backend with JSON file storage.
+Persistent storage for application settings using a Rust backend with JSON file storage. Supports theme and locale configurations with a clean separation between frontend and backend layers.
 
 ## Architecture
 
-```mermaid
-graph TB
-    subgraph "Frontend (TypeScript)"
-        A[ThemeContext] -->|uses| B[ThemeStorage Interface]
-        B -->|implemented by| C[ConfigThemeStorage]
-        C -->|uses| D[ConfigService Interface]
-        D -->|implemented by| E[TauriConfigService]
-        E -->|invokes| F[Tauri Commands]
-    end
-    
-    subgraph "Backend (Rust)"
-        F -->|calls| G[config_commands]
-        G -->|uses| H[ConfigManager]
-        H -->|depends on| I[ConfigStorage Trait]
-        I -->|implemented by| J[FileConfigStorage]
-        J -->|reads/writes| K[config.json]
-    end
-    
-    style B fill:#e1f5ff
-    style D fill:#e1f5ff
-    style I fill:#ffe1e1
-```
-
-## Key Components
-
 ### Backend (Rust)
 
-#### 1. Configuration Types ([`src-tauri/src/config/types.rs`](../../src-tauri/src/config/types.rs))
-
-Defines the configuration data structures:
-
+**Configuration Types** ([`src-tauri/src/config/types.rs`](../../src-tauri/src/config/types.rs))
 ```rust
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppConfig {
     pub theme: ThemeConfig,
+    pub locale: LocaleConfig,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ThemeConfig {
     pub dark_mode: bool,
 }
-```
 
-**Features:**
-- Serializable to/from JSON
-- Default implementations for initial state
-- Extensible for future configuration options
-
-#### 2. Configuration Storage Trait ([`src-tauri/src/config/storage.rs`](../../src-tauri/src/config/storage.rs))
-
-Defines the abstraction for configuration persistence:
-
-```rust
-pub trait ConfigStorage: Send + Sync {
-    fn load(&self) -> Result<AppConfig, ConfigError>;
-    fn save(&self, config: &AppConfig) -> Result<(), ConfigError>;
+pub struct LocaleConfig {
+    pub language: String,
 }
 ```
 
-**Implementation: FileConfigStorage**
-- Stores configuration in JSON format
-- Automatically creates parent directories
-- Returns default config if file doesn't exist
+**Storage Trait** ([`src-tauri/src/config/storage.rs`](../../src-tauri/src/config/storage.rs))
+- `ConfigStorage` trait defines persistence interface
+- `FileConfigStorage` implements JSON file storage
+- Location: `{APP_DATA_DIR}/config.json`
 - Thread-safe (Send + Sync)
 
-**File Location:**
-- Platform-specific app data directory
-- Path: `{APP_DATA_DIR}/config.json`
-
-#### 3. Configuration Manager ([`src-tauri/src/config/manager.rs`](../../src-tauri/src/config/manager.rs))
-
-Manages configuration business logic:
-
-```rust
-pub struct ConfigManager<S: ConfigStorage> {
-    storage: Arc<S>,
-}
-```
-
-**Methods:**
-- [`load_config()`](../../src-tauri/src/config/manager.rs:20) - Load configuration from storage
-- [`save_config()`](../../src-tauri/src/config/manager.rs:25) - Save configuration to storage
-- [`update_config()`](../../src-tauri/src/config/manager.rs:30) - Atomic update with closure
-
-**Design Benefits:**
+**Configuration Manager** ([`src-tauri/src/config/manager.rs`](../../src-tauri/src/config/manager.rs))
+- `load_config()` - Load from storage
+- `save_config()` - Save to storage
+- `update_config()` - Atomic update with closure
 - Generic over storage implementation (DIP)
-- Thread-safe with Arc
-- Clonable for sharing across threads
 
-#### 4. Error Handling ([`src-tauri/src/config/error.rs`](../../src-tauri/src/config/error.rs))
-
-Comprehensive error types:
-
+**Error Handling** ([`src-tauri/src/config/error.rs`](../../src-tauri/src/config/error.rs))
 ```rust
 pub enum ConfigError {
     IoError(String),
@@ -108,146 +46,71 @@ pub enum ConfigError {
 }
 ```
 
-**Features:**
-- Implements Display and Error traits
-- Automatic conversion from std::io::Error
-- Automatic conversion from serde_json::Error
-- Serializable for frontend communication
-
-#### 5. Tauri Commands ([`src-tauri/src/commands/config_commands.rs`](../../src-tauri/src/commands/config_commands.rs))
-
-Exposes configuration operations to frontend:
-
+**Tauri Commands** ([`src-tauri/src/commands/config_commands.rs`](../../src-tauri/src/commands/config_commands.rs))
 ```rust
 #[tauri::command]
-pub async fn load_config(
-    manager: State<'_, ConfigManager<FileConfigStorage>>,
-) -> Result<AppConfig, String>
+pub async fn load_config(manager: State<'_, ConfigManager<FileConfigStorage>>) 
+    -> Result<AppConfig, String>
 
 #[tauri::command]
-pub async fn save_config(
-    config: AppConfig,
-    manager: State<'_, ConfigManager<FileConfigStorage>>,
-) -> Result<(), String>
+pub async fn save_config(config: AppConfig, manager: State<'_, ConfigManager<FileConfigStorage>>) 
+    -> Result<(), String>
 ```
 
 ### Frontend (TypeScript)
 
-#### 1. Configuration Service ([`src/features/configuration/services/config.service.ts`](../../src/features/configuration/services/config.service.ts))
-
-Provides abstraction for configuration operations:
-
+**Configuration Service** ([`src/features/configuration/services/config.service.ts`](../../src/features/configuration/services/config.service.ts))
 ```typescript
 export interface ConfigService {
   loadConfig(): Promise<AppConfig>;
   saveConfig(config: AppConfig): Promise<void>;
 }
+
+// Singleton instance
+export const configService: ConfigService = new TauriConfigService();
 ```
 
-**Implementation: TauriConfigService**
-- Invokes Rust backend commands
-- Type-safe with TypeScript interfaces
-- Singleton pattern for global access
-
-#### 2. Configuration Types ([`src/features/configuration/types.ts`](../../src/features/configuration/types.ts))
-
-TypeScript types matching Rust structures:
-
+**Configuration Types** ([`src/features/configuration/types.ts`](../../src/features/configuration/types.ts))
 ```typescript
 export interface AppConfig {
   theme: ThemeConfig;
-}
-
-export interface ThemeConfig {
-  dark_mode: boolean;
+  locale: LocaleConfig;
 }
 ```
 
-**Note:** These types should be auto-generated from Rust using `tauri bindings` command in production.
-
-#### 3. Theme Storage Bridge ([`src/theme/ConfigThemeStorage.ts`](../../src/theme/ConfigThemeStorage.ts))
-
-Bridges theme system with configuration service:
-
-```typescript
-export class ConfigThemeStorage implements ThemeStorage {
-  async loadTheme(): Promise<ThemeConfig>
-  async saveTheme(theme: ThemeConfig): Promise<void>
-}
-```
-
-**Responsibilities:**
-- Implements ThemeStorage interface
-- Delegates to ConfigService
-- Handles theme-specific configuration
+**Storage Bridges**
+- [`ConfigThemeStorage`](../../src/features/theme/service/ConfigThemeStorage.ts) - Bridges theme system with config service
+- [`ConfigLocaleStorage`](../../src/features/i18n/ConfigLocaleStorage.ts) - Bridges i18n system with config service
 
 ## Data Flow
 
 ### Loading Configuration
-
-```mermaid
-sequenceDiagram
-    participant App
-    participant ThemeProvider
-    participant ConfigThemeStorage
-    participant ConfigService
-    participant Tauri
-    participant ConfigManager
-    participant FileStorage
-    
-    App->>ThemeProvider: Mount
-    ThemeProvider->>ConfigThemeStorage: loadTheme()
-    ConfigThemeStorage->>ConfigService: loadConfig()
-    ConfigService->>Tauri: invoke('load_config')
-    Tauri->>ConfigManager: load_config()
-    ConfigManager->>FileStorage: load()
-    FileStorage-->>ConfigManager: AppConfig
-    ConfigManager-->>Tauri: AppConfig
-    Tauri-->>ConfigService: AppConfig
-    ConfigService-->>ConfigThemeStorage: AppConfig
-    ConfigThemeStorage-->>ThemeProvider: ThemeConfig
-    ThemeProvider->>ThemeProvider: Apply theme
-```
+1. Feature provider (Theme/I18n) mounts
+2. Storage bridge calls `configService.loadConfig()`
+3. Service invokes Tauri `load_config` command
+4. ConfigManager loads from FileStorage
+5. Configuration returned to frontend
+6. Feature applies settings
 
 ### Saving Configuration
+1. User changes setting (theme/language)
+2. Storage bridge loads current config
+3. Updates relevant section (theme/locale)
+4. Calls `configService.saveConfig(config)`
+5. Service invokes Tauri `save_config` command
+6. ConfigManager persists to FileStorage
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant ThemeProvider
-    participant ConfigThemeStorage
-    participant ConfigService
-    participant Tauri
-    participant ConfigManager
-    participant FileStorage
-    
-    User->>ThemeProvider: Toggle theme
-    ThemeProvider->>ConfigThemeStorage: saveTheme(theme)
-    ConfigThemeStorage->>ConfigService: loadConfig()
-    ConfigService-->>ConfigThemeStorage: AppConfig
-    ConfigThemeStorage->>ConfigThemeStorage: Update theme
-    ConfigThemeStorage->>ConfigService: saveConfig(config)
-    ConfigService->>Tauri: invoke('save_config', config)
-    Tauri->>ConfigManager: save_config(config)
-    ConfigManager->>FileStorage: save(config)
-    FileStorage->>FileStorage: Write JSON file
-    FileStorage-->>ConfigManager: Ok()
-    ConfigManager-->>Tauri: Ok()
-    Tauri-->>ConfigService: Ok()
-    ConfigService-->>ConfigThemeStorage: Ok()
-    ConfigThemeStorage-->>ThemeProvider: Ok()
-```
+## Usage
 
-## Usage Examples
+### Adding New Configuration Fields
 
-### Backend: Adding New Configuration Fields
-
-1. **Update types** in [`src-tauri/src/config/types.rs`](../../src-tauri/src/config/types.rs):
-
+**1. Update Rust types:**
 ```rust
+// src-tauri/src/config/types.rs
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppConfig {
     pub theme: ThemeConfig,
+    pub locale: LocaleConfig,
     pub editor: EditorConfig,  // New field
 }
 
@@ -267,15 +130,42 @@ impl Default for EditorConfig {
 }
 ```
 
-2. **Update default implementation**:
+**2. Update TypeScript types:**
+```typescript
+// src/features/configuration/types.ts
+export interface AppConfig {
+  theme: ThemeConfig;
+  locale: LocaleConfig;
+  editor: EditorConfig;
+}
 
-```rust
-impl Default for AppConfig {
-    fn default() -> Self {
-        Self {
-            theme: ThemeConfig::default(),
-            editor: EditorConfig::default(),
-        }
-    }
+export interface EditorConfig {
+  auto_save: boolean;
+  font_size: number;
 }
 ```
+
+**3. Create storage bridge (if needed):**
+```typescript
+// src/features/editor/services/ConfigEditorStorage.ts
+export class ConfigEditorStorage implements EditorStorage {
+  async loadEditor(): Promise<EditorConfig> {
+    const config = await configService.loadConfig();
+    return config.editor;
+  }
+
+  async saveEditor(editor: EditorConfig): Promise<void> {
+    const config = await configService.loadConfig();
+    config.editor = editor;
+    await configService.saveConfig(config);
+  }
+}
+```
+
+### Best Practices
+
+- Use `configService` singleton for all config operations
+- Create storage bridges to isolate feature-specific config access
+- Follow DIP: features depend on storage interfaces, not concrete implementations
+- Generate TypeScript types from Rust using `cargo tauri dev` for type safety
+- Handle errors appropriately in both frontend and backend layers
