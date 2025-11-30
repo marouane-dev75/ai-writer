@@ -1,4 +1,4 @@
-import { NavLink } from "../../../common/ui";
+import { NavLink } from "@/common/ui";
 import { useTheme } from "..";
 import { useTranslation } from "../../i18n/contexts";
 import { LanguageSelector } from "../../i18n/LanguageSelector";
