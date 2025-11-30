@@ -37,6 +37,14 @@
       "danger": "Danger Badge",
       "info": "Info Badge",
       "secondary": "Secondary Badge"
+    },
+    "loading": {
+      "title": "Loading Spinners",
+      "description": "Dark mode friendly loading indicators with different sizes",
+      "small": "Small spinner",
+      "medium": "Medium spinner",
+      "large": "Large spinner",
+      "withText": "Loading with text..."
     }
   }
 }

@@ -3,6 +3,9 @@
     "save": "Save",
     "cancel": "Cancel",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "loading": "Loading...",
+    "loadingLanguage": "Loading language...",
+    "loadingTheme": "Loading theme..."
   }
 }

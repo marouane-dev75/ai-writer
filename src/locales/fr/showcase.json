@@ -37,6 +37,14 @@
       "danger": "Badge Danger",
       "info": "Badge Info",
       "secondary": "Badge Secondaire"
+    },
+    "loading": {
+      "title": "Indicateurs de chargement",
+      "description": "Indicateurs de chargement compatibles avec le mode sombre avec différentes tailles",
+      "small": "Petit spinner",
+      "medium": "Spinner moyen",
+      "large": "Grand spinner",
+      "withText": "Chargement avec texte..."
     }
   }
 }

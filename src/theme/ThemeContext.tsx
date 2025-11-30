@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { ThemeStorage } from './ThemeStorage.interface';
 import "./theme.css";
+import { LoadingSpinner } from '../components/ui';
 
 interface ThemeContextType {
   isDarkMode: boolean;
@@ -64,7 +65,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, storage 
 
   // Don't render children until theme is loaded
   if (isLoading) {
-    return null;
+    return <LoadingSpinner text="Loading theme..." />;
   }
 
   return (

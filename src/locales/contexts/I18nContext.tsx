@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
 import { configLocaleStorage } from '../ConfigLocaleStorage';
+import { LoadingSpinner } from '../../components/ui';
 
 interface I18nContextType {
   language: string;
@@ -51,7 +52,7 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
 
   // Don't render children until language is loaded from backend
   if (!isInitialized) {
-    return null;
+    return <LoadingSpinner text="Loading language..." />;
   }
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;

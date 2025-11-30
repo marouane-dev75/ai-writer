@@ -3,6 +3,9 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "edit": "Modifier",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "loading": "Chargement...",
+    "loadingLanguage": "Chargement de la langue...",
+    "loadingTheme": "Chargement du thème..."
   }
 }
