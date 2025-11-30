@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import App from "./App";
-import { ThemeProvider, configThemeStorage } from "./features/theme";
+import { ThemeProvider, configThemeStorage } from "@/common/theme";
 import { I18nProvider } from "@/common/i18n";
 import "@/common/i18n";
 
