@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
 import { configLocaleStorage } from '../ConfigLocaleStorage';
-import { LoadingSpinner } from '../../../common/ui';
 
 interface I18nContextType {
   language: string;
@@ -17,43 +16,27 @@ interface I18nProviderProps {
 
 export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
   const { t, i18n } = useI18nTranslation();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [language, setCurrentLanguage] = useState(i18n.language);
 
-  // Load language from backend on mount
+  // Load saved language on mount
   useEffect(() => {
-    const loadLanguage = async () => {
-      try {
-        const locale = await configLocaleStorage.loadLocale();
-        await i18n.changeLanguage(locale.language);
-      } catch (error) {
-        console.error('Failed to load language from backend:', error);
-      } finally {
-        setIsInitialized(true);
-      }
-    };
-
-    loadLanguage();
+    configLocaleStorage.loadLocale()
+      .then(locale => i18n.changeLanguage(locale.language))
+      .catch(error => console.error('Failed to load language:', error));
   }, [i18n]);
 
   const changeLanguage = useCallback(async (lng: string) => {
-    try {
-      await i18n.changeLanguage(lng);
-      await configLocaleStorage.saveLocale({ language: lng });
-    } catch (error) {
-      console.error('Failed to save language to backend:', error);
-    }
+    await i18n.changeLanguage(lng);
+    await configLocaleStorage.saveLocale({ language: lng })
+      .catch(error => console.error('Failed to save language:', error));
+    setCurrentLanguage(lng)
   }, [i18n]);
 
   const value = {
-    language: i18n.language,
+    language,
     changeLanguage,
     t,
   };
-
-  // Don't render children until language is loaded from backend
-  if (!isInitialized) {
-    return <LoadingSpinner text="Loading language..." />;
-  }
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 };
