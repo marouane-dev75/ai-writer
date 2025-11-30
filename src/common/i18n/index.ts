@@ -33,6 +33,3 @@ export { LanguageSelector } from './ui/LanguageSelector';
 
 // Export interfaces (for DIP compliance)
 export type { LocaleStorage } from './LocaleStorage.interface';
-
-// Export concrete implementation (singleton)
-export { configLocaleStorage } from './ConfigLocaleStorage';

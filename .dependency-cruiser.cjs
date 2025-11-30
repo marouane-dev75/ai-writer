@@ -207,7 +207,7 @@ module.exports = {
     /* Which modules to exclude */
     exclude : {
       /* path: an array of regular expressions in strings to match against */
-      path: ['node_modules', 'src/common/i18n'],
+      path: ['node_modules', 'src/common'],
     },
 
     /* Which modules to exclusively include (array of regular expressions in strings)

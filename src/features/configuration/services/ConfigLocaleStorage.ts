@@ -1,6 +1,6 @@
-import { LocaleConfig } from '@/features/configuration/types';
-import type { LocaleStorage } from './LocaleStorage.interface';
-import { configService } from '@/features/configuration';
+import { configService } from './config.service';
+import type { LocaleStorage } from '@/common/i18n';
+import type { LocaleConfig } from '../types';
 
 /**
  * Implementation of LocaleStorage using the configuration service
