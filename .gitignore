@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Dependency cruiser output
+dependency-graph.svg
+dependency-graph.png
+dependency-graph.dot
