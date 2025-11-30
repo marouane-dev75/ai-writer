@@ -1,4 +1,4 @@
-/// <reference types="./wdyr.d.ts" />
+/// <reference types="./wdyr" />
 
 import React from 'react';
 
