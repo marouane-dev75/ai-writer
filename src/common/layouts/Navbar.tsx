@@ -1,8 +1,7 @@
 import { NavLink } from "@/common/ui";
-import { useTheme } from "..";
-import { useTranslation } from "../../i18n/contexts";
-import { LanguageSelector } from "../../i18n/ui/LanguageSelector";
+import { useTranslation, LanguageSelector } from "@/common/i18n";
 import { DarkModeToggle } from "./DarkModeToggle";
+import { useTheme } from "../theme";
 
 export const Navbar = () => {
   const { isDarkMode, toggleTheme } = useTheme();

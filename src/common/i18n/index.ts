@@ -24,3 +24,12 @@ i18n
   });
 
 export default i18n;
+
+// Export context and hooks
+export { I18nProvider, useTranslation } from './contexts';
+
+// Export UI components
+export { LanguageSelector } from './ui/LanguageSelector';
+
+// Export interfaces (for DIP compliance)
+export type { LocaleStorage } from './LocaleStorage.interface';

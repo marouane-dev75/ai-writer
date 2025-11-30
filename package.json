@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "depcruise": "depcruise src",
+    "depcruise:graph": "depcruise src --output-type dot | dot -T svg > dependency-graph.svg",
+    "depcruise:graph:png": "depcruise src --output-type dot | dot -T png > dependency-graph.png"
   },
   "dependencies": {
     "@editorjs/editorjs": "^2.31.0",
@@ -29,6 +32,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
+    "dependency-cruiser": "^17.3.2",
     "typescript": "~5.8.3",
     "vite": "^7.0.4"
   }

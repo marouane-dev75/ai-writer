@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useLogStream } from '../hooks/useLogStream';
 import type { LogLevel } from '../types';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "@/common/i18n";
 
 const LOG_LEVELS: LogLevel[] = ['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR'];
 
@@ -99,10 +99,10 @@ export const LogViewer: React.FC = () => {
     <div className="flex flex-col h-full p-5">
       <div className="mb-5">
         <h1 className="text-2xl font-bold mb-2.5 text-gray-900 dark:text-gray-100">
-          {t('logs.title', 'Application Logs')}
+          {t('logs.title')}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          {t('logs.description', 'Real-time application logs with filtering and search')}
+          {t('logs.description')}
         </p>
       </div>
 
@@ -124,7 +124,7 @@ export const LogViewer: React.FC = () => {
         {/* Search */}
         <input
           type="text"
-          placeholder={t('logs.search', 'Search logs...')}
+          placeholder={t('logs.search')}
           value={search}
           onChange={handleSearchChange}
           className="flex-1 min-w-[200px] px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -140,7 +140,7 @@ export const LogViewer: React.FC = () => {
           }`}
         >
           {autoScroll ? '📌 ' : '📍 '}
-          {t('logs.autoScroll', 'Auto-scroll')}
+          {t('logs.autoScroll')}
         </button>
 
         {/* Clear */}
@@ -148,7 +148,7 @@ export const LogViewer: React.FC = () => {
           onClick={clearLogs}
           className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-pointer font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          🗑️ {t('logs.clear', 'Clear')}
+          🗑️ {t('logs.clear')}
         </button>
 
         {/* Copy */}
@@ -156,7 +156,7 @@ export const LogViewer: React.FC = () => {
           onClick={handleCopyLogs}
           className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-pointer font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          📋 {t('logs.copy', 'Copy')}
+          📋 {t('logs.copy')}
         </button>
 
         {/* Download */}
@@ -164,13 +164,13 @@ export const LogViewer: React.FC = () => {
           onClick={handleDownloadLogs}
           className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-pointer font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          💾 {t('logs.download', 'Download')}
+          💾 {t('logs.download')}
         </button>
       </div>
 
       {/* Log Count */}
       <div className="mb-2.5 text-gray-600 dark:text-gray-400 text-sm">
-        {t('logs.showing', 'Showing')} {filteredLogs.length} {t('logs.entries', 'entries')}
+        {t('logs.showing')} {filteredLogs.length} {t('logs.entries')}
       </div>
 
       {/* Error Display */}
@@ -183,7 +183,7 @@ export const LogViewer: React.FC = () => {
       {/* Loading State */}
       {isLoading && filteredLogs.length === 0 && (
         <div className="text-center py-10 text-gray-600 dark:text-gray-400">
-          {t('logs.loading', 'Loading logs...')}
+          {t('logs.loading')}
         </div>
       )}
 
@@ -194,7 +194,7 @@ export const LogViewer: React.FC = () => {
       >
         {filteredLogs.length === 0 && !isLoading ? (
           <div className="text-gray-400 dark:text-gray-500 text-center py-5">
-            {t('logs.noLogs', 'No logs to display')}
+            {t('logs.noLogs')}
           </div>
         ) : (
           filteredLogs.map((log, index) => (
