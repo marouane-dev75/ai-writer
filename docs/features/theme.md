@@ -19,7 +19,7 @@ ConfigService → Tauri Backend → config.json
 ## Core Components
 
 ### 1. ThemeStorage Interface
-**Location:** `src/features/theme/service/ThemeStorage.interface.ts`
+**Location:** `src/common/theme/service/ThemeStorage.interface.ts`
 
 Defines the storage abstraction (DIP):
 
@@ -35,7 +35,7 @@ export interface ThemeStorage {
 ```
 
 ### 2. ConfigThemeStorage
-**Location:** `src/features/theme/service/ConfigThemeStorage.ts`
+**Location:** `src/features/configuration/services/ConfigThemeStorage.ts`
 
 Concrete implementation using configuration service:
 
@@ -52,10 +52,13 @@ export class ConfigThemeStorage implements ThemeStorage {
     await configService.saveConfig(config);
   }
 }
+
+// Export singleton instance
+export const configThemeStorage = new ConfigThemeStorage();
 ```
 
 ### 3. ThemeProvider & useTheme Hook
-**Location:** `src/features/theme/ThemeContext.tsx`
+**Location:** `src/common/theme/ThemeContext.tsx`
 
 React context provider with dependency injection:
 
@@ -70,6 +73,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps>
 
 **Features:**
 - Loads theme on mount with loading state
+- Shows `LoadingSpinner` component while loading theme
 - Applies theme via CSS classes on `document.documentElement`
 - Auto-reverts on save errors
 - Provides `useTheme()` hook for components
@@ -80,16 +84,40 @@ const { isDarkMode, toggleTheme } = useTheme();
 ```
 
 ### 4. DarkModeToggle Component
-**Location:** `src/features/theme/layouts/DarkModeToggle.tsx`
+**Location:** `src/common/layouts/DarkModeToggle.tsx`
 
-UI component for theme switching with sun/moon icons.
+UI component for theme switching with sun/moon icons. Receives `isDarkMode` and `toggleTheme` as props.
+
+**Props:**
+```typescript
+interface DarkModeToggleProps {
+  isDarkMode: boolean;
+  toggleTheme: () => void;
+}
+```
+
+**Usage:**
+```typescript
+import { DarkModeToggle } from '@/common/layouts';
+import { useTheme } from '@/common/theme';
+
+export const Navbar = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+  
+  return (
+    <nav>
+      <DarkModeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+    </nav>
+  );
+};
+```
 
 ## CSS Implementation
 
 Theme uses CSS custom properties with class-based dark mode:
 
 ```css
-/* src/features/theme/theme.css */
+/* src/common/theme/theme.css */
 :root {
   --color-background: #ffffff;
   --color-text: #000000;
@@ -108,7 +136,8 @@ The provider automatically toggles the `dark` class on `document.documentElement
 ### Setup (main.tsx)
 
 ```typescript
-import { ThemeProvider, configThemeStorage } from './features/theme';
+import { ThemeProvider } from '@/common/theme';
+import { configThemeStorage } from '@/features/configuration';
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -122,7 +151,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 ### In Components
 
 ```typescript
-import { useTheme } from '@/features/theme';
+import { useTheme } from '@/common/theme';
 
 export const MyComponent = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -150,7 +179,7 @@ export const MyComponent = () => {
 ### Custom Storage Implementation
 
 ```typescript
-import type { ThemeStorage, ThemeConfig } from '@/features/theme/service/ThemeStorage.interface';
+import type { ThemeStorage, ThemeConfig } from '@/common/theme';
 
 export class LocalStorageThemeStorage implements ThemeStorage {
   private readonly key = 'app-theme';
@@ -173,15 +202,18 @@ const storage = new LocalStorageThemeStorage();
 ## File Structure
 
 ```
-src/features/theme/
+src/common/theme/
 ├── index.ts                           # Exports
 ├── theme.css                          # CSS variables
 ├── ThemeContext.tsx                   # Provider & hook
-├── layouts/
-│   └── DarkModeToggle.tsx            # Toggle component
 └── service/
-    ├── ThemeStorage.interface.ts     # Storage abstraction
-    └── ConfigThemeStorage.ts         # Config implementation
+    └── ThemeStorage.interface.ts     # Storage abstraction
+
+src/common/layouts/
+└── DarkModeToggle.tsx                # Toggle component
+
+src/features/configuration/services/
+└── ConfigThemeStorage.ts             # Config implementation
 ```
 
 ## Error Handling

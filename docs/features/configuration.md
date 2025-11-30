@@ -79,8 +79,8 @@ export interface AppConfig {
 ```
 
 **Storage Bridges**
-- [`ConfigThemeStorage`](../../src/features/theme/service/ConfigThemeStorage.ts) - Bridges theme system with config service
-- [`ConfigLocaleStorage`](../../src/features/i18n/ConfigLocaleStorage.ts) - Bridges i18n system with config service
+- [`ConfigThemeStorage`](../../src/features/configuration/services/ConfigThemeStorage.ts) - Bridges theme system with config service
+- [`ConfigLocaleStorage`](../../src/features/configuration/services/ConfigLocaleStorage.ts) - Bridges i18n system with config service
 
 ## Data Flow
 
@@ -160,6 +160,15 @@ export class ConfigEditorStorage implements EditorStorage {
     await configService.saveConfig(config);
   }
 }
+
+// Export singleton instance
+export const configEditorStorage = new ConfigEditorStorage();
+```
+
+**4. Export from feature index:**
+```typescript
+// src/features/configuration/index.ts
+export { configEditorStorage } from './services/ConfigEditorStorage';
 ```
 
 ### Best Practices
