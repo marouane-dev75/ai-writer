@@ -1,6 +1,6 @@
 import { NavLink } from "@/common/ui";
 import { useTheme } from "../../features/theme";
-import { useTranslation, LanguageSelector } from "../../features/i18n";
+import { useTranslation, LanguageSelector } from "@/common/i18n";
 import { DarkModeToggle } from "./DarkModeToggle";
 
 export const Navbar = () => {
