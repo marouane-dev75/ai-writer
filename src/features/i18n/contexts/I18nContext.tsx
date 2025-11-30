@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useCallback, useEffect, useState } from 'react';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
 import { configLocaleStorage } from '../ConfigLocaleStorage';
-import { LoadingSpinner } from '../../components/ui';
+import { LoadingSpinner } from '../../../common/ui';
 
 interface I18nContextType {
   language: string;

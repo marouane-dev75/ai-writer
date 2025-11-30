@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import type { ThemeStorage } from './ThemeStorage.interface';
 import "./theme.css";
-import { LoadingSpinner } from '../components/ui';
+import { LoadingSpinner } from '../../common/ui';
 
 interface ThemeContextType {
   isDarkMode: boolean;

@@ -1,4 +1,4 @@
-import { useTranslation } from "../locales/contexts";
+import { useTranslation } from "../features/i18n/contexts";
 
 export const HomePage = () => {
   const { t } = useTranslation();

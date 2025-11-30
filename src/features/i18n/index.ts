@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import enTranslation from './en';
-import frTranslation from './fr';
+import enTranslation from './locales/en';
+import frTranslation from './locales/fr';
 
 const resources = {
   en: {

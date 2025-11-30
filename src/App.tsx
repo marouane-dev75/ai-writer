@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router";
-import { PageContainer } from "./layouts";
+import { PageContainer } from "./features/theme/layouts";
 import { HomePage } from "./pages/HomePage";
 import { ComponentShowcasePage } from "./pages/ComponentShowcasePage";
 import { SettingsPage } from "./pages/SettingsPage";

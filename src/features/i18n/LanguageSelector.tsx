@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IoChevronDown, IoCheckmark } from 'react-icons/io5';
-import { useTranslation } from '../../locales/contexts';
+import { useTranslation } from './contexts';
 
 interface Language {
   code: string;
