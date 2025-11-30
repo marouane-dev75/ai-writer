@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import App from "./App";
 import { ThemeProvider, configThemeStorage } from "./features/theme";
-import { I18nProvider } from "./features/i18n/contexts";
+import { I18nProvider } from "./features/i18n";
 import "./features/i18n";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

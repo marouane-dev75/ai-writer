@@ -1,4 +1,4 @@
-import { useTranslation } from "../features/i18n/contexts";
+import { useTranslation } from "../features/i18n";
 import { LoadingSpinner } from "../common/ui";
 
 export const ComponentShowcasePage = () => {

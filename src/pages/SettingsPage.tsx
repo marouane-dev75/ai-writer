@@ -1,5 +1,5 @@
 import { useTheme } from "../features/theme";
-import { useTranslation } from "../features/i18n/contexts";
+import { useTranslation } from "../features/i18n";
 
 export const SettingsPage = () => {
   const { isDarkMode } = useTheme();
