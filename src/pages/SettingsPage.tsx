@@ -1,8 +1,6 @@
-import { useTheme } from "../features/theme";
 import { useTranslation } from "../features/i18n";
 
 export const SettingsPage = () => {
-  const { isDarkMode } = useTheme();
   const { t } = useTranslation();
 
   return (
@@ -14,30 +12,6 @@ export const SettingsPage = () => {
         <p className="text-gray-600 dark:text-gray-300">
           {t('settings.subtitle')}
         </p>
-      </div>
-
-      {/* Theme Settings */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-          {t('settings.appearance')}
-        </h2>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-                {t('settings.themeMode')}
-              </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                {t('settings.currentTheme')}: {isDarkMode ? t('settings.dark') : t('settings.light')}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-300">
-                {t('settings.useToggle')}
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Actions */}
