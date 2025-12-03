@@ -1,6 +1,7 @@
 {
   "ai": {
     "comingSoon": "Coming soon...",
+    "selectProvider": "Select AI Provider",
     "localQwen": {
       "title": "Local Qwen 3",
       "modelPath": "Model Path",

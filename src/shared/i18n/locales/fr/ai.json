@@ -1,24 +1,25 @@
 {
   "ai": {
     "comingSoon": "Bientôt disponible...",
+    "selectProvider": "Sélectionner le fournisseur IA",
     "localQwen": {
       "title": "Qwen 3 Local",
-      "modelPath": "Chemin du Modèle",
-      "contextSize": "Taille du Contexte",
+      "modelPath": "Chemin du modèle",
+      "contextSize": "Taille du contexte",
       "temperature": "Température"
     },
     "anthropic": {
       "title": "Anthropic",
       "apiKey": "Clé API",
       "model": "Modèle",
-      "maxTokens": "Tokens Maximum"
+      "maxTokens": "Tokens maximum"
     },
     "openai": {
       "title": "OpenAI",
       "apiKey": "Clé API",
       "model": "Modèle",
       "temperature": "Température",
-      "maxTokens": "Tokens Maximum"
+      "maxTokens": "Tokens maximum"
     }
   }
 }
