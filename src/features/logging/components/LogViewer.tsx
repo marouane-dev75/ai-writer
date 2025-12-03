@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useLogStream } from '../hooks/useLogStream';
 import type { LogLevel } from '../types';
-import { useTranslation } from "@/common/i18n";
+import { useTranslation } from "@/shared/i18n";
 
 const LOG_LEVELS: LogLevel[] = ['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR'];
 

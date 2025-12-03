@@ -1,5 +1,4 @@
-import { LocaleConfig } from "@/features/configuration";
-
+import type { LocaleConfig } from "./types";
 
 /**
  * Interface for locale storage abstraction

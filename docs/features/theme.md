@@ -98,8 +98,8 @@ interface DarkModeToggleProps {
 
 **Usage:**
 ```typescript
-import { DarkModeToggle } from '@/common/layouts';
-import { useTheme } from '@/common/theme';
+import { DarkModeToggle } from '@/shared/layouts';
+import { useTheme } from '@/shared/theme';
 
 export const Navbar = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -136,7 +136,7 @@ The provider automatically toggles the `dark` class on `document.documentElement
 ### Setup (main.tsx)
 
 ```typescript
-import { ThemeProvider } from '@/common/theme';
+import { ThemeProvider } from '@/shared/theme';
 import { configThemeStorage } from '@/features/configuration';
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -151,7 +151,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 ### In Components
 
 ```typescript
-import { useTheme } from '@/common/theme';
+import { useTheme } from '@/shared/theme';
 
 export const MyComponent = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -179,7 +179,7 @@ export const MyComponent = () => {
 ### Custom Storage Implementation
 
 ```typescript
-import type { ThemeStorage, ThemeConfig } from '@/common/theme';
+import type { ThemeStorage, ThemeConfig } from '@/shared/theme';
 
 export class LocalStorageThemeStorage implements ThemeStorage {
   private readonly key = 'app-theme';

@@ -1,5 +1,5 @@
 import { configService } from './config.service';
-import type { ThemeStorage, ThemeConfig } from '@/common/theme';
+import type { ThemeStorage, ThemeConfig } from '@/shared/theme';
 
 /**
  * Implementation of ThemeStorage using the configuration service

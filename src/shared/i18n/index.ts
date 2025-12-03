@@ -31,5 +31,6 @@ export { I18nProvider, useTranslation } from './contexts';
 // Export UI components
 export { LanguageSelector } from './ui/LanguageSelector';
 
-// Export interfaces (for DIP compliance)
+// Export interfaces and types (for DIP compliance)
 export type { LocaleStorage } from './LocaleStorage.interface';
+export type { LocaleConfig } from './types';

@@ -1,5 +1,5 @@
-import { NavLink } from "@/common/ui";
-import { useTranslation, LanguageSelector } from "@/common/i18n";
+import { NavLink } from "@/shared/ui";
+import { useTranslation, LanguageSelector } from "@/shared/i18n";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { useTheme } from "../theme";
 

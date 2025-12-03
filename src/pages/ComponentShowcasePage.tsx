@@ -1,5 +1,5 @@
-import { useTranslation } from "@/common/i18n";
-import { LoadingSpinner } from "@/common/ui";
+import { useTranslation } from "@/shared/i18n";
+import { LoadingSpinner } from "@/shared/ui";
 
 export const ComponentShowcasePage = () => {
   const { t } = useTranslation();

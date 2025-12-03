@@ -1,4 +1,4 @@
-import { useTranslation } from "@/common/i18n";
+import { useTranslation } from "@/shared/i18n";
 
 export const HomePage = () => {
   const { t } = useTranslation();
