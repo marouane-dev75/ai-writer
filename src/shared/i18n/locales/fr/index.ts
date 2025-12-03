@@ -5,6 +5,7 @@ import settings from './settings.json';
 import showcase from './showcase.json';
 import common from './common.json';
 import logs from './logs.json';
+import ai from './ai.json';
 
 export default {
   ...app,
@@ -14,4 +15,5 @@ export default {
   ...showcase,
   ...common,
   ...logs,
+  ...ai,
 };
