@@ -8,17 +8,16 @@ pub async fn load_config(
 ) -> Result<AppConfig, String> {
     log::debug!("load_config command invoked");
     
-    match manager.load_config() {
-        Ok(config) => {
+    manager.load_config()
+        .map(|config| {
             log::info!("load_config command completed successfully");
-            Ok(config)
-        }
-        Err(e) => {
+            config
+        })
+        .map_err(|e| {
             let error_msg = format!("Failed to load config: {}", e);
             log::error!("{}", error_msg);
-            Err(error_msg)
-        }
-    }
+            error_msg
+        })
 }
 
 /// Tauri command to save configuration
@@ -29,15 +28,13 @@ pub async fn save_config(
 ) -> Result<(), String> {
     log::debug!("save_config command invoked");
     
-    match manager.save_config(&config) {
-        Ok(_) => {
+    manager.save_config(&config)
+        .map(|_| {
             log::info!("save_config command completed successfully");
-            Ok(())
-        }
-        Err(e) => {
+        })
+        .map_err(|e| {
             let error_msg = format!("Failed to save config: {}", e);
             log::error!("{}", error_msg);
-            Err(error_msg)
-        }
-    }
+            error_msg
+        })
 }

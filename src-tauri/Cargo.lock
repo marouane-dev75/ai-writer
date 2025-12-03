@@ -21,6 +21,7 @@ dependencies = [
 name = "ai-editor"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "chrono",
  "env_logger",
  "log",

@@ -1,6 +1,6 @@
-use super::error::ConfigError;
 use super::storage::ConfigStorage;
 use super::types::AppConfig;
+use anyhow::Result;
 use std::sync::Arc;
 
 /// Configuration manager that handles business logic
@@ -18,7 +18,7 @@ impl<S: ConfigStorage> ConfigManager<S> {
     }
 
     /// Load configuration from storage
-    pub fn load_config(&self) -> Result<AppConfig, ConfigError> {
+    pub fn load_config(&self) -> Result<AppConfig> {
         log::debug!("Loading configuration");
         match self.storage.load() {
             Ok(config) => {
@@ -34,7 +34,7 @@ impl<S: ConfigStorage> ConfigManager<S> {
     }
 
     /// Save configuration to storage
-    pub fn save_config(&self, config: &AppConfig) -> Result<(), ConfigError> {
+    pub fn save_config(&self, config: &AppConfig) -> Result<()> {
         log::debug!("Saving configuration");
         log::trace!("Config to save: {:?}", config);
         match self.storage.save(config) {

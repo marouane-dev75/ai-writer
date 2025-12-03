@@ -1,3 +1,4 @@
+use anyhow::{Context, Result};
 use chrono::Local;
 use log::{Level, Log, Metadata, Record};
 use std::fs::{File, OpenOptions};
@@ -12,10 +13,11 @@ pub struct FileLogger {
 }
 
 impl FileLogger {
-    pub fn new(log_path: PathBuf) -> Result<Self, std::io::Error> {
+    pub fn new(log_path: PathBuf) -> Result<Self> {
         // Create parent directory if it doesn't exist
         if let Some(parent) = log_path.parent() {
-            std::fs::create_dir_all(parent)?;
+            std::fs::create_dir_all(parent)
+                .context("Failed to create log directory")?;
         }
 
         // Open file in write mode (truncate if exists)
@@ -23,7 +25,8 @@ impl FileLogger {
             .create(true)
             .write(true)
             .truncate(true)
-            .open(&log_path)?;
+            .open(&log_path)
+            .context("Failed to open log file for writing")?;
 
         Ok(Self {
             file: Mutex::new(file),
@@ -31,27 +34,30 @@ impl FileLogger {
         })
     }
 
-    pub fn clear(&self) -> Result<(), std::io::Error> {
+    pub fn clear(&self) -> Result<()> {
         if let Ok(mut file) = self.file.lock() {
-            file.set_len(0)?;
-            file.seek(SeekFrom::Start(0))?;
-            file.flush()?;
+            file.set_len(0)
+                .context("Failed to truncate log file")?;
+            file.seek(SeekFrom::Start(0))
+                .context("Failed to seek to start of log file")?;
+            file.flush()
+                .context("Failed to flush log file")?;
         }
         Ok(())
     }
 
-    pub fn get_logs(&self, cursor: u64) -> Result<LogResponse, String> {
+    pub fn get_logs(&self, cursor: u64) -> Result<LogResponse> {
         // Open a separate read handle since self.file is locked for writing
         // This allows concurrent reads while the logger continues writing
         let file = File::open(&self.log_path)
-            .map_err(|e| format!("Failed to open log file: {}", e))?;
+            .context("Failed to open log file for reading")?;
 
         let mut reader = BufReader::new(file);
 
         // Seek to cursor position
         reader
             .seek(SeekFrom::Start(cursor))
-            .map_err(|e| format!("Failed to seek to cursor position: {}", e))?;
+            .context("Failed to seek to cursor position")?;
 
         let mut entries = Vec::new();
         let mut current_position = cursor;
@@ -79,7 +85,7 @@ impl FileLogger {
         })
     }
 
-    pub fn get_all_logs(&self) -> Result<LogResponse, String> {
+    pub fn get_all_logs(&self) -> Result<LogResponse> {
         self.get_logs(0)
     }
 
@@ -128,9 +134,10 @@ impl Log for FileLogger {
     }
 }
 
-pub fn init_logger(log_path: PathBuf, level: Level) -> Result<Arc<FileLogger>, Box<dyn std::error::Error>> {
+pub fn init_logger(log_path: PathBuf, level: Level) -> Result<Arc<FileLogger>> {
     let logger = Arc::new(FileLogger::new(log_path)?);
-    log::set_boxed_logger(Box::new(logger.clone()))?;
+    log::set_boxed_logger(Box::new(logger.clone()))
+        .context("Failed to set logger")?;
     log::set_max_level(level.to_level_filter());
     Ok(logger)
 }
