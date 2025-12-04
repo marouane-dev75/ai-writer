@@ -5,9 +5,9 @@ export const AnthropicSettings = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 relative animate-fade-in">
+    <div className="relative animate-fade-in">
       {/* Coming Soon Badge */}
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-0 right-0">
         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
           {t('ai.comingSoon')}
         </span>

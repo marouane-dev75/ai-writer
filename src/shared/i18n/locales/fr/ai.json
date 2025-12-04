@@ -3,7 +3,7 @@
     "comingSoon": "Bientôt disponible...",
     "selectProvider": "Sélectionner le fournisseur IA",
     "localQwen": {
-      "title": "Qwen 3 Local",
+      "title": "Qwen 3 (Local)",
       "modelPath": "Chemin du modèle",
       "contextSize": "Taille du contexte",
       "temperature": "Température"
