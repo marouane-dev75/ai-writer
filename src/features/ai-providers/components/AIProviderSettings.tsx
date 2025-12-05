@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { Button } from "@/shared/ui";
 import { SiOpenai, SiAnthropic } from "react-icons/si";
@@ -12,11 +12,14 @@ export const AIProviderSettings = () => {
   const { t } = useTranslation();
   const [selectedProvider, setSelectedProvider] = useState<AIProvider>('localQwen');
 
-  const providers: { id: AIProvider; label: string; icon: React.ReactNode }[] = [
-    { id: 'localQwen', label: t('ai.localQwen.title'), icon: <HiCpuChip className="w-5 h-5" /> },
-    { id: 'openai', label: t('ai.openai.title'), icon: <SiOpenai className="w-5 h-5" /> },
-    { id: 'anthropic', label: t('ai.anthropic.title'), icon: <SiAnthropic className="w-5 h-5" /> },
-  ];
+  const providers = useMemo<{ id: AIProvider; label: string; icon: React.ReactNode }[]>(
+    () => [
+      { id: 'localQwen', label: t('ai.localQwen.title'), icon: <HiCpuChip className="w-5 h-5" /> },
+      { id: 'openai', label: t('ai.openai.title'), icon: <SiOpenai className="w-5 h-5" /> },
+      { id: 'anthropic', label: t('ai.anthropic.title'), icon: <SiAnthropic className="w-5 h-5" /> },
+    ],
+    [t]
+  );
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6">
@@ -54,13 +57,13 @@ export const AIProviderSettings = () => {
 
       {/* Provider Settings */}
       <div role="tabpanel" id="localQwen-panel" aria-labelledby="localQwen-tab" hidden={selectedProvider !== 'localQwen'}>
-        {selectedProvider === 'localQwen' && <LocalQwenSettings />}
+        <LocalQwenSettings />
       </div>
       <div role="tabpanel" id="openai-panel" aria-labelledby="openai-tab" hidden={selectedProvider !== 'openai'}>
-        {selectedProvider === 'openai' && <OpenAISettings />}
+        <OpenAISettings />
       </div>
       <div role="tabpanel" id="anthropic-panel" aria-labelledby="anthropic-tab" hidden={selectedProvider !== 'anthropic'}>
-        {selectedProvider === 'anthropic' && <AnthropicSettings />}
+        <AnthropicSettings />
       </div>
     </div>
   );
