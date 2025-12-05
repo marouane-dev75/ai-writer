@@ -7,8 +7,14 @@
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Chemin du modèle",
+      "useGpu": "Utiliser le GPU",
       "contextSize": "Taille du contexte",
-      "temperature": "Température"
+      "temperature": "Température",
+      "seed": "Graine",
+      "seedHelper": "-1 pour une graine aléatoire",
+      "repeatPenalty": "Pénalité de répétition",
+      "repeatLastN": "Répéter les derniers N",
+      "useThinkingMode": "Utiliser le mode réflexion"
     },
     "anthropic": {
       "title": "Anthropic",

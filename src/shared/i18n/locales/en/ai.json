@@ -7,8 +7,14 @@
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Model Path",
+      "useGpu": "Use GPU",
       "contextSize": "Context Size",
-      "temperature": "Temperature"
+      "temperature": "Temperature",
+      "seed": "Seed",
+      "seedHelper": "-1 for random seed",
+      "repeatPenalty": "Repeat Penalty",
+      "repeatLastN": "Repeat Last N",
+      "useThinkingMode": "Use Thinking Mode"
     },
     "anthropic": {
       "title": "Anthropic",

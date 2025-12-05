@@ -1,5 +1,5 @@
 import { useTranslation } from "@/shared/i18n";
-import { FormInput } from "@/shared/ui";
+import { FormInput, Switch } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface LocalQwenSettingsProps {
@@ -7,7 +7,10 @@ interface LocalQwenSettingsProps {
   onSetActive: () => void;
 }
 
-export const LocalQwenSettings = ({ isActive, onSetActive }: LocalQwenSettingsProps) => {
+export const LocalQwenSettings = ({
+  isActive,
+  onSetActive,
+}: LocalQwenSettingsProps) => {
   const { t } = useTranslation();
 
   return (
@@ -15,35 +18,70 @@ export const LocalQwenSettings = ({ isActive, onSetActive }: LocalQwenSettingsPr
       {/* Coming Soon Badge */}
       <div className="absolute top-0 right-0">
         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-          {t('ai.comingSoon')}
+          {t("ai.comingSoon")}
         </span>
       </div>
 
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-        {t('ai.localQwen.title')}
+        {t("ai.localQwen.title")}
       </h2>
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FormInput
-          label={t('ai.localQwen.modelPath')}
+          label={t("ai.localQwen.modelPath")}
           type="text"
           disabled
-          placeholder={t('ai.comingSoon')}
+          placeholder={t("ai.comingSoon")}
         />
+
         <FormInput
-          label={t('ai.localQwen.contextSize')}
+          label={t("ai.localQwen.contextSize")}
           type="number"
           disabled
-          placeholder={t('ai.comingSoon')}
+          placeholder={t("ai.comingSoon")}
         />
+
         <FormInput
-          label={t('ai.localQwen.temperature')}
+          label={t("ai.localQwen.temperature")}
           type="number"
           disabled
-          placeholder={t('ai.comingSoon')}
+          placeholder={t("ai.comingSoon")}
           step="0.1"
         />
-        
-        <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
+
+        <div>
+          <FormInput
+            label={t("ai.localQwen.seed")}
+            type="number"
+            disabled
+            placeholder={t("ai.comingSoon")}
+          />
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-1">
+            {t("ai.localQwen.seedHelper")}
+          </p>
+        </div>
+
+        <FormInput
+          label={t("ai.localQwen.repeatPenalty")}
+          type="number"
+          disabled
+          placeholder={t("ai.comingSoon")}
+          step="0.1"
+        />
+
+        <FormInput
+          label={t("ai.localQwen.repeatLastN")}
+          type="number"
+          disabled
+          placeholder={t("ai.comingSoon")}
+        />
+
+        <Switch label={t("ai.localQwen.useThinkingMode")} disabled />
+
+        <Switch label={t("ai.localQwen.useGpu")} disabled />
+
+        <div className="md:col-span-2">
+          <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
+        </div>
       </div>
     </div>
   );
