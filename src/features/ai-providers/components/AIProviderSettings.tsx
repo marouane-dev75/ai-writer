@@ -7,10 +7,21 @@ import { AnthropicSettings } from "./AnthropicSettings";
 import { LocalQwenSettings } from "./LocalQwenSettings";
 import { OpenAISettings } from "./OpenAISettings";
 import type { AIProvider } from "../types";
+import type { AIProviderService } from "../services/ai-provider.service";
 
-export const AIProviderSettings = () => {
+interface AIProviderSettingsProps {
+  service: AIProviderService;
+}
+
+export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
   const { t } = useTranslation();
-  const [selectedProvider, setSelectedProvider] = useState<AIProvider>('localQwen');
+  const [selectedProvider, setSelectedProvider] = useState<AIProvider>(service.getActiveProvider());
+  const [activeProvider, setActiveProvider] = useState<AIProvider>(service.getActiveProvider());
+
+  const handleSetActive = (provider: AIProvider) => {
+    service.setActiveProvider(provider);
+    setActiveProvider(provider);
+  };
 
   const providers = useMemo<{ id: AIProvider; label: string; icon: React.ReactNode }[]>(
     () => [
@@ -57,13 +68,22 @@ export const AIProviderSettings = () => {
 
       {/* Provider Settings */}
       <div role="tabpanel" id="localQwen-panel" aria-labelledby="localQwen-tab" hidden={selectedProvider !== 'localQwen'}>
-        <LocalQwenSettings />
+        <LocalQwenSettings 
+          isActive={activeProvider === 'localQwen'}
+          onSetActive={() => handleSetActive('localQwen')}
+        />
       </div>
       <div role="tabpanel" id="openai-panel" aria-labelledby="openai-tab" hidden={selectedProvider !== 'openai'}>
-        <OpenAISettings />
+        <OpenAISettings 
+          isActive={activeProvider === 'openai'}
+          onSetActive={() => handleSetActive('openai')}
+        />
       </div>
       <div role="tabpanel" id="anthropic-panel" aria-labelledby="anthropic-tab" hidden={selectedProvider !== 'anthropic'}>
-        <AnthropicSettings />
+        <AnthropicSettings 
+          isActive={activeProvider === 'anthropic'}
+          onSetActive={() => handleSetActive('anthropic')}
+        />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useTranslation } from "@/shared/i18n";
-import { AIProviderSettings } from "@/features/ai-providers";
+import { AIProviderSettings, aiProviderService } from "@/features/ai-providers";
 
 export const SettingsPage = () => {
   const { t } = useTranslation();
@@ -15,7 +15,7 @@ export const SettingsPage = () => {
         </p>
       </div>
 
-      <AIProviderSettings />
+      <AIProviderSettings service={aiProviderService} />
     </>
   );
 };

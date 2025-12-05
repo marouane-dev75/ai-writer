@@ -2,6 +2,8 @@
   "ai": {
     "comingSoon": "Coming soon...",
     "selectProvider": "Select AI Provider",
+    "setActive": "Set Active",
+    "activeProvider": "Active",
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Model Path",

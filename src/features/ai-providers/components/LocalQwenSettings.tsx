@@ -1,7 +1,13 @@
 import { useTranslation } from "@/shared/i18n";
 import { FormInput } from "@/shared/ui";
+import { ActiveProviderButton } from "./ActiveProviderButton";
 
-export const LocalQwenSettings = () => {
+interface LocalQwenSettingsProps {
+  isActive: boolean;
+  onSetActive: () => void;
+}
+
+export const LocalQwenSettings = ({ isActive, onSetActive }: LocalQwenSettingsProps) => {
   const { t } = useTranslation();
 
   return (
@@ -36,6 +42,8 @@ export const LocalQwenSettings = () => {
           placeholder={t('ai.comingSoon')}
           step="0.1"
         />
+        
+        <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
       </div>
     </div>
   );

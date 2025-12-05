@@ -2,6 +2,8 @@
   "ai": {
     "comingSoon": "Bientôt disponible...",
     "selectProvider": "Sélectionner le fournisseur IA",
+    "setActive": "Définir comme actif",
+    "activeProvider": "Actif",
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Chemin du modèle",

@@ -1,7 +1,13 @@
 import { useTranslation } from "@/shared/i18n";
 import { FormInput } from "@/shared/ui";
+import { ActiveProviderButton } from "./ActiveProviderButton";
 
-export const OpenAISettings = () => {
+interface OpenAISettingsProps {
+  isActive: boolean;
+  onSetActive: () => void;
+}
+
+export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) => {
   const { t } = useTranslation();
 
   return (
@@ -42,6 +48,8 @@ export const OpenAISettings = () => {
           disabled
           placeholder={t('ai.comingSoon')}
         />
+        
+        <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
       </div>
     </div>
   );

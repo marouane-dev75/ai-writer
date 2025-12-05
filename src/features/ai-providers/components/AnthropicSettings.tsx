@@ -1,7 +1,13 @@
 import { useTranslation } from "@/shared/i18n";
 import { FormInput } from "@/shared/ui";
+import { ActiveProviderButton } from "./ActiveProviderButton";
 
-export const AnthropicSettings = () => {
+interface AnthropicSettingsProps {
+  isActive: boolean;
+  onSetActive: () => void;
+}
+
+export const AnthropicSettings = ({ isActive, onSetActive }: AnthropicSettingsProps) => {
   const { t } = useTranslation();
 
   return (
@@ -35,6 +41,8 @@ export const AnthropicSettings = () => {
           disabled
           placeholder={t('ai.comingSoon')}
         />
+        
+        <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
       </div>
     </div>
   );
