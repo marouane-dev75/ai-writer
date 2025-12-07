@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { FormInput, Switch } from "@/shared/ui";
+import { DirectoryInput, FormInput, Switch } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface LocalQwenSettingsProps {
@@ -12,6 +13,7 @@ export const LocalQwenSettings = ({
   onSetActive,
 }: LocalQwenSettingsProps) => {
   const { t } = useTranslation();
+  const [modelPath, setModelPath] = useState<string>("");
 
   return (
     <div className="relative animate-fade-in">
@@ -26,9 +28,10 @@ export const LocalQwenSettings = ({
         {t("ai.localQwen.title")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FormInput
+        <DirectoryInput
           label={t("ai.localQwen.modelPath")}
-          type="text"
+          value={modelPath}
+          onChange={setModelPath}
           disabled
           placeholder={t("ai.comingSoon")}
         />

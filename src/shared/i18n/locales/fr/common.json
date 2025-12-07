@@ -6,6 +6,7 @@
     "delete": "Supprimer",
     "loading": "Chargement...",
     "loadingLanguage": "Chargement de la langue...",
-    "loadingTheme": "Chargement du thème..."
+    "loadingTheme": "Chargement du thème...",
+    "browse": "Parcourir"
   }
 }
