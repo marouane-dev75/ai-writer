@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { DirectoryInput, FormInput, Switch } from "@/shared/ui";
+import { DirectoryInput, FormInput, Slider, Switch } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface LocalQwenSettingsProps {
@@ -14,6 +14,8 @@ export const LocalQwenSettings = ({
 }: LocalQwenSettingsProps) => {
   const { t } = useTranslation();
   const [modelPath, setModelPath] = useState<string>("");
+  const [temperature, setTemperature] = useState<number>(0.7);
+  const [repeatPenalty, setRepeatPenalty] = useState<number>(1.1);
 
   return (
     <div className="relative animate-fade-in">
@@ -43,12 +45,14 @@ export const LocalQwenSettings = ({
           placeholder={t("ai.comingSoon")}
         />
 
-        <FormInput
+        <Slider
           label={t("ai.localQwen.temperature")}
-          type="number"
+          value={temperature}
+          onChange={setTemperature}
+          min={0}
+          max={2}
+          step={0.1}
           disabled
-          placeholder={t("ai.comingSoon")}
-          step="0.1"
         />
 
         <div>
@@ -63,12 +67,14 @@ export const LocalQwenSettings = ({
           </p>
         </div>
 
-        <FormInput
+        <Slider
           label={t("ai.localQwen.repeatPenalty")}
-          type="number"
+          value={repeatPenalty}
+          onChange={setRepeatPenalty}
+          min={1}
+          max={2}
+          step={0.1}
           disabled
-          placeholder={t("ai.comingSoon")}
-          step="0.1"
         />
 
         <FormInput

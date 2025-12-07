@@ -26,8 +26,8 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
   const providers = useMemo<{ id: AIProvider; label: string; icon: React.ReactNode }[]>(
     () => [
       { id: 'localQwen', label: t('ai.localQwen.title'), icon: <HiCpuChip className="w-5 h-5" /> },
-      { id: 'openai', label: t('ai.openai.title'), icon: <SiOpenai className="w-5 h-5" /> },
       { id: 'anthropic', label: t('ai.anthropic.title'), icon: <SiAnthropic className="w-5 h-5" /> },
+      { id: 'openai', label: t('ai.openai.title'), icon: <SiOpenai className="w-5 h-5" /> },
     ],
     [t]
   );
