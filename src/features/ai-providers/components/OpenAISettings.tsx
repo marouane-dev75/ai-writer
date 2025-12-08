@@ -1,5 +1,5 @@
 import { useTranslation } from "@/shared/i18n";
-import { FormInput } from "@/shared/ui";
+import { FormInput, Slider } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface OpenAISettingsProps {
@@ -35,18 +35,21 @@ export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) =
           disabled
           placeholder={t('ai.comingSoon')}
         />
-        <FormInput
+        <Slider
           label={t('ai.openai.temperature')}
-          type="number"
+          value={0.7}
+          min={0}
+          max={2}
+          step={0.1}
           disabled
-          placeholder={t('ai.comingSoon')}
-          step="0.1"
         />
-        <FormInput
+        <Slider
           label={t('ai.openai.maxTokens')}
-          type="number"
+          value={2048}
+          min={100}
+          max={4096}
+          step={100}
           disabled
-          placeholder={t('ai.comingSoon')}
         />
         
         <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />

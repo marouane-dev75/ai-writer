@@ -1,5 +1,5 @@
 import { useTranslation } from "@/shared/i18n";
-import { FormInput } from "@/shared/ui";
+import { FormInput, Slider } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface AnthropicSettingsProps {
@@ -35,11 +35,13 @@ export const AnthropicSettings = ({ isActive, onSetActive }: AnthropicSettingsPr
           disabled
           placeholder={t('ai.comingSoon')}
         />
-        <FormInput
+        <Slider
           label={t('ai.anthropic.maxTokens')}
-          type="number"
+          value={2048}
+          min={100}
+          max={4096}
+          step={100}
           disabled
-          placeholder={t('ai.comingSoon')}
         />
         
         <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
