@@ -65,6 +65,7 @@ fn setup_app(app: &mut tauri::App) -> Result<()> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             setup_app(app).map_err(|e| {
                 let error_msg = format!("Application setup failed: {:#}", e);
