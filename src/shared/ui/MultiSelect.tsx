@@ -1,0 +1,180 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { FiChevronDown, FiX, FiCheck } from 'react-icons/fi';
+
+export interface MultiSelectOption {
+  value: string;
+  label: string;
+}
+
+interface MultiSelectProps {
+  label: string;
+  options: MultiSelectOption[];
+  value: string[];
+  onChange: (selected: string[]) => void;
+  disabled?: boolean;
+  placeholder?: string;
+  className?: string;
+}
+
+export const MultiSelect: React.FC<MultiSelectProps> = ({
+  label,
+  options,
+  value,
+  onChange,
+  disabled = false,
+  placeholder = 'Select options...',
+  className = '',
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchTerm('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const filteredOptions = options.filter(option =>
+    option.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const toggleOption = (optionValue: string) => {
+    if (disabled) return;
+    
+    const newValue = value.includes(optionValue)
+      ? value.filter(v => v !== optionValue)
+      : [...value, optionValue];
+    
+    onChange(newValue);
+  };
+
+  const removeOption = (optionValue: string) => {
+    if (disabled) return;
+    onChange(value.filter(v => v !== optionValue));
+  };
+
+  const getSelectedLabels = () => {
+    return value
+      .map(v => options.find(opt => opt.value === v)?.label)
+      .filter(Boolean) as string[];
+  };
+
+  return (
+    <div className={className} ref={dropdownRef}>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        {label}
+      </label>
+
+      {/* Selected items as tags */}
+      {value.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-2">
+          {getSelectedLabels().map((label, index) => (
+            <span
+              key={value[index]}
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm ${
+                disabled
+                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                  : 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
+              }`}
+            >
+              {label}
+              {!disabled && (
+                <button
+                  type="button"
+                  onClick={() => removeOption(value[index])}
+                  className="hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
+                  aria-label={`Remove ${label}`}
+                >
+                  <FiX size={14} />
+                </button>
+              )}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Dropdown trigger */}
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => !disabled && setIsOpen(!isOpen)}
+          disabled={disabled}
+          className={`w-full px-4 py-2 border rounded-lg transition-colors duration-200 flex items-center justify-between ${
+            disabled
+              ? 'border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+              : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+          }`}
+        >
+          <span className={value.length === 0 ? 'text-gray-400 dark:text-gray-500' : ''}>
+            {value.length === 0
+              ? placeholder
+              : `${value.length} selected`}
+          </span>
+          <FiChevronDown
+            className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            size={20}
+          />
+        </button>
+
+        {/* Dropdown menu */}
+        {isOpen && !disabled && (
+          <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-hidden">
+            {/* Search input */}
+            <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search..."
+                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+
+            {/* Options list */}
+            <div className="overflow-y-auto max-h-48">
+              {filteredOptions.length === 0 ? (
+                <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+                  No options found
+                </div>
+              ) : (
+                filteredOptions.map((option) => {
+                  const isSelected = value.includes(option.value);
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => toggleOption(option.value)}
+                      className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2"
+                    >
+                      <div
+                        className={`w-4 h-4 border rounded flex items-center justify-center ${
+                          isSelected
+                            ? 'bg-blue-500 border-blue-500'
+                            : 'border-gray-300 dark:border-gray-600'
+                        }`}
+                      >
+                        {isSelected && <FiCheck size={12} className="text-white" />}
+                      </div>
+                      <span className="text-gray-900 dark:text-white">{option.label}</span>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+MultiSelect.displayName = 'MultiSelect';

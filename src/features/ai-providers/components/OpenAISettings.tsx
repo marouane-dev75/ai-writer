@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { FormInput, Slider } from "@/shared/ui";
+import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface OpenAISettingsProps {
@@ -7,8 +8,17 @@ interface OpenAISettingsProps {
   onSetActive: () => void;
 }
 
+const OPENAI_MODELS: SelectOption[] = [
+  { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
+  { value: 'gpt-4', label: 'GPT-4' },
+  { value: 'gpt-4-32k', label: 'GPT-4 32K' },
+  { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' },
+  { value: 'gpt-3.5-turbo-16k', label: 'GPT-3.5 Turbo 16K' },
+];
+
 export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) => {
   const { t } = useTranslation();
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
 
   return (
     <div className="relative animate-fade-in">
@@ -29,11 +39,13 @@ export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) =
           disabled
           placeholder={t('ai.comingSoon')}
         />
-        <FormInput
+        <Select
           label={t('ai.openai.model')}
-          type="text"
+          options={OPENAI_MODELS}
+          value={selectedModel}
+          onChange={setSelectedModel}
           disabled
-          placeholder={t('ai.comingSoon')}
+          placeholder={t('ai.openai.modelPlaceholder')}
         />
         <Slider
           label={t('ai.openai.temperature')}

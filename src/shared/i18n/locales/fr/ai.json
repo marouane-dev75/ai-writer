@@ -20,14 +20,16 @@
       "title": "Anthropic",
       "apiKey": "Clé API",
       "model": "Modèle",
-      "maxTokens": "Tokens maximum"
+      "modelPlaceholder": "Sélectionner des modèles...",
+      "maxTokens": "Tokens Maximum"
     },
     "openai": {
       "title": "OpenAI",
       "apiKey": "Clé API",
       "model": "Modèle",
+      "modelPlaceholder": "Sélectionner des modèles...",
       "temperature": "Température",
-      "maxTokens": "Tokens maximum"
+      "maxTokens": "Tokens Maximum"
     }
   }
 }

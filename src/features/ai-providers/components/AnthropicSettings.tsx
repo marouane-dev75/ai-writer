@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { FormInput, Slider } from "@/shared/ui";
+import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 
 interface AnthropicSettingsProps {
@@ -7,8 +8,18 @@ interface AnthropicSettingsProps {
   onSetActive: () => void;
 }
 
+const ANTHROPIC_MODELS: SelectOption[] = [
+  { value: 'claude-3-opus', label: 'Claude 3 Opus' },
+  { value: 'claude-3-sonnet', label: 'Claude 3 Sonnet' },
+  { value: 'claude-3-haiku', label: 'Claude 3 Haiku' },
+  { value: 'claude-2.1', label: 'Claude 2.1' },
+  { value: 'claude-2.0', label: 'Claude 2.0' },
+  { value: 'claude-instant-1.2', label: 'Claude Instant 1.2' },
+];
+
 export const AnthropicSettings = ({ isActive, onSetActive }: AnthropicSettingsProps) => {
   const { t } = useTranslation();
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
 
   return (
     <div className="relative animate-fade-in">
@@ -29,11 +40,13 @@ export const AnthropicSettings = ({ isActive, onSetActive }: AnthropicSettingsPr
           disabled
           placeholder={t('ai.comingSoon')}
         />
-        <FormInput
+        <Select
           label={t('ai.anthropic.model')}
-          type="text"
+          options={ANTHROPIC_MODELS}
+          value={selectedModel}
+          onChange={setSelectedModel}
           disabled
-          placeholder={t('ai.comingSoon')}
+          placeholder={t('ai.anthropic.modelPlaceholder')}
         />
         <Slider
           label={t('ai.anthropic.maxTokens')}
