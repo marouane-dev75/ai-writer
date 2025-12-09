@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
+import { aiProviderService } from "../services/ai-provider.service";
 
 interface AnthropicSettingsProps {
   isActive: boolean;
@@ -19,17 +20,33 @@ const ANTHROPIC_MODELS: SelectOption[] = [
 
 export const AnthropicSettings = ({ isActive, onSetActive }: AnthropicSettingsProps) => {
   const { t } = useTranslation();
+  const [apiKey, setApiKey] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [maxTokens, setMaxTokens] = useState<number>(2048);
+
+  // Load config on mount
+  useEffect(() => {
+    const config = aiProviderService.getAnthropicConfig();
+    setApiKey(config.apiKey);
+    setSelectedModel(config.model);
+    setMaxTokens(config.maxTokens);
+  }, []);
+
+  // Update config when values change
+  const updateConfig = () => {
+    aiProviderService.setAnthropicConfig({
+      apiKey,
+      model: selectedModel || 'claude-3-opus',
+      maxTokens,
+    });
+  };
+
+  useEffect(() => {
+    updateConfig();
+  }, [apiKey, selectedModel, maxTokens]);
 
   return (
-    <div className="relative animate-fade-in">
-      {/* Coming Soon Badge */}
-      <div className="absolute top-0 right-0">
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-          {t('ai.comingSoon')}
-        </span>
-      </div>
-
+    <div className="animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
         {t('ai.anthropic.title')}
       </h2>
@@ -37,24 +54,24 @@ export const AnthropicSettings = ({ isActive, onSetActive }: AnthropicSettingsPr
         <FormInput
           label={t('ai.anthropic.apiKey')}
           type="password"
-          disabled
-          placeholder={t('ai.comingSoon')}
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          placeholder={t('ai.anthropic.apiKey')}
         />
         <Select
           label={t('ai.anthropic.model')}
           options={ANTHROPIC_MODELS}
           value={selectedModel}
           onChange={setSelectedModel}
-          disabled
           placeholder={t('ai.anthropic.modelPlaceholder')}
         />
         <Slider
           label={t('ai.anthropic.maxTokens')}
-          value={2048}
+          value={maxTokens}
+          onChange={setMaxTokens}
           min={100}
           max={4096}
           step={100}
-          disabled
         />
         
         <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />

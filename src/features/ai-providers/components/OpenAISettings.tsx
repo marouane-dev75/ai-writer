@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
+import { aiProviderService } from "../services/ai-provider.service";
 
 interface OpenAISettingsProps {
   isActive: boolean;
@@ -18,17 +19,36 @@ const OPENAI_MODELS: SelectOption[] = [
 
 export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) => {
   const { t } = useTranslation();
+  const [apiKey, setApiKey] = useState<string>("");
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [temperature, setTemperature] = useState<number>(0.7);
+  const [maxTokens, setMaxTokens] = useState<number>(2048);
+
+  // Load config on mount
+  useEffect(() => {
+    const config = aiProviderService.getOpenAIConfig();
+    setApiKey(config.apiKey);
+    setSelectedModel(config.model);
+    setTemperature(config.temperature);
+    setMaxTokens(config.maxTokens);
+  }, []);
+
+  // Update config when values change
+  const updateConfig = () => {
+    aiProviderService.setOpenAIConfig({
+      apiKey,
+      model: selectedModel || 'gpt-4-turbo',
+      temperature,
+      maxTokens,
+    });
+  };
+
+  useEffect(() => {
+    updateConfig();
+  }, [apiKey, selectedModel, temperature, maxTokens]);
 
   return (
-    <div className="relative animate-fade-in">
-      {/* Coming Soon Badge */}
-      <div className="absolute top-0 right-0">
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-          {t('ai.comingSoon')}
-        </span>
-      </div>
-
+    <div className="animate-fade-in">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
         {t('ai.openai.title')}
       </h2>
@@ -36,32 +56,32 @@ export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) =
         <FormInput
           label={t('ai.openai.apiKey')}
           type="password"
-          disabled
-          placeholder={t('ai.comingSoon')}
+          value={apiKey}
+          onChange={(e) => setApiKey(e.target.value)}
+          placeholder={t('ai.openai.apiKey')}
         />
         <Select
           label={t('ai.openai.model')}
           options={OPENAI_MODELS}
           value={selectedModel}
           onChange={setSelectedModel}
-          disabled
           placeholder={t('ai.openai.modelPlaceholder')}
         />
         <Slider
           label={t('ai.openai.temperature')}
-          value={0.7}
+          value={temperature}
+          onChange={setTemperature}
           min={0}
           max={2}
           step={0.1}
-          disabled
         />
         <Slider
           label={t('ai.openai.maxTokens')}
-          value={2048}
+          value={maxTokens}
+          onChange={setMaxTokens}
           min={100}
           max={4096}
           step={100}
-          disabled
         />
         
         <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
