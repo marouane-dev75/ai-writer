@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { Button } from "@/shared/ui";
 import { SiOpenai, SiAnthropic } from "react-icons/si";
@@ -6,7 +6,7 @@ import { HiCpuChip } from "react-icons/hi2";
 import { AnthropicSettings } from "./AnthropicSettings";
 import { LocalQwenSettings } from "./LocalQwenSettings";
 import { OpenAISettings } from "./OpenAISettings";
-import type { AIProvider } from "../types";
+import { useProviderSettings } from "../hooks/useProviderSettings";
 import type { AIProviderService } from "../services/ai-provider.service";
 
 interface AIProviderSettingsProps {
@@ -15,25 +15,64 @@ interface AIProviderSettingsProps {
 
 export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
   const { t } = useTranslation();
-  const [selectedProvider, setSelectedProvider] = useState<AIProvider>(service.getActiveProvider());
-  const [activeProvider, setActiveProvider] = useState<AIProvider>(service.getActiveProvider());
+  const {
+    config,
+    selectedProvider,
+    setSelectedProvider,
+    updateConfig,
+    save,
+    reset,
+    isLoading,
+    isSaving,
+    isDirty,
+    error,
+  } = useProviderSettings(service);
 
-  const handleSetActive = (provider: AIProvider) => {
-    service.setActiveProvider(provider);
-    setActiveProvider(provider);
-  };
-
-  const providers = useMemo<{ id: AIProvider; label: string; icon: React.ReactNode }[]>(
+  const providers = useMemo(
     () => [
-      { id: 'localQwen', label: t('ai.localQwen.title'), icon: <HiCpuChip className="w-5 h-5" /> },
-      { id: 'anthropic', label: t('ai.anthropic.title'), icon: <SiAnthropic className="w-5 h-5" /> },
-      { id: 'openai', label: t('ai.openai.title'), icon: <SiOpenai className="w-5 h-5" /> },
+      { id: 'localQwen' as const, label: t('ai.localQwen.title'), icon: <HiCpuChip className="w-5 h-5" /> },
+      { id: 'anthropic' as const, label: t('ai.anthropic.title'), icon: <SiAnthropic className="w-5 h-5" /> },
+      { id: 'openai' as const, label: t('ai.openai.title'), icon: <SiOpenai className="w-5 h-5" /> },
     ],
     [t]
   );
 
+  const handleSave = async () => {
+    try {
+      await save();
+      // TODO: Show success toast notification
+    } catch (err) {
+      // Error already handled by hook with error state
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <p className="text-gray-600 dark:text-gray-400">{t('common.loading')}</p>
+      </div>
+    );
+  }
+
+  if (!config) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <p className="text-red-600 dark:text-red-400">
+          {t('ai.failedToLoad')}
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      {/* Error Display */}
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+        </div>
+      )}
+
       {/* Provider Selector Tabs */}
       <div className="mb-6">
         <label 
@@ -53,8 +92,6 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
               onClick={() => setSelectedProvider(provider.id)}
               variant={selectedProvider === provider.id ? 'primary' : 'outline'}
               className="flex items-center gap-2"
-              aria-selected={selectedProvider === provider.id}
-              aria-controls={`${provider.id}-panel`}
             >
               {provider.icon}
               {provider.label}
@@ -64,26 +101,50 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
       </div>
 
       {/* Divider */}
-      <div className="border-t border-gray-200 dark:border-gray-700 mb-6"></div>
+      <div className="border-t border-gray-200 dark:border-gray-700 mb-6" />
 
-      {/* Provider Settings */}
-      <div role="tabpanel" id="localQwen-panel" aria-labelledby="localQwen-tab" hidden={selectedProvider !== 'localQwen'}>
-        <LocalQwenSettings 
-          isActive={activeProvider === 'localQwen'}
-          onSetActive={() => handleSetActive('localQwen')}
+      {/* Provider Settings - Controlled components */}
+      {selectedProvider === 'localQwen' && (
+        <LocalQwenSettings
+          config={config.localQwen}
+          onChange={(updates) => updateConfig({ localQwen: { ...config.localQwen, ...updates } })}
+          isActive={config.activeProvider === 'localQwen'}
+          onSetActive={() => updateConfig({ activeProvider: 'localQwen' })}
         />
-      </div>
-      <div role="tabpanel" id="openai-panel" aria-labelledby="openai-tab" hidden={selectedProvider !== 'openai'}>
-        <OpenAISettings 
-          isActive={activeProvider === 'openai'}
-          onSetActive={() => handleSetActive('openai')}
+      )}
+      {selectedProvider === 'openai' && (
+        <OpenAISettings
+          config={config.openai}
+          onChange={(updates) => updateConfig({ openai: { ...config.openai, ...updates } })}
+          isActive={config.activeProvider === 'openai'}
+          onSetActive={() => updateConfig({ activeProvider: 'openai' })}
         />
-      </div>
-      <div role="tabpanel" id="anthropic-panel" aria-labelledby="anthropic-tab" hidden={selectedProvider !== 'anthropic'}>
-        <AnthropicSettings 
-          isActive={activeProvider === 'anthropic'}
-          onSetActive={() => handleSetActive('anthropic')}
+      )}
+      {selectedProvider === 'anthropic' && (
+        <AnthropicSettings
+          config={config.anthropic}
+          onChange={(updates) => updateConfig({ anthropic: { ...config.anthropic, ...updates } })}
+          isActive={config.activeProvider === 'anthropic'}
+          onSetActive={() => updateConfig({ activeProvider: 'anthropic' })}
         />
+      )}
+
+      {/* Save/Reset Actions */}
+      <div className="border-t border-gray-200 dark:border-gray-700 mt-6 pt-6 flex justify-end gap-3">
+        <Button
+          onClick={reset}
+          variant="outline"
+          disabled={!isDirty || isSaving}
+        >
+          {t('common.cancel')}
+        </Button>
+        <Button
+          onClick={handleSave}
+          variant="primary"
+          disabled={!isDirty || isSaving}
+        >
+          {isSaving ? t('common.saving') : t('common.save')}
+        </Button>
       </div>
     </div>
   );

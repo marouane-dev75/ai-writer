@@ -6,5 +6,5 @@ export type {
   OpenAIConfig, 
   AnthropicConfig, 
   LocalQwenConfig, 
-  AIProviderConfigs 
+  AIProvidersConfig 
 } from './types';

@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
-import { aiProviderService } from "../services/ai-provider.service";
+import type { OpenAIConfig } from "../types";
 
 interface OpenAISettingsProps {
+  config: OpenAIConfig;
+  onChange: (updates: Partial<OpenAIConfig>) => void;
   isActive: boolean;
   onSetActive: () => void;
 }
@@ -17,35 +19,22 @@ const OPENAI_MODELS: SelectOption[] = [
   { value: 'gpt-3.5-turbo-16k', label: 'GPT-3.5 Turbo 16K' },
 ];
 
-export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) => {
+export const OpenAISettings = ({ 
+  config, 
+  onChange, 
+  isActive, 
+  onSetActive 
+}: OpenAISettingsProps) => {
   const { t } = useTranslation();
-  const [apiKey, setApiKey] = useState<string>("");
-  const [selectedModel, setSelectedModel] = useState<string | null>(null);
-  const [temperature, setTemperature] = useState<number>(0.7);
-  const [maxTokens, setMaxTokens] = useState<number>(2048);
 
-  // Load config on mount
-  useEffect(() => {
-    const config = aiProviderService.getOpenAIConfig();
-    setApiKey(config.apiKey);
-    setSelectedModel(config.model);
-    setTemperature(config.temperature);
-    setMaxTokens(config.maxTokens);
-  }, []);
-
-  // Update config when values change
-  const updateConfig = () => {
-    aiProviderService.setOpenAIConfig({
-      apiKey,
-      model: selectedModel || 'gpt-4-turbo',
-      temperature,
-      maxTokens,
-    });
-  };
-
-  useEffect(() => {
-    updateConfig();
-  }, [apiKey, selectedModel, temperature, maxTokens]);
+  const handleChange = useCallback(
+    (field: keyof OpenAIConfig) => (value: string | number | null) => {
+      if (value !== null) {
+        onChange({ [field]: value });
+      }
+    },
+    [onChange]
+  );
 
   return (
     <div className="animate-fade-in">
@@ -56,29 +45,29 @@ export const OpenAISettings = ({ isActive, onSetActive }: OpenAISettingsProps) =
         <FormInput
           label={t('ai.openai.apiKey')}
           type="password"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
+          value={config.apiKey}
+          onChange={(e) => handleChange('apiKey')(e.target.value)}
           placeholder={t('ai.openai.apiKey')}
         />
         <Select
           label={t('ai.openai.model')}
           options={OPENAI_MODELS}
-          value={selectedModel}
-          onChange={setSelectedModel}
+          value={config.model}
+          onChange={(value) => handleChange('model')(value)}
           placeholder={t('ai.openai.modelPlaceholder')}
         />
         <Slider
           label={t('ai.openai.temperature')}
-          value={temperature}
-          onChange={setTemperature}
+          value={config.temperature}
+          onChange={handleChange('temperature')}
           min={0}
           max={2}
           step={0.1}
         />
         <Slider
           label={t('ai.openai.maxTokens')}
-          value={maxTokens}
-          onChange={setMaxTokens}
+          value={config.maxTokens}
+          onChange={handleChange('maxTokens')}
           min={100}
           max={4096}
           step={100}

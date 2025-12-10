@@ -1,100 +1,138 @@
-import type { AIProvider, OpenAIConfig, AnthropicConfig, LocalQwenConfig } from '../types';
+import { invoke } from '@tauri-apps/api/core';
+import type { 
+  AIProvider, 
+  OpenAIConfig, 
+  AnthropicConfig, 
+  LocalQwenConfig,
+  AIProvidersConfig 
+} from '../types';
+
+/**
+ * Internal AppConfig interface - only used internally to communicate with backend
+ * This feature should only expose AI provider configs
+ */
+interface AppConfig {
+  theme: {
+    darkMode: boolean;
+  };
+  locale: {
+    language: string;
+  };
+  aiProviders: AIProvidersConfig;
+}
 
 /**
  * Service interface for AI provider operations
+ * This abstraction allows different implementations (mock, backend, etc.)
  */
 export interface AIProviderService {
+  /**
+   * Load all AI provider configs from backend
+   */
+  loadConfig(): Promise<AIProvidersConfig>;
+  
+  /**
+   * Save all AI provider configs to backend
+   * Only updates the aiProviders section, preserves other app config
+   */
+  saveConfig(config: AIProvidersConfig): Promise<void>;
+  
+  /**
+   * Get active provider from current cached state
+   * Requires loadConfig() to be called first
+   */
   getActiveProvider(): AIProvider;
-  setActiveProvider(provider: AIProvider): void;
   
-  // OpenAI configuration
+  /**
+   * Get OpenAI config from current cached state
+   * Requires loadConfig() to be called first
+   */
   getOpenAIConfig(): OpenAIConfig;
-  setOpenAIConfig(config: OpenAIConfig): void;
   
-  // Anthropic configuration
+  /**
+   * Get Anthropic config from current cached state
+   * Requires loadConfig() to be called first
+   */
   getAnthropicConfig(): AnthropicConfig;
-  setAnthropicConfig(config: AnthropicConfig): void;
   
-  // LocalQwen configuration
+  /**
+   * Get Local Qwen config from current cached state
+   * Requires loadConfig() to be called first
+   */
   getLocalQwenConfig(): LocalQwenConfig;
-  setLocalQwenConfig(config: LocalQwenConfig): void;
 }
 
 /**
- * Default configuration for OpenAI provider
+ * Backend implementation of AIProviderService
+ * Communicates with Tauri backend via invoke
+ * Only exposes AI provider configs, internal handling of full AppConfig
  */
-const DEFAULT_OPENAI_CONFIG: OpenAIConfig = {
-  apiKey: '',
-  model: 'gpt-4-turbo',
-  temperature: 0.7,
-  maxTokens: 2048,
-};
+class BackendAIProviderService implements AIProviderService {
+  private currentConfig: AIProvidersConfig | null = null;
 
-/**
- * Default configuration for Anthropic provider
- */
-const DEFAULT_ANTHROPIC_CONFIG: AnthropicConfig = {
-  apiKey: '',
-  model: 'claude-3-opus',
-  maxTokens: 2048,
-};
-
-/**
- * Default configuration for Local Qwen provider
- */
-const DEFAULT_LOCAL_QWEN_CONFIG: LocalQwenConfig = {
-  modelPath: '',
-  contextSize: 4096,
-  temperature: 0.7,
-  seed: -1,
-  repeatPenalty: 1.1,
-  repeatLastN: 64,
-  useThinkingMode: false,
-  useGpu: true,
-};
-
-/**
- * In-memory implementation of AIProviderService
- * Stores the active provider and configurations in memory (will be replaced with backend later)
- */
-class InMemoryAIProviderService implements AIProviderService {
-  private activeProvider: AIProvider = 'localQwen';
-  private openaiConfig: OpenAIConfig = { ...DEFAULT_OPENAI_CONFIG };
-  private anthropicConfig: AnthropicConfig = { ...DEFAULT_ANTHROPIC_CONFIG };
-  private localQwenConfig: LocalQwenConfig = { ...DEFAULT_LOCAL_QWEN_CONFIG };
-
-  getActiveProvider(): AIProvider {
-    return this.activeProvider;
+  async loadConfig(): Promise<AIProvidersConfig> {
+    try {
+      const appConfig = await invoke<AppConfig>('load_config');
+      this.currentConfig = appConfig.aiProviders;
+      return { ...this.currentConfig };
+    } catch (error) {
+      throw new Error(
+        `Failed to load AI provider configuration: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
   }
 
-  setActiveProvider(provider: AIProvider): void {
-    this.activeProvider = provider;
+  async saveConfig(config: AIProvidersConfig): Promise<void> {
+    try {
+      // Load current full app config
+      const appConfig = await invoke<AppConfig>('load_config');
+      
+      // Update only AI providers section
+      appConfig.aiProviders = config;
+      
+      // Save back the full config
+      await invoke('save_config', { config: appConfig });
+      
+      // Update local cache
+      this.currentConfig = { ...config };
+    } catch (error) {
+      throw new Error(
+        `Failed to save AI provider configuration: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
+  getActiveProvider(): AIProvider {
+    if (!this.currentConfig) {
+      throw new Error('Config not loaded. Call loadConfig() first.');
+    }
+    return this.currentConfig.activeProvider;
   }
 
   getOpenAIConfig(): OpenAIConfig {
-    return { ...this.openaiConfig };
-  }
-
-  setOpenAIConfig(config: OpenAIConfig): void {
-    this.openaiConfig = { ...config };
+    if (!this.currentConfig) {
+      throw new Error('Config not loaded. Call loadConfig() first.');
+    }
+    return { ...this.currentConfig.openai };
   }
 
   getAnthropicConfig(): AnthropicConfig {
-    return { ...this.anthropicConfig };
-  }
-
-  setAnthropicConfig(config: AnthropicConfig): void {
-    this.anthropicConfig = { ...config };
+    if (!this.currentConfig) {
+      throw new Error('Config not loaded. Call loadConfig() first.');
+    }
+    return { ...this.currentConfig.anthropic };
   }
 
   getLocalQwenConfig(): LocalQwenConfig {
-    return { ...this.localQwenConfig };
-  }
-
-  setLocalQwenConfig(config: LocalQwenConfig): void {
-    this.localQwenConfig = { ...config };
+    if (!this.currentConfig) {
+      throw new Error('Config not loaded. Call loadConfig() first.');
+    }
+    return { ...this.currentConfig.localQwen };
   }
 }
 
-// Export singleton instance
-export const aiProviderService: AIProviderService = new InMemoryAIProviderService();
+/**
+ * Singleton instance of the AI provider service
+ * This is the main service used throughout the application
+ */
+export const aiProviderService: AIProviderService = new BackendAIProviderService();

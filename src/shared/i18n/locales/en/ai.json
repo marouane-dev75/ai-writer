@@ -4,6 +4,7 @@
     "selectProvider": "Select AI Provider",
     "setActive": "Set Active",
     "activeProvider": "Active",
+    "failedToLoad": "Failed to load AI provider configuration",
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Model Path",

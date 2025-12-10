@@ -34,9 +34,10 @@ export interface LocalQwenConfig {
 }
 
 /**
- * Combined AI provider configurations
+ * AI Providers configuration containing all providers and active selection
  */
-export interface AIProviderConfigs {
+export interface AIProvidersConfig {
+  activeProvider: AIProvider;
   openai: OpenAIConfig;
   anthropic: AnthropicConfig;
   localQwen: LocalQwenConfig;

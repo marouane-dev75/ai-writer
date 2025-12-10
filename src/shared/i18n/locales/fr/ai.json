@@ -4,6 +4,7 @@
     "selectProvider": "Sélectionner le fournisseur IA",
     "setActive": "Définir comme actif",
     "activeProvider": "Actif",
+    "failedToLoad": "Échec du chargement de la configuration du fournisseur IA",
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Chemin du modèle",
