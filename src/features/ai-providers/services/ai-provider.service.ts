@@ -8,20 +8,6 @@ import type {
 } from '../types';
 
 /**
- * Internal AppConfig interface - only used internally to communicate with backend
- * This feature should only expose AI provider configs
- */
-interface AppConfig {
-  theme: {
-    darkMode: boolean;
-  };
-  locale: {
-    language: string;
-  };
-  aiProviders: AIProvidersConfig;
-}
-
-/**
  * Service interface for AI provider operations
  * This abstraction allows different implementations (mock, backend, etc.)
  */
@@ -65,15 +51,15 @@ export interface AIProviderService {
 /**
  * Backend implementation of AIProviderService
  * Communicates with Tauri backend via invoke
- * Only exposes AI provider configs, internal handling of full AppConfig
+ * Uses dedicated AI provider commands - no knowledge of other app config
  */
 class BackendAIProviderService implements AIProviderService {
   private currentConfig: AIProvidersConfig | null = null;
 
   async loadConfig(): Promise<AIProvidersConfig> {
     try {
-      const appConfig = await invoke<AppConfig>('load_config');
-      this.currentConfig = appConfig.aiProviders;
+      const config = await invoke<AIProvidersConfig>('load_ai_providers_config');
+      this.currentConfig = config;
       return { ...this.currentConfig };
     } catch (error) {
       throw new Error(
@@ -84,14 +70,7 @@ class BackendAIProviderService implements AIProviderService {
 
   async saveConfig(config: AIProvidersConfig): Promise<void> {
     try {
-      // Load current full app config
-      const appConfig = await invoke<AppConfig>('load_config');
-      
-      // Update only AI providers section
-      appConfig.aiProviders = config;
-      
-      // Save back the full config
-      await invoke('save_config', { config: appConfig });
+      await invoke('save_ai_providers_config', { aiProvidersConfig: config });
       
       // Update local cache
       this.currentConfig = { ...config };

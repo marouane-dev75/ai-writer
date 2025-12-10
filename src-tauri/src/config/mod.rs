@@ -4,4 +4,4 @@ pub mod types;
 
 pub use manager::ConfigManager;
 pub use storage::FileConfigStorage;
-pub use types::AppConfig;
+pub use types::{AIProvidersConfig, LocaleConfig, ThemeConfig};

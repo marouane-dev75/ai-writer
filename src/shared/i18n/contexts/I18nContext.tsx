@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback, useEffect } from 'react';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
-import type { LocaleStorage } from '../LocaleStorage.interface';
+import type { LocaleStorage } from '../types';
 
 interface I18nContextType {
   language: string;

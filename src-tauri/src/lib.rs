@@ -74,8 +74,12 @@ pub fn run() {
             })
         })
         .invoke_handler(tauri::generate_handler![
-            commands::load_config,
-            commands::save_config,
+            commands::load_ai_providers_config,
+            commands::save_ai_providers_config,
+            commands::load_locale_config,
+            commands::save_locale_config,
+            commands::load_theme_config,
+            commands::save_theme_config,
             commands::get_logs,
             commands::get_all_logs,
             commands::clear_logs
