@@ -15,6 +15,21 @@
       "medium": "Medium spinner",
       "large": "Large spinner",
       "withText": "Loading with text..."
+    },
+    "aiStreaming": {
+      "title": "AI Streaming Test",
+      "description": "Test the AI streaming system with custom prompts",
+      "systemPrompt": "System Prompt",
+      "userPrompt": "User Prompt",
+      "startStream": "Start Stream",
+      "cancelStream": "Cancel Stream",
+      "clearOutput": "Clear Output",
+      "output": "Stream Output",
+      "noOutput": "No output yet. Start a stream to see results.",
+      "streaming": "Streaming...",
+      "modelNotLoaded": "Model not loaded. Configure AI settings first.",
+      "defaultSystemPrompt": "You are a helpful assistant.",
+      "defaultUserPrompt": "Write a short poem about coding."
     }
   }
 }

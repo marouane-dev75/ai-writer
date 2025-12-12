@@ -5,6 +5,12 @@
     "setActive": "Définir comme actif",
     "activeProvider": "Actif",
     "failedToLoad": "Échec du chargement de la configuration du fournisseur IA",
+    "modelStatus": {
+      "noModel": "Aucun modèle",
+      "loading": "Chargement {{provider}}...",
+      "loaded": "{{provider}}: {{model}}",
+      "error": "Erreur : {{provider}}"
+    },
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Chemin du modèle",

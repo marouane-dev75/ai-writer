@@ -5,6 +5,12 @@
     "setActive": "Set Active",
     "activeProvider": "Active",
     "failedToLoad": "Failed to load AI provider configuration",
+    "modelStatus": {
+      "noModel": "No Model",
+      "loading": "Loading {{provider}}...",
+      "loaded": "{{provider}}: {{model}}",
+      "error": "Error: {{provider}}"
+    },
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Model Path",

@@ -5,7 +5,7 @@ import type { LocaleStorage } from '../types';
 interface I18nContextType {
   language: string;
   changeLanguage: (lng: string) => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);

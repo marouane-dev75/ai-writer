@@ -15,6 +15,21 @@
       "medium": "Spinner moyen",
       "large": "Grand spinner",
       "withText": "Chargement avec texte..."
+    },
+    "aiStreaming": {
+      "title": "Test de Streaming IA",
+      "description": "Testez le système de streaming IA avec des prompts personnalisés",
+      "systemPrompt": "Prompt Système",
+      "userPrompt": "Prompt Utilisateur",
+      "startStream": "Démarrer le Stream",
+      "cancelStream": "Annuler le Stream",
+      "clearOutput": "Effacer la Sortie",
+      "output": "Sortie du Stream",
+      "noOutput": "Aucune sortie pour le moment. Démarrez un stream pour voir les résultats.",
+      "streaming": "Streaming en cours...",
+      "modelNotLoaded": "Modèle non chargé. Configurez d'abord les paramètres IA.",
+      "defaultSystemPrompt": "Vous êtes un assistant utile.",
+      "defaultUserPrompt": "Écrivez un court poème sur le codage."
     }
   }
 }
