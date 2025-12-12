@@ -1,0 +1,155 @@
+//! AI Manager - coordinates providers, state, and execution.
+
+use crate::ai::executor::Executor;
+use crate::ai::providers::{AIProvider, MockAnthropic, MockLocalQwen, MockOpenAI};
+use crate::ai::state::StateManager;
+use crate::ai::types::{AIError, ModelStatus};
+use crate::config::types::{AIProvider as ConfigProvider, AIProvidersConfig};
+use anyhow::Result;
+use std::sync::Arc;
+use tokio::sync::RwLock;
+
+/// Main AI manager that coordinates all AI operations
+pub struct AIManager {
+    active_provider: Arc<RwLock<Option<Arc<dyn AIProvider>>>>,
+    model_status: Arc<RwLock<ModelStatus>>,
+    executor: Arc<Executor>,
+}
+
+impl AIManager {
+    /// Create a new AI manager
+    pub fn new() -> Self {
+        log::info!("Initializing AIManager");
+        let state_manager = Arc::new(StateManager::new());
+        let executor = Arc::new(Executor::new(Arc::clone(&state_manager)));
+
+        Self {
+            active_provider: Arc::new(RwLock::new(None)),
+            model_status: Arc::new(RwLock::new(ModelStatus::Unloaded)),
+            executor,
+        }
+    }
+
+    /// Initialize the AI manager with configuration
+    pub async fn initialize(&self, config: &AIProvidersConfig) -> Result<()> {
+        log::info!("Initializing AI manager with config: {:?}", config.active_provider);
+        
+        // Set loading status
+        let provider_name = match config.active_provider {
+            ConfigProvider::Openai => "OpenAI",
+            ConfigProvider::Anthropic => "Anthropic",
+            ConfigProvider::LocalQwen => "LocalQwen",
+        };
+
+        {
+            let mut status = self.model_status.write().await;
+            *status = ModelStatus::Loading {
+                provider: provider_name.to_string(),
+            };
+        }
+
+        // Load the provider
+        let result = self.load_provider(config).await;
+
+        match result {
+            Ok(_) => {
+                log::info!("AI manager initialized successfully");
+                Ok(())
+            }
+            Err(e) => {
+                log::error!("Failed to initialize AI manager: {:#}", e);
+                let mut status = self.model_status.write().await;
+                *status = ModelStatus::Error {
+                    provider: provider_name.to_string(),
+                    error: e.to_string(),
+                };
+                Err(e)
+            }
+        }
+    }
+
+    /// Load a provider based on configuration
+    async fn load_provider(&self, config: &AIProvidersConfig) -> Result<()> {
+        let (provider, provider_name, model_name): (Arc<dyn AIProvider>, String, String) = 
+            match config.active_provider {
+                ConfigProvider::Openai => {
+                    let model = config.openai.model.clone();
+                    let provider = Arc::new(MockOpenAI::new(model.clone()));
+                    (provider, "OpenAI".to_string(), model)
+                }
+                ConfigProvider::Anthropic => {
+                    let model = config.anthropic.model.clone();
+                    let provider = Arc::new(MockAnthropic::new(model.clone()));
+                    (provider, "Anthropic".to_string(), model)
+                }
+                ConfigProvider::LocalQwen => {
+                    let model_path = config.local_qwen.model_path.clone();
+                    let provider = Arc::new(MockLocalQwen::new(model_path.clone()));
+                    let model_name = std::path::Path::new(&model_path)
+                        .file_name()
+                        .and_then(|n| n.to_str())
+                        .unwrap_or("Qwen-Local")
+                        .to_string();
+                    (provider, "LocalQwen".to_string(), model_name)
+                }
+            };
+
+        log::info!("Loading provider: {} with model: {}", provider_name, model_name);
+
+        // Set the active provider
+        {
+            let mut active = self.active_provider.write().await;
+            *active = Some(provider);
+        }
+
+        // Update status to loaded
+        {
+            let mut status = self.model_status.write().await;
+            *status = ModelStatus::Loaded {
+                provider: provider_name,
+                model: model_name,
+            };
+        }
+
+        Ok(())
+    }
+
+    /// Get the current model status
+    pub async fn get_status(&self) -> ModelStatus {
+        let status = self.model_status.read().await;
+        status.clone()
+    }
+
+    /// Generate a streaming response
+    pub async fn generate_stream(
+        &self,
+        system_prompt: String,
+        user_prompt: String,
+        app_handle: tauri::AppHandle,
+    ) -> Result<u64, AIError> {
+        log::info!("Generating stream with prompts");
+
+        // Get active provider
+        let provider = {
+            let active = self.active_provider.read().await;
+            active.clone().ok_or(AIError::NoActiveProvider)?
+        };
+
+        // Execute stream
+        self.executor
+            .execute_stream(provider, system_prompt, user_prompt, app_handle)
+            .await
+    }
+
+    /// Cancel the current streaming operation
+    pub async fn cancel_stream(&self) -> Result<(), AIError> {
+        log::info!("Cancelling stream");
+        self.executor.cancel_stream().await
+    }
+}
+
+impl Default for AIManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
