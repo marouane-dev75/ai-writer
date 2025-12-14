@@ -16,6 +16,7 @@ export interface OpenAIConfig {
 export interface AnthropicConfig {
   apiKey: string;
   model: string;
+  temperature: number;
   maxTokens: number;
 }
 
@@ -24,6 +25,7 @@ export interface AnthropicConfig {
  */
 export interface LocalQwenConfig {
   modelPath: string;
+  selectedModelId: string;
   contextSize: number;
   temperature: number;
   seed: number;

@@ -12,12 +12,9 @@ interface AnthropicSettingsProps {
 }
 
 const ANTHROPIC_MODELS: SelectOption[] = [
-  { value: 'claude-3-opus', label: 'Claude 3 Opus' },
-  { value: 'claude-3-sonnet', label: 'Claude 3 Sonnet' },
-  { value: 'claude-3-haiku', label: 'Claude 3 Haiku' },
-  { value: 'claude-2.1', label: 'Claude 2.1' },
-  { value: 'claude-2.0', label: 'Claude 2.0' },
-  { value: 'claude-instant-1.2', label: 'Claude Instant 1.2' },
+  { value: 'claude-sonnet-4-5', label: 'Claude Sonnet 4.5' },
+  { value: 'claude-haiku-4-5', label: 'Claude Haiku 4.5' },
+  { value: 'claude-opus-4-5', label: 'Claude Opus 4.5' },
 ];
 
 export const AnthropicSettings = ({ 
@@ -56,6 +53,14 @@ export const AnthropicSettings = ({
           value={config.model}
           onChange={(value) => handleChange('model')(value)}
           placeholder={t('ai.anthropic.modelPlaceholder')}
+        />
+        <Slider
+          label={t('ai.anthropic.temperature')}
+          value={config.temperature}
+          onChange={handleChange('temperature')}
+          min={0}
+          max={1}
+          step={0.1}
         />
         <Slider
           label={t('ai.anthropic.maxTokens')}

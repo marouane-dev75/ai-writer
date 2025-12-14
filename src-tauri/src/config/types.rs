@@ -54,6 +54,7 @@ pub struct OpenAIConfig {
 pub struct AnthropicConfig {
     pub api_key: String,
     pub model: String,
+    pub temperature: f32,
     pub max_tokens: u32,
 }
 
@@ -61,6 +62,7 @@ pub struct AnthropicConfig {
 #[serde(rename_all = "camelCase")]
 pub struct LocalQwenConfig {
     pub model_path: String,
+    pub selected_model_id: String,
     pub context_size: u32,
     pub temperature: f32,
     pub seed: i32,
@@ -120,7 +122,8 @@ impl Default for AnthropicConfig {
     fn default() -> Self {
         Self {
             api_key: String::new(),
-            model: "claude-sonnet-4.5".to_string(),
+            model: "claude-sonnet-4-5".to_string(),
+            temperature: 0.7,
             max_tokens: 2048,
         }
     }
@@ -130,6 +133,7 @@ impl Default for LocalQwenConfig {
     fn default() -> Self {
         Self {
             model_path: String::new(),
+            selected_model_id: String::new(),
             context_size: 4096,
             temperature: 0.7,
             seed: -1,

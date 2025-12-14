@@ -1,12 +1,12 @@
 //! AI provider trait and implementations.
 
-mod mock_anthropic;
-mod mock_openai;
-mod mock_qwen;
+mod anthropic;
+mod local_qwen;
+mod openai;
 
-pub use mock_anthropic::MockAnthropic;
-pub use mock_openai::MockOpenAI;
-pub use mock_qwen::MockLocalQwen;
+pub use anthropic::Anthropic;
+pub use local_qwen::LocalQwen;
+pub use openai::OpenAI;
 
 use anyhow::Result;
 use async_trait::async_trait;
