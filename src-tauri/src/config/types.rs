@@ -54,6 +54,7 @@ pub struct OpenAIConfig {
 pub struct AnthropicConfig {
     pub api_key: String,
     pub model: String,
+    pub temperature: f32,
     pub max_tokens: u32,
 }
 
@@ -120,7 +121,8 @@ impl Default for AnthropicConfig {
     fn default() -> Self {
         Self {
             api_key: String::new(),
-            model: "claude-sonnet-4.5".to_string(),
+            model: "claude-sonnet-4-5".to_string(),
+            temperature: 0.7,
             max_tokens: 2048,
         }
     }

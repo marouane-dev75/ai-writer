@@ -16,6 +16,7 @@ export interface OpenAIConfig {
 export interface AnthropicConfig {
   apiKey: string;
   model: string;
+  temperature: number;
   maxTokens: number;
 }
 

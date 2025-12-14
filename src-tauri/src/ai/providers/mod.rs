@@ -1,10 +1,10 @@
 //! AI provider trait and implementations.
 
-mod mock_anthropic;
+mod anthropic;
 mod mock_qwen;
 mod openai;
 
-pub use mock_anthropic::MockAnthropic;
+pub use anthropic::Anthropic;
 pub use mock_qwen::MockLocalQwen;
 pub use openai::OpenAI;
 
