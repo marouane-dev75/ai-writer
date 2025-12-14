@@ -114,7 +114,10 @@ pub fn run() {
             commands::save_theme_config,
             commands::get_logs,
             commands::get_all_logs,
-            commands::clear_logs
+            commands::clear_logs,
+            commands::scan_qwen_models_cmd,
+            commands::get_qwen_models_cmd,
+            commands::download_qwen_model_cmd
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

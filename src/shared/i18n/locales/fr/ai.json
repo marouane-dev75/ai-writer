@@ -14,6 +14,9 @@
     "localQwen": {
       "title": "Qwen 3 (Local)",
       "modelPath": "Chemin du modèle",
+      "basePath": "Chemin de base des modèles",
+      "selectedModel": "Modèle actif",
+      "selectModel": "Sélectionner un modèle",
       "useGpu": "Utiliser le GPU",
       "contextSize": "Taille du contexte",
       "temperature": "Température",
@@ -21,7 +24,20 @@
       "seedHelper": "-1 pour une graine aléatoire",
       "repeatPenalty": "Pénalité de répétition",
       "repeatLastN": "Répéter les derniers N",
-      "useThinkingMode": "Utiliser le mode réflexion"
+      "useThinkingMode": "Utiliser le mode réflexion",
+      "modelManager": "Gestionnaire de modèles",
+      "availableModels": "Modèles disponibles",
+      "downloaded": "Téléchargé",
+      "notDownloaded": "Non téléchargé",
+      "downloadModel": "Télécharger",
+      "downloading": "Téléchargement...",
+      "downloadingFile": "Téléchargement de {{file}}...",
+      "downloadProgress": "{{percentage}}% ({{downloaded}} Mo / {{total}} Mo)",
+      "scanning": "Analyse des modèles...",
+      "noModelsDownloaded": "Aucun modèle téléchargé",
+      "selectPathFirst": "Veuillez d'abord sélectionner un chemin de base",
+      "downloadComplete": "Téléchargement terminé",
+      "downloadFailed": "Échec du téléchargement"
     },
     "anthropic": {
       "title": "Anthropic",

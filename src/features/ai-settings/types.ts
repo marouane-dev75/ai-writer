@@ -25,6 +25,7 @@ export interface AnthropicConfig {
  */
 export interface LocalQwenConfig {
   modelPath: string;
+  selectedModelId: string;
   contextSize: number;
   temperature: number;
   seed: number;

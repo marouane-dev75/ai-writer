@@ -2,6 +2,7 @@
 
 pub mod executor;
 pub mod manager;
+pub mod model_manager;
 pub mod providers;
 pub mod state;
 pub mod types;
