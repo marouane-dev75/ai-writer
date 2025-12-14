@@ -1,0 +1,42 @@
+{
+  "ai": {
+    "comingSoon": "Coming soon...",
+    "selectProvider": "Select AI Provider",
+    "setActive": "Set Active",
+    "activeProvider": "Active",
+    "failedToLoad": "Failed to load AI provider configuration",
+    "modelStatus": {
+      "noModel": "No Model",
+      "loading": "Loading {{provider}}...",
+      "loaded": "{{provider}}: {{model}}",
+      "error": "Error: {{provider}}"
+    },
+    "localQwen": {
+      "title": "Qwen 3 (Local)",
+      "modelPath": "Model Path",
+      "useGpu": "Use GPU",
+      "contextSize": "Context Size",
+      "temperature": "Temperature",
+      "seed": "Seed",
+      "seedHelper": "-1 for random seed",
+      "repeatPenalty": "Repeat Penalty",
+      "repeatLastN": "Repeat Last N",
+      "useThinkingMode": "Use Thinking Mode"
+    },
+    "anthropic": {
+      "title": "Anthropic",
+      "apiKey": "API Key",
+      "model": "Model",
+      "modelPlaceholder": "Select models...",
+      "maxTokens": "Max Tokens"
+    },
+    "openai": {
+      "title": "OpenAI",
+      "apiKey": "API Key",
+      "model": "Model",
+      "modelPlaceholder": "Select models...",
+      "temperature": "Temperature",
+      "maxTokens": "Max Tokens"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import type { ThemeStorage } from './service/ThemeStorage.interface';
+import type { ThemeStorage } from './types';
 import "./theme.css";
 import { LoadingSpinner } from '@/shared/ui';
 
@@ -24,7 +24,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, storage 
     const loadTheme = async () => {
       try {
         const theme = await storage.loadTheme();
-        setIsDarkMode(theme.dark_mode);
+        setIsDarkMode(theme.darkMode);
       } catch (error) {
         console.error('Failed to load theme:', error);
         // Use default value on error
@@ -50,7 +50,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, storage 
     setIsDarkMode(newMode);
     
     try {
-      await storage.saveTheme({ dark_mode: newMode });
+      await storage.saveTheme({ darkMode: newMode });
     } catch (error) {
       console.error('Failed to save theme:', error);
       // Revert on error

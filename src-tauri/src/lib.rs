@@ -3,12 +3,15 @@
 //! This module handles the Tauri application setup, including:
 //! - Logger initialization
 //! - Configuration management
+//! - AI provider management
 //! - State management
 
+mod ai;
 mod commands;
 mod config;
 mod logging;
 
+use ai::AIManager;
 use anyhow::{Context, Result};
 use config::*;
 use logging::*;
@@ -37,6 +40,26 @@ fn initialize_config(app_data_dir: &Path) -> Result<ConfigManager<FileConfigStor
     Ok(ConfigManager::new(storage))
 }
 
+/// Initialize the AI manager with configuration.
+async fn initialize_ai(config_manager: &ConfigManager<FileConfigStorage>) -> Result<AIManager> {
+    let ai_manager = AIManager::new();
+    
+    // Load full config and extract AI providers config
+    let app_config = config_manager
+        .load_config()
+        .context("Failed to load app config")?;
+    
+    // Initialize AI manager with config
+    ai_manager
+        .initialize(&app_config.ai_providers)
+        .await
+        .context("Failed to initialize AI manager")?;
+    
+    log::info!("AI manager initialized successfully");
+    
+    Ok(ai_manager)
+}
+
 /// Setup the Tauri application with required managers and state.
 fn setup_app(app: &mut tauri::App) -> Result<()> {
     let app_data_dir = app
@@ -51,9 +74,15 @@ fn setup_app(app: &mut tauri::App) -> Result<()> {
     let log_manager = initialize_logging(&app_data_dir)?;
     let config_manager = initialize_config(&app_data_dir)?;
     
+    // Initialize AI manager (async)
+    let ai_manager = tauri::async_runtime::block_on(async {
+        initialize_ai(&config_manager).await
+    })?;
+    
     // Register state
     app.manage(log_manager);
     app.manage(config_manager);
+    app.manage(ai_manager);
     
     log::info!("Application setup completed");
     
@@ -65,6 +94,7 @@ fn setup_app(app: &mut tauri::App) -> Result<()> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
         .setup(|app| {
             setup_app(app).map_err(|e| {
                 let error_msg = format!("Application setup failed: {:#}", e);
@@ -73,8 +103,15 @@ pub fn run() {
             })
         })
         .invoke_handler(tauri::generate_handler![
-            commands::load_config,
-            commands::save_config,
+            commands::get_model_status,
+            commands::generate_stream,
+            commands::cancel_stream,
+            commands::load_ai_providers_config,
+            commands::save_ai_providers_config,
+            commands::load_locale_config,
+            commands::save_locale_config,
+            commands::load_theme_config,
+            commands::save_theme_config,
             commands::get_logs,
             commands::get_all_logs,
             commands::clear_logs

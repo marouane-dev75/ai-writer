@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useCallback, useEffect } from 'react';
 import { useTranslation as useI18nTranslation } from 'react-i18next';
-import type { LocaleStorage } from '../LocaleStorage.interface';
+import type { LocaleStorage } from '../types';
 
 interface I18nContextType {
   language: string;
   changeLanguage: (lng: string) => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, string | number>) => string;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);

@@ -1,17 +1,5 @@
 {
   "showcase": {
-    "card1": {
-      "title": "Responsive Design",
-      "description": "Tailwind makes it easy to build responsive layouts with mobile-first utilities."
-    },
-    "card2": {
-      "title": "Utility-First",
-      "description": "Build complex components from a constrained set of primitive utilities."
-    },
-    "card3": {
-      "title": "Fast Development",
-      "description": "Rapidly build modern websites without leaving your HTML."
-    },
     "buttons": {
       "title": "Button Styles",
       "primary": "Primary Button",
@@ -20,24 +8,6 @@
       "danger": "Danger Button",
       "outline": "Outline Button"
     },
-    "typography": {
-      "title": "Typography Examples",
-      "extraLarge": "Extra Large Heading",
-      "large": "Large Heading",
-      "medium": "Medium Heading",
-      "regular": "Regular text with some content",
-      "small": "Small text for captions or footnotes",
-      "extraSmall": "Extra small text"
-    },
-    "badges": {
-      "title": "Badges & Tags",
-      "primary": "Primary Badge",
-      "success": "Success Badge",
-      "warning": "Warning Badge",
-      "danger": "Danger Badge",
-      "info": "Info Badge",
-      "secondary": "Secondary Badge"
-    },
     "loading": {
       "title": "Loading Spinners",
       "description": "Dark mode friendly loading indicators with different sizes",
@@ -45,6 +15,21 @@
       "medium": "Medium spinner",
       "large": "Large spinner",
       "withText": "Loading with text..."
+    },
+    "aiStreaming": {
+      "title": "AI Streaming Test",
+      "description": "Test the AI streaming system with custom prompts",
+      "systemPrompt": "System Prompt",
+      "userPrompt": "User Prompt",
+      "startStream": "Start Stream",
+      "cancelStream": "Cancel Stream",
+      "clearOutput": "Clear Output",
+      "output": "Stream Output",
+      "noOutput": "No output yet. Start a stream to see results.",
+      "streaming": "Streaming...",
+      "modelNotLoaded": "Model not loaded. Configure AI settings first.",
+      "defaultSystemPrompt": "You are a helpful assistant.",
+      "defaultUserPrompt": "Write a short poem about coding."
     }
   }
 }

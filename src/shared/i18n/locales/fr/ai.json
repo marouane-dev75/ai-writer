@@ -1,0 +1,42 @@
+{
+  "ai": {
+    "comingSoon": "Bientôt disponible...",
+    "selectProvider": "Sélectionner le fournisseur IA",
+    "setActive": "Définir comme actif",
+    "activeProvider": "Actif",
+    "failedToLoad": "Échec du chargement de la configuration du fournisseur IA",
+    "modelStatus": {
+      "noModel": "Aucun modèle",
+      "loading": "Chargement {{provider}}...",
+      "loaded": "{{provider}}: {{model}}",
+      "error": "Erreur : {{provider}}"
+    },
+    "localQwen": {
+      "title": "Qwen 3 (Local)",
+      "modelPath": "Chemin du modèle",
+      "useGpu": "Utiliser le GPU",
+      "contextSize": "Taille du contexte",
+      "temperature": "Température",
+      "seed": "Graine",
+      "seedHelper": "-1 pour une graine aléatoire",
+      "repeatPenalty": "Pénalité de répétition",
+      "repeatLastN": "Répéter les derniers N",
+      "useThinkingMode": "Utiliser le mode réflexion"
+    },
+    "anthropic": {
+      "title": "Anthropic",
+      "apiKey": "Clé API",
+      "model": "Modèle",
+      "modelPlaceholder": "Sélectionner des modèles...",
+      "maxTokens": "Tokens Maximum"
+    },
+    "openai": {
+      "title": "OpenAI",
+      "apiKey": "Clé API",
+      "model": "Modèle",
+      "modelPlaceholder": "Sélectionner des modèles...",
+      "temperature": "Température",
+      "maxTokens": "Tokens Maximum"
+    }
+  }
+}

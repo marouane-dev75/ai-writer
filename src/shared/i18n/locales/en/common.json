@@ -1,11 +1,13 @@
 {
   "common": {
     "save": "Save",
+    "saving": "Saving...",
     "cancel": "Cancel",
     "edit": "Edit",
     "delete": "Delete",
     "loading": "Loading...",
     "loadingLanguage": "Loading language...",
-    "loadingTheme": "Loading theme..."
+    "loadingTheme": "Loading theme...",
+    "browse": "Browse"
   }
 }
