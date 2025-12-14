@@ -22,8 +22,12 @@ struct ChatCompletionRequest {
     stream: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     temperature: Option<f32>,
+    /// For older models (GPT-3.5, GPT-4, etc.)
     #[serde(skip_serializing_if = "Option::is_none")]
     max_tokens: Option<u32>,
+    /// For newer models (GPT-4o, GPT-5, o1, etc.)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    max_completion_tokens: Option<u32>,
 }
 
 #[derive(Debug, Serialize)]
@@ -113,6 +117,19 @@ impl OpenAI {
             format!("HTTP {} - {}", status, body)
         }
     }
+
+    /// Determines if the model uses the new max_completion_tokens parameter
+    /// instead of the legacy max_tokens parameter.
+    fn uses_max_completion_tokens(&self) -> bool {
+        let model_lower = self.model.to_lowercase();
+        
+        // Newer models that require max_completion_tokens
+        model_lower.starts_with("gpt-4o")
+            || model_lower.starts_with("gpt-5")
+            || model_lower.starts_with("o1")
+            || model_lower.starts_with("o3")
+            || model_lower.contains("chatgpt-4o")
+    }
 }
 
 #[async_trait]
@@ -143,7 +160,8 @@ impl AIProvider for OpenAI {
         .await
         .context("Failed to emit start event")?;
 
-        // Build request
+        // Build request with appropriate token limit parameter based on model
+        let use_new_param = self.uses_max_completion_tokens();
         let request_body = ChatCompletionRequest {
             model: self.model.clone(),
             messages: vec![
@@ -158,10 +176,14 @@ impl AIProvider for OpenAI {
             ],
             stream: true,
             temperature: self.temperature,
-            max_tokens: self.max_tokens,
+            max_tokens: if use_new_param { None } else { self.max_tokens },
+            max_completion_tokens: if use_new_param { self.max_tokens } else { None },
         };
 
-        log::debug!("Sending request to OpenAI API");
+        log::debug!(
+            "Sending request to OpenAI API (using {})",
+            if use_new_param { "max_completion_tokens" } else { "max_tokens" }
+        );
 
         // Make HTTP request
         let response = match timeout(
