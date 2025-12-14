@@ -294,7 +294,7 @@ export const LocalQwenSettings = ({
             type="number"
             value={config.contextSize.toString()}
             onChange={(e) => handleChange('contextSize')(Number(e.target.value))}
-            placeholder="4096"
+            placeholder="16384"
           />
 
           <Slider

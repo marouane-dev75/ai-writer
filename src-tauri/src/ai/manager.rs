@@ -1,7 +1,7 @@
 //! AI Manager - coordinates providers, state, and execution.
 
 use crate::ai::executor::Executor;
-use crate::ai::providers::{AIProvider, Anthropic, MockLocalQwen, OpenAI};
+use crate::ai::providers::{AIProvider, Anthropic, LocalQwen, OpenAI};
 use crate::ai::state::StateManager;
 use crate::ai::types::{AIError, ModelStatus};
 use crate::config::types::{AIProvider as ConfigProvider, AIProvidersConfig};
@@ -95,13 +95,13 @@ impl AIManager {
                     (provider, "Anthropic".to_string(), model)
                 }
                 ConfigProvider::LocalQwen => {
-                    let model_path = config.local_qwen.model_path.clone();
-                    let provider = Arc::new(MockLocalQwen::new(model_path.clone()));
-                    let model_name = std::path::Path::new(&model_path)
-                        .file_name()
-                        .and_then(|n| n.to_str())
-                        .unwrap_or("Qwen-Local")
-                        .to_string();
+                    let local_qwen_config = config.local_qwen.clone();
+                    let model_name = local_qwen_config.selected_model_id.clone();
+                    
+                    let provider = Arc::new(
+                        LocalQwen::new(local_qwen_config)?
+                    );
+
                     (provider, "LocalQwen".to_string(), model_name)
                 }
             };
