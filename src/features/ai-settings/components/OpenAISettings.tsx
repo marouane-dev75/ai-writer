@@ -12,11 +12,10 @@ interface OpenAISettingsProps {
 }
 
 const OPENAI_MODELS: SelectOption[] = [
-  { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
-  { value: 'gpt-4', label: 'GPT-4' },
-  { value: 'gpt-4-32k', label: 'GPT-4 32K' },
-  { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' },
-  { value: 'gpt-3.5-turbo-16k', label: 'GPT-3.5 Turbo 16K' },
+  { value: 'gpt-5-mini', label: 'GPT-5 mini' },
+  { value: 'gpt-4.1-mini', label: 'GPT-4.1 mini' },
+  { value: 'gpt-4.1-nano', label: 'GPT-4.1 nano' },
+  { value: 'gpt-4-nano', label: 'GPT-4 nano' },
 ];
 
 export const OpenAISettings = ({ 

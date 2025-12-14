@@ -1,7 +1,7 @@
 //! AI Manager - coordinates providers, state, and execution.
 
 use crate::ai::executor::Executor;
-use crate::ai::providers::{AIProvider, MockAnthropic, MockLocalQwen, MockOpenAI};
+use crate::ai::providers::{AIProvider, MockAnthropic, MockLocalQwen, OpenAI};
 use crate::ai::state::StateManager;
 use crate::ai::types::{AIError, ModelStatus};
 use crate::config::types::{AIProvider as ConfigProvider, AIProvidersConfig};
@@ -74,7 +74,13 @@ impl AIManager {
             match config.active_provider {
                 ConfigProvider::Openai => {
                     let model = config.openai.model.clone();
-                    let provider = Arc::new(MockOpenAI::new(model.clone()));
+                    let api_key = config.openai.api_key.clone();
+                    let temperature = config.openai.temperature;
+                    let max_tokens = config.openai.max_tokens;
+                    
+                    let provider = Arc::new(
+                        OpenAI::new(api_key, model.clone(), temperature, max_tokens)?
+                    );
                     (provider, "OpenAI".to_string(), model)
                 }
                 ConfigProvider::Anthropic => {
