@@ -1,0 +1,19 @@
+{
+  "aiPresets": {
+    "title": "Préréglages IA",
+    "subtitle": "Configurez les préréglages de transformation de texte IA pour l'éditeur",
+    "addPreset": "Ajouter un préréglage",
+    "addFirstPreset": "Ajouter votre premier préréglage",
+    "editPreset": "Modifier le préréglage",
+    "deletePreset": "Supprimer le préréglage",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce préréglage ?",
+    "noPresets": "Aucun préréglage configuré pour le moment",
+    "name": "Nom",
+    "namePlaceholder": "ex: Résumer, Développer, Vérifier la grammaire",
+    "promptTemplate": "Modèle de prompt",
+    "promptTemplatePlaceholder": "Entrez votre modèle de prompt ici...\n\nUtilisez {{BEFORE}} pour les lignes avant la sélection\nUtilisez {{AFTER}} pour les lignes après la sélection",
+    "placeholderHint": "Utilisez les espaces réservés {{BEFORE}} et {{AFTER}} dans votre modèle",
+    "linesBefore": "Lignes avant",
+    "linesAfter": "Lignes après"
+  }
+}
