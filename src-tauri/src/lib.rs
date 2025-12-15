@@ -13,6 +13,7 @@ mod logging;
 
 use ai::AIManager;
 use anyhow::{Context, Result};
+use config::types::AppConfig;
 use config::*;
 use logging::*;
 use std::path::Path;
@@ -41,23 +42,29 @@ fn initialize_config(app_data_dir: &Path) -> Result<ConfigManager<FileConfigStor
 }
 
 /// Initialize the AI manager with configuration.
-async fn initialize_ai(config_manager: &ConfigManager<FileConfigStorage>) -> Result<AIManager> {
+/// Returns an AI manager even if initialization fails - errors are tracked internally.
+async fn initialize_ai(config_manager: &ConfigManager<FileConfigStorage>) -> AIManager {
     let ai_manager = AIManager::new();
     
     // Load full config and extract AI providers config
-    let app_config = config_manager
-        .load_config()
-        .context("Failed to load app config")?;
+    let app_config = match config_manager.load_config() {
+        Ok(config) => config,
+        Err(e) => {
+            log::error!("Failed to load app config: {:#}", e);
+            log::info!("Using default configuration");
+            AppConfig::default()
+        }
+    };
     
-    // Initialize AI manager with config
+    // Initialize AI manager with config - errors are handled internally
+    if let Err(e) = ai_manager.initialize(&app_config.ai_providers).await {
+        log::error!("Failed to initialize AI manager: {:#}", e);
+        log::info!("AI manager will remain in error state until reconfigured");
+    } else {
+        log::info!("AI manager initialized successfully");
+    }
+    
     ai_manager
-        .initialize(&app_config.ai_providers)
-        .await
-        .context("Failed to initialize AI manager")?;
-    
-    log::info!("AI manager initialized successfully");
-    
-    Ok(ai_manager)
 }
 
 /// Setup the Tauri application with required managers and state.
@@ -74,10 +81,10 @@ fn setup_app(app: &mut tauri::App) -> Result<()> {
     let log_manager = initialize_logging(&app_data_dir)?;
     let config_manager = initialize_config(&app_data_dir)?;
     
-    // Initialize AI manager (async)
+    // Initialize AI manager (async) - always succeeds, errors tracked internally
     let ai_manager = tauri::async_runtime::block_on(async {
         initialize_ai(&config_manager).await
-    })?;
+    });
     
     // Register state
     app.manage(log_manager);

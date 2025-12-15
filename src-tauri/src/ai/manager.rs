@@ -30,7 +30,8 @@ impl AIManager {
         }
     }
 
-    /// Initialize the AI manager with configuration
+    /// Initialize the AI manager with configuration.
+    /// Errors are tracked in ModelStatus::Error and returned for logging purposes.
     pub async fn initialize(&self, config: &AIProvidersConfig) -> Result<()> {
         log::info!("Initializing AI manager with config: {:?}", config.active_provider);
         
@@ -63,6 +64,7 @@ impl AIManager {
                     provider: provider_name.to_string(),
                     error: e.to_string(),
                 };
+                // Return error for logging but app will continue
                 Err(e)
             }
         }
