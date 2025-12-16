@@ -22,7 +22,7 @@ use tauri::Manager;
 /// Initialize the logging system.
 fn initialize_logging(app_data_dir: &Path) -> Result<LogManager> {
     let log_path = app_data_dir.join("logs.txt");
-    let logger = init_logger(log_path, log::Level::Trace)
+    let logger = init_logger(log_path, log::Level::Debug)
         .context("Failed to initialize logger")?;
     
     log::info!("Logger initialized at {:?}", app_data_dir.join("logs.txt"));
