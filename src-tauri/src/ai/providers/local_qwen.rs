@@ -92,10 +92,10 @@ impl TokenOutputStream {
 
 pub struct LocalQwen {
     config: LocalQwenConfig,
-    model: Arc<Mutex<Qwen3>>,
-    tokenizer: Arc<Tokenizer>,
+    model: Arc<Mutex<Option<Qwen3>>>,
+    tokenizer: Arc<Mutex<Option<Tokenizer>>>,
     device: Device,
-    eos_token: u32,
+    initialized: Arc<Mutex<bool>>,
 }
 
 impl LocalQwen {
@@ -109,12 +109,12 @@ impl LocalQwen {
         }
 
         log::info!(
-            "Initializing LocalQwen provider: base_path={}, model_id={}",
+            "Initializing LocalQwen provider (lazy loading): base_path={}, model_id={}",
             config.model_path,
             config.selected_model_id
         );
 
-        // Construct the model directory path
+        // Validate paths exist but don't load yet
         let model_dir = Path::new(&config.model_path).join(&config.selected_model_id);
         
         if !model_dir.exists() {
@@ -126,27 +126,23 @@ impl LocalQwen {
             );
         }
 
-        // Find the .gguf file in the model directory
-        let model_file_path = std::fs::read_dir(&model_dir)
+        // Verify .gguf file exists
+        let _model_file_exists = std::fs::read_dir(&model_dir)
             .context("Failed to read model directory")?
             .filter_map(|entry| entry.ok())
-            .find(|entry| {
+            .any(|entry| {
                 entry.path().extension()
                     .and_then(|ext| ext.to_str())
                     .map(|ext| ext.eq_ignore_ascii_case("gguf"))
                     .unwrap_or(false)
-            })
-            .map(|entry| entry.path())
-            .context(format!(
-                "No .gguf file found in model directory: {:?}",
-                model_dir
-            ))?;
+            });
 
-        log::info!("Found model file: {:?}", model_file_path);
+        if !_model_file_exists {
+            anyhow::bail!("No .gguf file found in model directory: {:?}", model_dir);
+        }
 
-        // Get tokenizer path
+        // Verify tokenizer exists
         let tokenizer_path = model_dir.join("tokenizer.json");
-        
         if !tokenizer_path.exists() {
             anyhow::bail!(
                 "Tokenizer not found at {:?}. Please ensure tokenizer.json is in the same directory as the model.",
@@ -154,44 +150,18 @@ impl LocalQwen {
             );
         }
 
-        log::info!("Found tokenizer: {:?}", tokenizer_path);
-
-        // Load tokenizer
-        log::info!("Loading tokenizer from: {:?}", tokenizer_path);
-        let tokenizer = Tokenizer::from_file(&tokenizer_path)
-            .map_err(|e| anyhow::anyhow!("Failed to load tokenizer: {}", e))?;
-        log::info!("✓ Tokenizer loaded");
-
         // Determine device
         let device = Self::device(config.use_gpu)?;
         log::info!("✓ Using device: {:?}", device);
 
-        // Load model
-        log::info!("Loading model from: {:?}", model_file_path);
-        let mut file = File::open(&model_file_path)
-            .context("Failed to open model file")?;
-        
-        let model_content = gguf_file::Content::read(&mut file)
-            .map_err(|e| anyhow::anyhow!("Failed to read GGUF file: {}", e))?;
-
-        let model = Qwen3::from_gguf(model_content, &mut file, &device)
-            .context("Failed to load Qwen3 model from GGUF")?;
-        log::info!("✓ Model loaded successfully");
-
-        // Get EOS token
-        let eos_token = tokenizer
-            .get_vocab(true)
-            .get(EOS_TOKEN)
-            .copied()
-            .unwrap_or(151668);
-        log::info!("✓ EOS token ID: {}", eos_token);
+        log::info!("✓ LocalQwen provider initialized (model will load on first use)");
 
         Ok(Self {
             config,
-            model: Arc::new(Mutex::new(model)),
-            tokenizer: Arc::new(tokenizer),
+            model: Arc::new(Mutex::new(None)),
+            tokenizer: Arc::new(Mutex::new(None)),
             device,
-            eos_token,
+            initialized: Arc::new(Mutex::new(false)),
         })
     }
 
@@ -288,6 +258,87 @@ impl LocalQwen {
             .unwrap_or("Qwen-Local")
             .to_string()
     }
+
+    /// Lazy load the model and tokenizer if not already loaded
+    async fn ensure_loaded(&self) -> Result<()> {
+        // Clone what we need for the blocking task
+        let config = self.config.clone();
+        let model_arc = Arc::clone(&self.model);
+        let tokenizer_arc = Arc::clone(&self.tokenizer);
+        let initialized_arc = Arc::clone(&self.initialized);
+        let device = self.device.clone();
+
+        tokio::task::spawn_blocking(move || -> Result<()> {
+            let mut initialized = initialized_arc.lock()
+                .map_err(|e| anyhow::anyhow!("Failed to lock initialized flag: {}", e))?;
+
+            if *initialized {
+                log::debug!("Model already loaded, skipping initialization");
+                return Ok(());
+            }
+
+            log::info!("Loading model and tokenizer (first use)...");
+
+            // Construct paths
+            let model_dir = Path::new(&config.model_path).join(&config.selected_model_id);
+            
+            // Find the .gguf file
+            let model_file_path = std::fs::read_dir(&model_dir)
+                .context("Failed to read model directory")?
+                .filter_map(|entry| entry.ok())
+                .find(|entry| {
+                    entry.path().extension()
+                        .and_then(|ext| ext.to_str())
+                        .map(|ext| ext.eq_ignore_ascii_case("gguf"))
+                        .unwrap_or(false)
+                })
+                .map(|entry| entry.path())
+                .context(format!("No .gguf file found in model directory: {:?}", model_dir))?;
+
+            log::info!("Loading model from: {:?}", model_file_path);
+
+            // Load model
+            let mut file = File::open(&model_file_path)
+                .context("Failed to open model file")?;
+            
+            let model_content = gguf_file::Content::read(&mut file)
+                .map_err(|e| anyhow::anyhow!("Failed to read GGUF file: {}", e))?;
+
+            let model = Qwen3::from_gguf(model_content, &mut file, &device)
+                .context("Failed to load Qwen3 model from GGUF")?;
+            
+            log::info!("✓ Model loaded successfully");
+
+            // Load tokenizer
+            let tokenizer_path = model_dir.join("tokenizer.json");
+            log::info!("Loading tokenizer from: {:?}", tokenizer_path);
+            
+            let tokenizer = Tokenizer::from_file(&tokenizer_path)
+                .map_err(|e| anyhow::anyhow!("Failed to load tokenizer: {}", e))?;
+            
+            log::info!("✓ Tokenizer loaded");
+
+            // Store loaded model and tokenizer
+            {
+                let mut model_guard = model_arc.lock()
+                    .map_err(|e| anyhow::anyhow!("Failed to lock model: {}", e))?;
+                *model_guard = Some(model);
+            }
+
+            {
+                let mut tokenizer_guard = tokenizer_arc.lock()
+                    .map_err(|e| anyhow::anyhow!("Failed to lock tokenizer: {}", e))?;
+                *tokenizer_guard = Some(tokenizer);
+            }
+
+            *initialized = true;
+            log::info!("✓ Model and tokenizer loaded and ready");
+
+            Ok(())
+        })
+        .await
+        .context("Failed to join loading task")?
+    }
 }
 
 #[async_trait]
@@ -319,6 +370,10 @@ impl AIProvider for LocalQwen {
         .await
         .context("Failed to emit start event")?;
 
+        // Lazy load model and tokenizer if not already loaded
+        self.ensure_loaded().await
+            .context("Failed to load model and tokenizer")?;
+
         // Create cancellation flag shared between async and blocking contexts
         let cancelled = Arc::new(AtomicBool::new(false));
         let cancelled_clone = Arc::clone(&cancelled);
@@ -346,14 +401,26 @@ impl AIProvider for LocalQwen {
         let model = Arc::clone(&self.model);
         let tokenizer = Arc::clone(&self.tokenizer);
         let device = self.device.clone();
-        let eos_token = self.eos_token;
 
         let generation_result = tokio::task::spawn_blocking(move || -> Result<bool> {
-            log::info!("Using pre-loaded model and tokenizer");
+            // Get tokenizer from Option and clone it
+            let tokenizer_guard = tokenizer.lock()
+                .map_err(|e| anyhow::anyhow!("Failed to lock tokenizer: {}", e))?;
+            
+            let tokenizer_ref = tokenizer_guard.as_ref()
+                .context("Tokenizer not loaded")?;
+            
+            // Get EOS token from loaded tokenizer
+            let eos_token = tokenizer_ref
+                .get_vocab(true)
+                .get(EOS_TOKEN)
+                .copied()
+                .unwrap_or(151668);
 
-            // Create a new tokenizer instance for TokenOutputStream
-            // We clone the tokenizer data to avoid borrowing issues
-            let tokenizer_for_stream = (*tokenizer).clone();
+            // Clone tokenizer for TokenOutputStream
+            let tokenizer_for_stream = tokenizer_ref.clone();
+            drop(tokenizer_guard); // Release lock
+
             let mut tos = TokenOutputStream::new(tokenizer_for_stream);
 
             // Add thinking mode toggle to user prompt
@@ -401,9 +468,12 @@ impl AIProvider for LocalQwen {
                 .lock()
                 .map_err(|e| anyhow::anyhow!("Failed to lock model: {}", e))?;
 
+            let model_ref = model_guard.as_mut()
+                .context("Model not loaded")?;
+
             // Generate first token
             let input = Tensor::new(tokens, &device)?.unsqueeze(0)?;
-            let logits = model_guard.forward(&input, 0)?;
+            let logits = model_ref.forward(&input, 0)?;
             let logits = logits.squeeze(0)?;
             let mut next_token = logits_processor.sample(&logits)?;
 
@@ -429,7 +499,7 @@ impl AIProvider for LocalQwen {
                 }
 
                 let input = Tensor::new(&[next_token], &device)?.unsqueeze(0)?;
-                let logits = model_guard.forward(&input, tokens.len() + index)?;
+                let logits = model_ref.forward(&input, tokens.len() + index)?;
                 let logits = logits.squeeze(0)?;
 
                 // Apply repeat penalty
