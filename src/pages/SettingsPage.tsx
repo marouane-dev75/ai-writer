@@ -1,5 +1,6 @@
 import { useTranslation } from "@/shared/i18n";
 import { AIProviderSettings, aiProviderService } from "@/features/ai-settings";
+import { AIPresetsList, aiPresetsService } from "@/features/ai-presets";
 
 export const SettingsPage = () => {
   const { t } = useTranslation();
@@ -15,7 +16,10 @@ export const SettingsPage = () => {
         </p>
       </div>
 
-      <AIProviderSettings service={aiProviderService} />
+      <div className="space-y-8">
+        <AIProviderSettings service={aiProviderService} />
+        <AIPresetsList service={aiPresetsService} />
+      </div>
     </>
   );
 };

@@ -339,11 +339,6 @@ impl AIProvider for Anthropic {
                                             if let Some(text) = delta.text {
                                                 if !text.is_empty() {
                                                     total_chunks += 1;
-                                                    log::debug!(
-                                                        "Streaming chunk: request_id={}, chars={}",
-                                                        request_id,
-                                                        text.len()
-                                                    );
 
                                                     Self::emit_event(
                                                         &app_handle,

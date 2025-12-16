@@ -312,11 +312,6 @@ impl AIProvider for OpenAI {
                                         if let Some(content) = &choice.delta.content {
                                             if !content.is_empty() {
                                                 total_chunks += 1;
-                                                log::debug!(
-                                                    "Streaming chunk: request_id={}, chars={}",
-                                                    request_id,
-                                                    content.len()
-                                                );
 
                                                 Self::emit_event(
                                                     &app_handle,
