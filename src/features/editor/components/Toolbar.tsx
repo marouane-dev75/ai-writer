@@ -30,7 +30,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onClear }) => {
   };
 
   return (
-    <div className="flex gap-2 p-2 border-b border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+    <div className="flex items-center gap-2 p-2 border-b border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
       <BlockTypeDropdown />
       <div className="w-px bg-gray-300 dark:bg-gray-600" />
       <button
