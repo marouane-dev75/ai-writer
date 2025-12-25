@@ -13,9 +13,6 @@
     "depcruise:graph:png": "depcruise src --output-type dot | dot -T png > dependency-graph.png"
   },
   "dependencies": {
-    "@editorjs/editorjs": "^2.31.0",
-    "@editorjs/header": "^2.8.8",
-    "@editorjs/list": "^2.0.9",
     "@tailwindcss/vite": "^4.1.17",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "~2.4.2",

@@ -8,15 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@editorjs/editorjs':
-        specifier: ^2.31.0
-        version: 2.31.0
-      '@editorjs/header':
-        specifier: ^2.8.8
-        version: 2.8.8
-      '@editorjs/list':
-        specifier: ^2.0.9
-        version: 2.0.9
       '@tailwindcss/vite':
         specifier: ^4.1.17
         version: 4.1.17(vite@7.2.2(jiti@2.6.1)(lightningcss@1.30.2))
@@ -164,30 +155,6 @@ packages:
   '@babel/types@7.28.5':
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
     engines: {node: '>=6.9.0'}
-
-  '@codexteam/icons@0.0.5':
-    resolution: {integrity: sha512-s6H2KXhLz2rgbMZSkRm8dsMJvyUNZsEjxobBEg9ztdrb1B2H3pEzY6iTwI4XUPJWJ3c3qRKwV4TrO3J5jUdoQA==}
-
-  '@codexteam/icons@0.3.3':
-    resolution: {integrity: sha512-cp7mkZPgmBuSxigTm3Vb+DtVHYeX7qXfQd7o05vcLD8Ag5WvRlol2QSn5P10k0CDAJwmkH9nQGQLBycErS9lsQ==}
-
-  '@editorjs/caret@1.0.3':
-    resolution: {integrity: sha512-VmgwQJZgL/LQjk049JunzRV1YCa0vDi+BNEpbDmr5cp3lGZllq9QQFO1eI71ZPzvFVn3vvhb+eOif4sAEyGgbw==}
-
-  '@editorjs/dom@1.0.1':
-    resolution: {integrity: sha512-yLO+86MYOIUr1Jl7SQw23SYT84ggv6aJW0EIRsI3NTHYgnQzmK7Bt2n5ZFupQlB0GJqmKqA5tCue3NKQb+o7Pw==}
-
-  '@editorjs/editorjs@2.31.0':
-    resolution: {integrity: sha512-CBcIZXtPlg0dSlC5clO9OfTCmcxelj723jd4d67teFlaFJobjjxU1PmMxFJdhaRep5+nqdD0jr+fdJBqEDqt1g==}
-
-  '@editorjs/header@2.8.8':
-    resolution: {integrity: sha512-bsMSs34u2hoi0UBuRoc5EGWXIFzJiwYgkFUYQGVm63y5FU+s8zPBmVx5Ip2sw1xgs0fqfDROqmteMvvmbCy62w==}
-
-  '@editorjs/helpers@1.0.1':
-    resolution: {integrity: sha512-Lmr8ImoQvoROXtzhsIJsA1ZtXzH46DmE6O8hMjn9/AvQq62UfjREjn+Ewi6KxjIZMay2PsgDEbLlsVyNJGEaxw==}
-
-  '@editorjs/list@2.0.9':
-    resolution: {integrity: sha512-rUTgDSt5wygD3Dp24bNyp6vvye/Xf4UWju0ZuvWeP13Z4cu2z1Jb5JFSTEhCou72XUGuf4xVhtsd8cm/bwUS1g==}
 
   '@esbuild/aix-ppc64@0.25.12':
     resolution: {integrity: sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==}
@@ -721,12 +688,6 @@ packages:
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
-
-  codex-notifier@1.1.2:
-    resolution: {integrity: sha512-DCp6xe/LGueJ1N5sXEwcBc3r3PyVkEEDNWCVigfvywAkeXcZMk9K41a31tkEFBW0Ptlwji6/JlAb49E3Yrxbtg==}
-
-  codex-tooltip@1.0.5:
-    resolution: {integrity: sha512-IuA8LeyLU5p1B+HyhOsqR6oxyFQ11k3i9e9aXw40CrHFTRO2Y1npNBVU3W1SvhKAbUU7R/YikUBdcYFP0RcJag==}
 
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
@@ -1309,35 +1270,6 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
-  '@codexteam/icons@0.0.5': {}
-
-  '@codexteam/icons@0.3.3': {}
-
-  '@editorjs/caret@1.0.3':
-    dependencies:
-      '@editorjs/dom': 1.0.1
-
-  '@editorjs/dom@1.0.1':
-    dependencies:
-      '@editorjs/helpers': 1.0.1
-
-  '@editorjs/editorjs@2.31.0':
-    dependencies:
-      '@editorjs/caret': 1.0.3
-      codex-notifier: 1.1.2
-      codex-tooltip: 1.0.5
-
-  '@editorjs/header@2.8.8':
-    dependencies:
-      '@codexteam/icons': 0.0.5
-      '@editorjs/editorjs': 2.31.0
-
-  '@editorjs/helpers@1.0.1': {}
-
-  '@editorjs/list@2.0.9':
-    dependencies:
-      '@codexteam/icons': 0.3.3
-
   '@esbuild/aix-ppc64@0.25.12':
     optional: true
 
@@ -1719,10 +1651,6 @@ snapshots:
     dependencies:
       ansi-styles: 4.3.0
       supports-color: 7.2.0
-
-  codex-notifier@1.1.2: {}
-
-  codex-tooltip@1.0.5: {}
 
   color-convert@2.0.1:
     dependencies:
