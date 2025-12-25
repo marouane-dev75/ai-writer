@@ -5,9 +5,10 @@ import {
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
   SELECTION_CHANGE_COMMAND,
+  $createParagraphNode,
 } from 'lexical';
 import { $setBlocksType } from '@lexical/selection';
-import { $createHeadingNode, $createQuoteNode, HeadingTagType } from '@lexical/rich-text';
+import { $createHeadingNode, $createQuoteNode, HeadingTagType, $isHeadingNode } from '@lexical/rich-text';
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
@@ -122,10 +123,10 @@ export const BlockTypeDropdown: React.FC = () => {
             setBlockType('check');
           }
         } else {
-          const type = element.getType();
-          if (type === 'h1' || type === 'h2' || type === 'h3') {
-            setBlockType(type as BlockType);
-          } else if (type === 'quote') {
+          if ($isHeadingNode(element)) {
+            const tag = element.getTag();
+            setBlockType(tag as BlockType);
+          } else if (element.getType() === 'quote') {
             setBlockType('quote');
           } else if ($isCodeNode(element)) {
             setBlockType('code');
@@ -183,7 +184,7 @@ export const BlockTypeDropdown: React.FC = () => {
     editor.update(() => {
       const selection = $getSelection();
       if ($isRangeSelection(selection)) {
-        $setBlocksType(selection, () => $createHeadingNode('p' as HeadingTagType));
+        $setBlocksType(selection, () => $createParagraphNode());
       }
     });
   };
