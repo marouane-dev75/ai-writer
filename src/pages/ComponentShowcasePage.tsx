@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { Button, LoadingSpinner } from "@/shared/ui";
 import { ModelStatusIndicator, useAIRuntime, useAiStatus } from "@/features/ai-runtime";
+import { Editor } from "@/features/editor";
 
 export const ComponentShowcasePage = () => {
   const { t } = useTranslation();
@@ -28,6 +29,9 @@ export const ComponentShowcasePage = () => {
 
   return (
     <>
+      {/* Text Editor */}
+      <Editor/>
+
       {/* AI Streaming Test */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
