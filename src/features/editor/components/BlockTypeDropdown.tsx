@@ -275,7 +275,7 @@ export const BlockTypeDropdown: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-[240px]">
+        <div className="absolute top-full left-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg z-10 min-w-60">
           {blockTypeOptions.map((option) => (
             <button
               key={option.type}

@@ -81,7 +81,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
           <div className="relative">
             <RichTextPlugin
               contentEditable={
-                <ContentEditable className="min-h-[400px] p-4 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
+                <ContentEditable className="min-h-96 p-4 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
               }
               placeholder={
                 <div className="absolute top-4 left-4 text-gray-400 dark:text-gray-500 pointer-events-none">
