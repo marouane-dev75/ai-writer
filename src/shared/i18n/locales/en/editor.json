@@ -7,7 +7,19 @@
       "bold": "Bold",
       "italic": "Italic",
       "underline": "Underline",
-      "clear": "Clear"
+      "clear": "Clear",
+      "blockType": "Block Type"
+    },
+    "blockTypes": {
+      "normal": "Normal",
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "numberedList": "Numbered List",
+      "bulletList": "Bullet List",
+      "checkList": "Check List",
+      "quote": "Quote",
+      "codeBlock": "Code Block"
     }
   }
 }

@@ -1,13 +1,25 @@
 {
   "editor": {
     "title": "Éditeur de texte",
-    "description": "Un éditeur de texte enrichi minimal propulsé par Lexical",
+    "description": "Un éditeur de texte riche minimal propulsé par Lexical",
     "placeholder": "Commencez à taper...",
     "toolbar": {
       "bold": "Gras",
       "italic": "Italique",
       "underline": "Souligné",
-      "clear": "Effacer"
+      "clear": "Effacer",
+      "blockType": "Type de bloc"
+    },
+    "blockTypes": {
+      "normal": "Normal",
+      "heading1": "Titre 1",
+      "heading2": "Titre 2",
+      "heading3": "Titre 3",
+      "numberedList": "Liste numérotée",
+      "bulletList": "Liste à puces",
+      "checkList": "Liste de contrôle",
+      "quote": "Citation",
+      "codeBlock": "Bloc de code"
     }
   }
 }

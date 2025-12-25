@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@lexical/code':
+        specifier: ^0.39.0
+        version: 0.39.0
+      '@lexical/list':
+        specifier: ^0.39.0
+        version: 0.39.0
       '@lexical/plain-text':
         specifier: ^0.39.0
         version: 0.39.0
@@ -15,6 +21,12 @@ importers:
         specifier: ^0.39.0
         version: 0.39.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(yjs@13.6.28)
       '@lexical/rich-text':
+        specifier: ^0.39.0
+        version: 0.39.0
+      '@lexical/selection':
+        specifier: ^0.39.0
+        version: 0.39.0
+      '@lexical/utils':
         specifier: ^0.39.0
         version: 0.39.0
       '@tailwindcss/vite':

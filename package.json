@@ -13,9 +13,13 @@
     "depcruise:graph:png": "depcruise src --output-type dot | dot -T png > dependency-graph.png"
   },
   "dependencies": {
+    "@lexical/code": "^0.39.0",
+    "@lexical/list": "^0.39.0",
     "@lexical/plain-text": "^0.39.0",
     "@lexical/react": "^0.39.0",
     "@lexical/rich-text": "^0.39.0",
+    "@lexical/selection": "^0.39.0",
+    "@lexical/utils": "^0.39.0",
     "@tailwindcss/vite": "^4.1.17",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-dialog": "~2.4.2",
