@@ -12,7 +12,7 @@ import { CodeNode } from '@lexical/code';
 import { $getRoot } from 'lexical';
 import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
-import { Toolbar } from './Toolbar';
+import { Toolbar } from './toolbar/Toolbar';
 
 interface EditorProps {
   onChange?: (content: string) => void;
