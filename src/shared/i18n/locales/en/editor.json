@@ -1,0 +1,13 @@
+{
+  "editor": {
+    "title": "Text Editor",
+    "description": "A minimal rich text editor powered by Lexical",
+    "placeholder": "Start typing...",
+    "toolbar": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "clear": "Clear"
+    }
+  }
+}

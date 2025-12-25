@@ -1,0 +1,13 @@
+{
+  "editor": {
+    "title": "Éditeur de texte",
+    "description": "Un éditeur de texte enrichi minimal propulsé par Lexical",
+    "placeholder": "Commencez à taper...",
+    "toolbar": {
+      "bold": "Gras",
+      "italic": "Italique",
+      "underline": "Souligné",
+      "clear": "Effacer"
+    }
+  }
+}
