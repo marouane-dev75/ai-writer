@@ -20,6 +20,13 @@
       "checkList": "Check List",
       "quote": "Quote",
       "codeBlock": "Code Block"
+    },
+    "aiTransformer": {
+      "title": "AI Transformer",
+      "description": "Transform selected text with AI-powered tools",
+      "uppercase": "Uppercase",
+      "selectText": "Select text to enable transformations",
+      "singleNodeOnly": "Selection must be within a single node"
     }
   }
 }

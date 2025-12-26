@@ -13,6 +13,7 @@ import { $getRoot } from 'lexical';
 import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
 import { Toolbar } from './toolbar/Toolbar';
+import { AiTransformer } from './ai-transformer';
 
 interface EditorProps {
   onChange?: (content: string) => void;
@@ -67,37 +68,45 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-12">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-        {t('editor.title')}
-      </h2>
-      <p className="text-gray-600 dark:text-gray-300 mb-6">
-        {t('editor.description')}
-      </p>
-
-      <div className="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-        <LexicalComposer initialConfig={initialConfig}>
-          <Toolbar onClear={handleClear} />
-          <div className="relative">
-            <RichTextPlugin
-              contentEditable={
-                <ContentEditable className="min-h-96 p-4 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
-              }
-              placeholder={
-                <div className="absolute top-4 left-4 text-gray-400 dark:text-gray-500 pointer-events-none">
-                  {t('editor.placeholder')}
-                </div>
-              }
-              ErrorBoundary={() => <div className="p-4 text-red-600">An error occurred</div>}
-            />
-          </div>
-          <HistoryPlugin />
-          <ListPlugin />
-          <CheckListPlugin />
-          <OnChangePlugin onChange={handleEditorChange} />
-          <ClearEditorPlugin />
-        </LexicalComposer>
+    <div className="mb-12">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-6">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+          {t('editor.title')}
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          {t('editor.description')}
+        </p>
       </div>
+
+      <LexicalComposer initialConfig={initialConfig}>
+        <div className="flex gap-6">
+          <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+            <Toolbar onClear={handleClear} />
+            <div className="relative">
+              <RichTextPlugin
+                contentEditable={
+                  <ContentEditable className="min-h-96 p-4 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
+                }
+                placeholder={
+                  <div className="absolute top-4 left-4 text-gray-400 dark:text-gray-500 pointer-events-none">
+                    {t('editor.placeholder')}
+                  </div>
+                }
+                ErrorBoundary={() => <div className="p-4 text-red-600">An error occurred</div>}
+              />
+            </div>
+            <HistoryPlugin />
+            <ListPlugin />
+            <CheckListPlugin />
+            <OnChangePlugin onChange={handleEditorChange} />
+            <ClearEditorPlugin />
+          </div>
+
+          <div className="w-80">
+            <AiTransformer />
+          </div>
+        </div>
+      </LexicalComposer>
     </div>
   );
 };
