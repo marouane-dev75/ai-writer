@@ -34,6 +34,18 @@
         "accept": "Accept",
         "reject": "Reject"
       }
+    },
+    "aiGenerator": {
+      "title": "AI Content Generator",
+      "description": "Generate new content with AI",
+      "placeholder": "Describe what you want to generate...",
+      "send": "Generate",
+      "preview": {
+        "title": "Generated Content Preview",
+        "content": "Content to Insert",
+        "accept": "Insert Content",
+        "reject": "Discard"
+      }
     }
   }
 }

@@ -14,6 +14,7 @@ import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
 import { Toolbar } from './toolbar/Toolbar';
 import { AiTransformer } from './ai-transformer';
+import { AiGenerator } from './ai-generator';
 
 interface EditorProps {
   onChange?: (content: string) => void;
@@ -79,7 +80,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
       </div>
 
       <LexicalComposer initialConfig={initialConfig}>
-        <div className="flex gap-6">
+        <div className="flex gap-6 mb-6">
           <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
             <Toolbar onClear={handleClear} />
             <div className="relative">
@@ -105,6 +106,11 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
           <div className="w-80">
             <AiTransformer />
           </div>
+        </div>
+
+        {/* AI Generator Component - Full Width Below Editor */}
+        <div className="w-full">
+          <AiGenerator />
         </div>
       </LexicalComposer>
     </div>

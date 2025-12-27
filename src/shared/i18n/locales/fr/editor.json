@@ -34,6 +34,18 @@
         "accept": "Accepter",
         "reject": "Refuser"
       }
+    },
+    "aiGenerator": {
+      "title": "Générateur de contenu IA",
+      "description": "Générez du nouveau contenu avec l'IA",
+      "placeholder": "Décrivez ce que vous voulez générer...",
+      "send": "Générer",
+      "preview": {
+        "title": "Aperçu du contenu généré",
+        "content": "Contenu à insérer",
+        "accept": "Insérer le contenu",
+        "reject": "Rejeter"
+      }
     }
   }
 }
