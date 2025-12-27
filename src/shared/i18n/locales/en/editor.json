@@ -1,0 +1,51 @@
+{
+  "editor": {
+    "title": "Text Editor",
+    "description": "A minimal rich text editor powered by Lexical",
+    "placeholder": "Start typing...",
+    "toolbar": {
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "clear": "Clear",
+      "blockType": "Block Type"
+    },
+    "blockTypes": {
+      "normal": "Normal",
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "numberedList": "Numbered List",
+      "bulletList": "Bullet List",
+      "checkList": "Check List",
+      "quote": "Quote",
+      "codeBlock": "Code Block"
+    },
+    "aiTransformer": {
+      "title": "AI Transformer",
+      "description": "Transform selected text with AI-powered tools",
+      "uppercase": "Uppercase",
+      "selectText": "Select text to enable transformations",
+      "singleNodeOnly": "Selection must be within a single node",
+      "preview": {
+        "title": "Preview Transformation",
+        "original": "Original",
+        "transformed": "Transformed",
+        "accept": "Accept",
+        "reject": "Reject"
+      }
+    },
+    "aiGenerator": {
+      "title": "AI Content Generator",
+      "description": "Generate new content with AI",
+      "placeholder": "Describe what you want to generate...",
+      "send": "Generate",
+      "preview": {
+        "title": "Generated Content Preview",
+        "content": "Content to Insert",
+        "accept": "Insert Content",
+        "reject": "Discard"
+      }
+    }
+  }
+}

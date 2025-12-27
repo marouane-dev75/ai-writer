@@ -1,0 +1,51 @@
+{
+  "editor": {
+    "title": "Éditeur de texte",
+    "description": "Un éditeur de texte riche minimal propulsé par Lexical",
+    "placeholder": "Commencez à taper...",
+    "toolbar": {
+      "bold": "Gras",
+      "italic": "Italique",
+      "underline": "Souligné",
+      "clear": "Effacer",
+      "blockType": "Type de bloc"
+    },
+    "blockTypes": {
+      "normal": "Normal",
+      "heading1": "Titre 1",
+      "heading2": "Titre 2",
+      "heading3": "Titre 3",
+      "numberedList": "Liste numérotée",
+      "bulletList": "Liste à puces",
+      "checkList": "Liste de contrôle",
+      "quote": "Citation",
+      "codeBlock": "Bloc de code"
+    },
+    "aiTransformer": {
+      "title": "Transformateur IA",
+      "description": "Transformez le texte sélectionné avec des outils IA",
+      "uppercase": "Majuscules",
+      "selectText": "Sélectionnez du texte pour activer les transformations",
+      "singleNodeOnly": "La sélection doit être dans un seul nœud",
+      "preview": {
+        "title": "Aperçu de la transformation",
+        "original": "Original",
+        "transformed": "Transformé",
+        "accept": "Accepter",
+        "reject": "Refuser"
+      }
+    },
+    "aiGenerator": {
+      "title": "Générateur de contenu IA",
+      "description": "Générez du nouveau contenu avec l'IA",
+      "placeholder": "Décrivez ce que vous voulez générer...",
+      "send": "Générer",
+      "preview": {
+        "title": "Aperçu du contenu généré",
+        "content": "Contenu à insérer",
+        "accept": "Insérer le contenu",
+        "reject": "Rejeter"
+      }
+    }
+  }
+}

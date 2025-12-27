@@ -7,6 +7,7 @@ import common from './common.json';
 import logs from './logs.json';
 import aiSettings from './ai-settings.json';
 import aiPresets from './ai-presets.json';
+import editor from './editor.json';
 
 export default {
   ...app,
@@ -18,4 +19,5 @@ export default {
   ...logs,
   ...aiSettings,
   ...aiPresets,
+  ...editor,
 };
