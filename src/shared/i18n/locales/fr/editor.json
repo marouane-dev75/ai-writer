@@ -26,7 +26,14 @@
       "description": "Transformez le texte sélectionné avec des outils IA",
       "uppercase": "Majuscules",
       "selectText": "Sélectionnez du texte pour activer les transformations",
-      "singleNodeOnly": "La sélection doit être dans un seul nœud"
+      "singleNodeOnly": "La sélection doit être dans un seul nœud",
+      "preview": {
+        "title": "Aperçu de la transformation",
+        "original": "Original",
+        "transformed": "Transformé",
+        "accept": "Accepter",
+        "reject": "Refuser"
+      }
     }
   }
 }

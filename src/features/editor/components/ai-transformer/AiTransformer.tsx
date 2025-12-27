@@ -1,18 +1,37 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
 import { useSelectionState } from '../../hooks/useSelectionState';
 import { uppercaseTransform } from '../../services/ai-transformer.service';
 import { TransformButton } from './TransformButton';
+import { TransformPreview } from './TransformPreview';
+
+interface PreviewState {
+  original: string;
+  transformed: string;
+}
 
 export const AiTransformer: React.FC = () => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
   const { hasSelection, isSingleNode, selectedText } = useSelectionState();
+  const [previewState, setPreviewState] = useState<PreviewState | null>(null);
 
   const handleUppercase = useCallback(() => {
     if (!hasSelection || !isSingleNode) {
+      return;
+    }
+
+    const transformedText = uppercaseTransform(selectedText);
+    setPreviewState({
+      original: selectedText,
+      transformed: transformedText,
+    });
+  }, [hasSelection, isSingleNode, selectedText]);
+
+  const handleAccept = useCallback(() => {
+    if (!previewState) {
       return;
     }
 
@@ -23,12 +42,17 @@ export const AiTransformer: React.FC = () => {
         return;
       }
 
-      const transformedText = uppercaseTransform(selectedText);
-      selection.insertText(transformedText);
+      selection.insertText(previewState.transformed);
     });
-  }, [editor, hasSelection, isSingleNode, selectedText]);
 
-  const isButtonEnabled = hasSelection && isSingleNode;
+    setPreviewState(null);
+  }, [editor, previewState]);
+
+  const handleReject = useCallback(() => {
+    setPreviewState(null);
+  }, []);
+
+  const isButtonEnabled = hasSelection && isSingleNode && !previewState;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6 h-full">
@@ -46,16 +70,25 @@ export const AiTransformer: React.FC = () => {
           label={t('editor.aiTransformer.uppercase')}
         />
 
-        {!hasSelection && (
+        {!hasSelection && !previewState && (
           <p className="text-xs text-gray-500 dark:text-gray-400 italic">
             {t('editor.aiTransformer.selectText')}
           </p>
         )}
 
-        {hasSelection && !isSingleNode && (
+        {hasSelection && !isSingleNode && !previewState && (
           <p className="text-xs text-amber-600 dark:text-amber-400 italic">
             {t('editor.aiTransformer.singleNodeOnly')}
           </p>
+        )}
+
+        {previewState && (
+          <TransformPreview
+            originalText={previewState.original}
+            transformedText={previewState.transformed}
+            onAccept={handleAccept}
+            onReject={handleReject}
+          />
         )}
       </div>
     </div>
