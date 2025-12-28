@@ -9,8 +9,6 @@ pub struct AppConfig {
     pub locale: LocaleConfig,
     #[serde(default)]
     pub ai_providers: AIProvidersConfig,
-    #[serde(default)]
-    pub ai_presets: AIPresetsConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -74,29 +72,12 @@ pub struct LocalQwenConfig {
     pub use_gpu: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AIPreset {
-    pub id: String,
-    pub name: String,
-    pub prompt_template: String,
-    pub lines_before: u32,
-    pub lines_after: u32,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AIPresetsConfig {
-    pub presets: Vec<AIPreset>,
-}
-
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
             theme: ThemeConfig::default(),
             locale: LocaleConfig::default(),
             ai_providers: AIProvidersConfig::default(),
-            ai_presets: AIPresetsConfig::default(),
         }
     }
 }
@@ -164,10 +145,3 @@ impl Default for LocalQwenConfig {
     }
 }
 
-impl Default for AIPresetsConfig {
-    fn default() -> Self {
-        Self {
-            presets: Vec::new(),
-        }
-    }
-}
