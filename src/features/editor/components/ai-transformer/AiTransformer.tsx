@@ -1,37 +1,63 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
+import { Button, Select } from '@/shared/ui';
 import { useSelectionState } from '../../hooks/useSelectionState';
-import { uppercaseTransform } from '../../services/ai-transformer.service';
-import { TransformButton } from './TransformButton';
+import { useTransformPresets } from '../../hooks/useTransformPresets';
 import { TransformPreview } from './TransformPreview';
+import { PresetManager } from './PresetManager';
 
-interface PreviewState {
-  original: string;
-  transformed: string;
+interface AiTransformerProps {
+  onTransformStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
+  isStreaming: boolean;
+  currentStream: string;
+  error: string | null;
+  onClearStream: () => void;
 }
 
-export const AiTransformer: React.FC = () => {
+export const AiTransformer: React.FC<AiTransformerProps> = ({
+  onTransformStream,
+  isStreaming,
+  currentStream,
+  error,
+  onClearStream,
+}) => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
   const { hasSelection, isSingleNode, selectedText } = useSelectionState();
-  const [previewState, setPreviewState] = useState<PreviewState | null>(null);
+  const { presets, isLoading: presetsLoading, addPreset, updatePreset, deletePreset } = useTransformPresets();
+  
+  const [selectedPresetId, setSelectedPresetId] = useState<string>('');
+  const [showPreview, setShowPreview] = useState(false);
+  const [showPresetManager, setShowPresetManager] = useState(false);
 
-  const handleUppercase = useCallback(() => {
-    if (!hasSelection || !isSingleNode) {
+  // Show preview when streaming starts or completes
+  useEffect(() => {
+    if (isStreaming || currentStream || error) {
+      setShowPreview(true);
+    }
+  }, [isStreaming, currentStream, error]);
+
+  const handleTransform = useCallback(async () => {
+    if (!hasSelection || !isSingleNode || !selectedPresetId) {
       return;
     }
 
-    const transformedText = uppercaseTransform(selectedText);
-    setPreviewState({
-      original: selectedText,
-      transformed: transformedText,
-    });
-  }, [hasSelection, isSingleNode, selectedText]);
+    const selectedPreset = presets.find((p) => p.id === selectedPresetId);
+    if (!selectedPreset) {
+      return;
+    }
+
+    // Clear any previous stream
+    onClearStream();
+
+    // Use preset description as system prompt, selected text as user input
+    await onTransformStream(selectedPreset.description, selectedText);
+  }, [hasSelection, isSingleNode, selectedPresetId, selectedText, presets, onTransformStream, onClearStream]);
 
   const handleAccept = useCallback(() => {
-    if (!previewState) {
+    if (!currentStream) {
       return;
     }
 
@@ -42,17 +68,26 @@ export const AiTransformer: React.FC = () => {
         return;
       }
 
-      selection.insertText(previewState.transformed);
+      selection.insertText(currentStream);
     });
 
-    setPreviewState(null);
-  }, [editor, previewState]);
+    // Clear state
+    onClearStream();
+    setShowPreview(false);
+  }, [editor, currentStream, onClearStream]);
 
   const handleReject = useCallback(() => {
-    setPreviewState(null);
-  }, []);
+    onClearStream();
+    setShowPreview(false);
+  }, [onClearStream]);
 
-  const isButtonEnabled = hasSelection && isSingleNode && !previewState;
+  const isTransformEnabled = hasSelection && isSingleNode && selectedPresetId && !isStreaming && !showPreview;
+
+  // Prepare preset options for Select component
+  const presetOptions = presets.map((preset) => ({
+    value: preset.id,
+    label: preset.title,
+  }));
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6 h-full">
@@ -64,28 +99,82 @@ export const AiTransformer: React.FC = () => {
       </p>
 
       <div className="space-y-3">
-        <TransformButton
-          onClick={handleUppercase}
-          disabled={!isButtonEnabled}
-          label={t('editor.aiTransformer.uppercase')}
-        />
+        {/* Preset Manager Button */}
+        <Button
+          onClick={() => setShowPresetManager(!showPresetManager)}
+          variant="secondary"
+          className="w-full text-sm"
+          disabled={isStreaming || showPreview}
+        >
+          {showPresetManager ? t('editor.aiTransformer.hidePresets') : t('editor.aiTransformer.managePresets')}
+        </Button>
 
-        {!hasSelection && !previewState && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-            {t('editor.aiTransformer.selectText')}
+        {/* Preset Manager */}
+        {showPresetManager && (
+          <PresetManager
+            presets={presets}
+            onAdd={addPreset}
+            onUpdate={updatePreset}
+            onDelete={deletePreset}
+            isLoading={presetsLoading}
+          />
+        )}
+
+        {/* Preset Selector */}
+        {!showPresetManager && presets.length > 0 && (
+          <>
+            <Select
+              label={t('editor.aiTransformer.presetLabel')}
+              options={presetOptions}
+              value={selectedPresetId || null}
+              onChange={(value) => setSelectedPresetId(value || '')}
+              disabled={isStreaming || showPreview}
+              placeholder={t('editor.aiTransformer.selectPreset')}
+            />
+
+            {/* Transform Button */}
+            <Button
+              onClick={handleTransform}
+              disabled={!isTransformEnabled}
+              variant="primary"
+              className="w-full text-sm"
+            >
+              {t('editor.aiTransformer.transform')}
+            </Button>
+          </>
+        )}
+
+        {/* Empty State */}
+        {!showPresetManager && presets.length === 0 && !presetsLoading && (
+          <p className="text-sm text-amber-600 dark:text-amber-400 italic">
+            {t('editor.aiTransformer.noPresets')}
           </p>
         )}
 
-        {hasSelection && !isSingleNode && !previewState && (
-          <p className="text-xs text-amber-600 dark:text-amber-400 italic">
-            {t('editor.aiTransformer.singleNodeOnly')}
-          </p>
+        {/* Selection Hints */}
+        {!showPreview && !showPresetManager && presets.length > 0 && (
+          <>
+            {!hasSelection && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+                {t('editor.aiTransformer.selectText')}
+              </p>
+            )}
+
+            {hasSelection && !isSingleNode && (
+              <p className="text-xs text-amber-600 dark:text-amber-400 italic">
+                {t('editor.aiTransformer.singleNodeOnly')}
+              </p>
+            )}
+          </>
         )}
 
-        {previewState && (
+        {/* Preview Component */}
+        {showPreview && (
           <TransformPreview
-            originalText={previewState.original}
-            transformedText={previewState.transformed}
+            originalText={selectedText}
+            transformedText={currentStream}
+            isStreaming={isStreaming}
+            error={error}
             onAccept={handleAccept}
             onReject={handleReject}
           />

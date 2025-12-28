@@ -106,7 +106,13 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
           </div>
 
           <div className="w-80">
-            <AiTransformer />
+            <AiTransformer
+              onTransformStream={startStream}
+              isStreaming={isStreaming}
+              currentStream={currentStream}
+              error={error}
+              onClearStream={clearStream}
+            />
           </div>
         </div>
 

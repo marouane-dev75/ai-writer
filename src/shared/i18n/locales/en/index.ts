@@ -6,7 +6,6 @@ import showcase from './showcase.json';
 import common from './common.json';
 import logs from './logs.json';
 import aiSettings from './ai-settings.json';
-import aiPresets from './ai-presets.json';
 import editor from './editor.json';
 
 export default {
@@ -18,6 +17,5 @@ export default {
   ...common,
   ...logs,
   ...aiSettings,
-  ...aiPresets,
   ...editor,
 };

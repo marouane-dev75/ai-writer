@@ -10,7 +10,22 @@ pub struct AppConfig {
     #[serde(default)]
     pub ai_providers: AIProvidersConfig,
     #[serde(default)]
-    pub ai_presets: AIPresetsConfig,
+    pub transform_presets: TransformPresetsConfig,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TransformPreset {
+    pub id: String,
+    pub title: String,
+    pub description: String,
+    pub created_at: i64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct TransformPresetsConfig {
+    pub presets: Vec<TransformPreset>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -74,29 +89,13 @@ pub struct LocalQwenConfig {
     pub use_gpu: bool,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AIPreset {
-    pub id: String,
-    pub name: String,
-    pub prompt_template: String,
-    pub lines_before: u32,
-    pub lines_after: u32,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct AIPresetsConfig {
-    pub presets: Vec<AIPreset>,
-}
-
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
             theme: ThemeConfig::default(),
             locale: LocaleConfig::default(),
             ai_providers: AIProvidersConfig::default(),
-            ai_presets: AIPresetsConfig::default(),
+            transform_presets: TransformPresetsConfig::default(),
         }
     }
 }
@@ -164,7 +163,7 @@ impl Default for LocalQwenConfig {
     }
 }
 
-impl Default for AIPresetsConfig {
+impl Default for TransformPresetsConfig {
     fn default() -> Self {
         Self {
             presets: Vec::new(),
