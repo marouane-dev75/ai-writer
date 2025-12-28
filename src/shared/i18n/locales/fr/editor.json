@@ -23,16 +23,33 @@
     },
     "aiTransformer": {
       "title": "Transformateur IA",
-      "description": "Transformez le texte sélectionné avec des outils IA",
-      "uppercase": "Majuscules",
+      "description": "Transformez le texte sélectionné avec des préréglages IA",
+      "managePresets": "Gérer les préréglages",
+      "hidePresets": "Masquer les préréglages",
+      "presetLabel": "Sélectionner un préréglage",
+      "selectPreset": "Choisissez un préréglage de transformation...",
+      "transform": "Transformer",
+      "noPresets": "Aucun préréglage disponible. Cliquez sur 'Gérer les préréglages' pour en créer un.",
       "selectText": "Sélectionnez du texte pour activer les transformations",
       "singleNodeOnly": "La sélection doit être dans un seul nœud",
       "preview": {
         "title": "Aperçu de la transformation",
         "original": "Original",
         "transformed": "Transformé",
+        "streaming": "Génération de la transformation...",
+        "noContent": "Aucun contenu généré",
         "accept": "Accepter",
-        "reject": "Refuser"
+        "reject": "Rejeter"
+      },
+      "presetManager": {
+        "title": "Gestionnaire de préréglages",
+        "addNew": "Ajouter un nouveau préréglage",
+        "titleLabel": "Titre du préréglage",
+        "titlePlaceholder": "ex: Rendre professionnel, Simplifier, Corriger la grammaire",
+        "descriptionLabel": "Prompt système (Instructions pour l'IA)",
+        "descriptionPlaceholder": "ex: Réécrivez le texte pour qu'il soit plus professionnel et formel...",
+        "empty": "Aucun préréglage pour le moment. Créez votre premier préréglage !",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce préréglage ?"
       }
     },
     "aiGenerator": {

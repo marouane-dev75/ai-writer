@@ -23,16 +23,33 @@
     },
     "aiTransformer": {
       "title": "AI Transformer",
-      "description": "Transform selected text with AI-powered tools",
-      "uppercase": "Uppercase",
+      "description": "Transform selected text with AI-powered presets",
+      "managePresets": "Manage Presets",
+      "hidePresets": "Hide Presets",
+      "presetLabel": "Select Preset",
+      "selectPreset": "Choose a transformation preset...",
+      "transform": "Transform",
+      "noPresets": "No presets available. Click 'Manage Presets' to create one.",
       "selectText": "Select text to enable transformations",
       "singleNodeOnly": "Selection must be within a single node",
       "preview": {
         "title": "Preview Transformation",
         "original": "Original",
         "transformed": "Transformed",
+        "streaming": "Generating transformation...",
+        "noContent": "No content generated",
         "accept": "Accept",
         "reject": "Reject"
+      },
+      "presetManager": {
+        "title": "Preset Manager",
+        "addNew": "Add New Preset",
+        "titleLabel": "Preset Title",
+        "titlePlaceholder": "e.g., Make Professional, Simplify, Fix Grammar",
+        "descriptionLabel": "System Prompt (Instructions for AI)",
+        "descriptionPlaceholder": "e.g., Rewrite the text to be more professional and formal...",
+        "empty": "No presets yet. Create your first preset!",
+        "confirmDelete": "Are you sure you want to delete this preset?"
       }
     },
     "aiGenerator": {
