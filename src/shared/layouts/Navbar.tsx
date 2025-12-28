@@ -22,7 +22,6 @@ export const Navbar = () => {
           
           <nav className="flex items-center gap-6">
             <NavLink to="/">{t('nav.home')}</NavLink>
-            <NavLink to="/showcase">{t('nav.components')}</NavLink>
             <NavLink to="/settings">{t('nav.settings')}</NavLink>
             <NavLink to="/logs">{t('nav.logs')}</NavLink>
             <LanguageSelector />
