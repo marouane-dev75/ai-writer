@@ -1,35 +1,54 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection, $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
-import { Button } from '@/shared/ui';
+import { Button, Switch } from '@/shared/ui';
 import { GeneratorPreview } from './GeneratorPreview';
 
-interface PreviewState {
-  generatedText: string;
+interface AiGeneratorProps {
+  onGenerateStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
+  isStreaming: boolean;
+  currentStream: string;
+  error: string | null;
+  onClearStream: () => void;
 }
 
-const mockGenerate = (prompt: string): string => {
-  return `Generated content based on: "${prompt}"\n\nThis is a placeholder for AI-generated text. In a real implementation, this would be replaced with actual AI-generated content.`;
-};
-
-export const AiGenerator: React.FC = () => {
+export const AiGenerator: React.FC<AiGeneratorProps> = ({
+  onGenerateStream,
+  isStreaming,
+  currentStream,
+  error,
+  onClearStream,
+}) => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
   const [promptText, setPromptText] = useState('');
-  const [previewState, setPreviewState] = useState<PreviewState | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const [useSystemPrompt, setUseSystemPrompt] = useState(false);
+  const [systemPromptText, setSystemPromptText] = useState('');
 
-  const handleGenerate = useCallback(() => {
+  // Show preview when streaming starts or completes
+  useEffect(() => {
+    if (isStreaming || currentStream || error) {
+      setShowPreview(true);
+    }
+  }, [isStreaming, currentStream, error]);
+
+  const handleGenerate = useCallback(async () => {
     if (!promptText.trim()) {
       return;
     }
 
-    const generatedText = mockGenerate(promptText);
-    setPreviewState({ generatedText });
-  }, [promptText]);
+    // Clear any previous stream
+    onClearStream();
+    
+    // Use system prompt only if enabled
+    const systemPrompt = useSystemPrompt ? systemPromptText : '';
+    await onGenerateStream(systemPrompt, promptText);
+  }, [promptText, systemPromptText, useSystemPrompt, onGenerateStream, onClearStream]);
 
   const handleAccept = useCallback(() => {
-    if (!previewState) {
+    if (!currentStream) {
       return;
     }
 
@@ -38,7 +57,7 @@ export const AiGenerator: React.FC = () => {
 
       // Create a new paragraph node with the generated text
       const paragraphNode = $createParagraphNode();
-      const textNode = $createTextNode(previewState.generatedText);
+      const textNode = $createTextNode(currentStream);
       paragraphNode.append(textNode);
 
       if ($isRangeSelection(selection)) {
@@ -73,15 +92,17 @@ export const AiGenerator: React.FC = () => {
     });
 
     // Clear state
-    setPreviewState(null);
+    onClearStream();
+    setShowPreview(false);
     setPromptText('');
-  }, [editor, previewState]);
+  }, [editor, currentStream, onClearStream]);
 
   const handleReject = useCallback(() => {
-    setPreviewState(null);
-  }, []);
+    onClearStream();
+    setShowPreview(false);
+  }, [onClearStream]);
 
-  const isSendEnabled = promptText.trim().length > 0 && !previewState;
+  const isSendEnabled = promptText.trim().length > 0 && !isStreaming && !showPreview;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6">
@@ -93,13 +114,35 @@ export const AiGenerator: React.FC = () => {
       </p>
 
       <div className="space-y-3">
-        {/* Large Textarea Input */}
+        {/* System Prompt Toggle */}
+        <Switch
+          label={t('editor.aiGenerator.useSystemPrompt')}
+          checked={useSystemPrompt}
+          onChange={(e) => setUseSystemPrompt(e.target.checked)}
+          disabled={isStreaming || showPreview}
+        />
+
+        {/* System Prompt Textarea (conditional) */}
+        {useSystemPrompt && (
+          <div>
+            <textarea
+              value={systemPromptText}
+              onChange={(e) => setSystemPromptText(e.target.value)}
+              placeholder={t('editor.aiGenerator.systemPromptPlaceholder')}
+              disabled={isStreaming || showPreview}
+              className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
+              rows={4}
+            />
+          </div>
+        )}
+
+        {/* User Prompt Textarea */}
         <div>
           <textarea
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
             placeholder={t('editor.aiGenerator.placeholder')}
-            disabled={!!previewState}
+            disabled={isStreaming || showPreview}
             className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
             rows={4}
           />
@@ -116,9 +159,11 @@ export const AiGenerator: React.FC = () => {
         </Button>
 
         {/* Preview Component */}
-        {previewState && (
+        {showPreview && (
           <GeneratorPreview
-            generatedText={previewState.generatedText}
+            generatedText={currentStream}
+            isStreaming={isStreaming}
+            error={error}
             onAccept={handleAccept}
             onReject={handleReject}
           />

@@ -12,6 +12,7 @@ import { CodeNode } from '@lexical/code';
 import { $getRoot } from 'lexical';
 import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
+import { useAIRuntime } from '@/features/ai-runtime';
 import { Toolbar } from './toolbar/Toolbar';
 import { AiTransformer } from './ai-transformer';
 import { AiGenerator } from './ai-generator';
@@ -22,6 +23,7 @@ interface EditorProps {
 
 export const Editor: React.FC<EditorProps> = ({ onChange }) => {
   const { t } = useTranslation();
+  const { isStreaming, currentStream, error, startStream, clearStream } = useAIRuntime();
 
   const initialConfig = {
     namespace: 'MinimalEditor',
@@ -110,7 +112,13 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
 
         {/* AI Generator Component - Full Width Below Editor */}
         <div className="w-full">
-          <AiGenerator />
+          <AiGenerator
+            onGenerateStream={startStream}
+            isStreaming={isStreaming}
+            currentStream={currentStream}
+            error={error}
+            onClearStream={clearStream}
+          />
         </div>
       </LexicalComposer>
     </div>

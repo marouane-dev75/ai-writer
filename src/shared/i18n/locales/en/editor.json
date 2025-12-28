@@ -40,6 +40,8 @@
       "description": "Generate new content with AI",
       "placeholder": "Describe what you want to generate...",
       "send": "Generate",
+      "useSystemPrompt": "Use Custom System Prompt",
+      "systemPromptPlaceholder": "Enter system instructions (e.g., 'You are a helpful assistant that...')",
       "preview": {
         "title": "Generated Content Preview",
         "content": "Content to Insert",
