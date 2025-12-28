@@ -26,9 +26,16 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
   const { hasSelection, isSingleNode, selectedText } = useSelectionState();
-  const { presets, isLoading: presetsLoading, addPreset, updatePreset, deletePreset } = useTransformPresets();
+  const { 
+    presets, 
+    isLoading: presetsLoading, 
+    selectedPresetId, 
+    addPreset, 
+    updatePreset, 
+    deletePreset,
+    setSelectedPreset 
+  } = useTransformPresets();
   
-  const [selectedPresetId, setSelectedPresetId] = useState<string>('');
   const [showPreview, setShowPreview] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -55,6 +62,14 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
     // Use preset description as system prompt, selected text as user input
     await onTransformStream(selectedPreset.description, selectedText);
   }, [hasSelection, isSingleNode, selectedPresetId, selectedText, presets, onTransformStream, onClearStream]);
+
+  const handlePresetChange = useCallback(async (value: string | null) => {
+    try {
+      await setSelectedPreset(value);
+    } catch (err) {
+      console.error('Failed to set selected preset:', err);
+    }
+  }, [setSelectedPreset]);
 
   const handleAccept = useCallback(() => {
     if (!currentStream) {
@@ -116,7 +131,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
               label={t('editor.aiTransformer.presetLabel')}
               options={presetOptions}
               value={selectedPresetId || null}
-              onChange={(value) => setSelectedPresetId(value || '')}
+              onChange={handlePresetChange}
               disabled={isStreaming || showPreview}
               placeholder={t('editor.aiTransformer.selectPreset')}
             />
