@@ -24,14 +24,16 @@
     "aiTransformer": {
       "title": "AI Transformer",
       "description": "Transform selected text with AI-powered presets",
-      "managePresets": "Manage Presets",
-      "hidePresets": "Hide Presets",
+      "managePresetsButton": "⚙️ Manage Presets",
       "presetLabel": "Select Preset",
       "selectPreset": "Choose a transformation preset...",
       "transform": "Transform",
       "noPresets": "No presets available. Click 'Manage Presets' to create one.",
       "selectText": "Select text to enable transformations",
       "singleNodeOnly": "Selection must be within a single node",
+      "presetDialog": {
+        "title": "Manage Transformation Presets"
+      },
       "preview": {
         "title": "Preview Transformation",
         "original": "Original",

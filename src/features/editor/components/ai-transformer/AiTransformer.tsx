@@ -6,7 +6,7 @@ import { Button, Select } from '@/shared/ui';
 import { useSelectionState } from '../../hooks/useSelectionState';
 import { useTransformPresets } from '../../hooks/useTransformPresets';
 import { TransformPreview } from './TransformPreview';
-import { PresetManager } from './PresetManager';
+import { PresetManagerDialog } from './PresetManagerDialog';
 
 interface AiTransformerProps {
   onTransformStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
@@ -30,7 +30,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
   
   const [selectedPresetId, setSelectedPresetId] = useState<string>('');
   const [showPreview, setShowPreview] = useState(false);
-  const [showPresetManager, setShowPresetManager] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Show preview when streaming starts or completes
   useEffect(() => {
@@ -99,29 +99,18 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
       </p>
 
       <div className="space-y-3">
-        {/* Preset Manager Button */}
+        {/* Manage Presets Button */}
         <Button
-          onClick={() => setShowPresetManager(!showPresetManager)}
+          onClick={() => setIsDialogOpen(true)}
           variant="secondary"
           className="w-full text-sm"
           disabled={isStreaming || showPreview}
         >
-          {showPresetManager ? t('editor.aiTransformer.hidePresets') : t('editor.aiTransformer.managePresets')}
+          {t('editor.aiTransformer.managePresetsButton')}
         </Button>
 
-        {/* Preset Manager */}
-        {showPresetManager && (
-          <PresetManager
-            presets={presets}
-            onAdd={addPreset}
-            onUpdate={updatePreset}
-            onDelete={deletePreset}
-            isLoading={presetsLoading}
-          />
-        )}
-
         {/* Preset Selector */}
-        {!showPresetManager && presets.length > 0 && (
+        {presets.length > 0 && (
           <>
             <Select
               label={t('editor.aiTransformer.presetLabel')}
@@ -145,14 +134,14 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
         )}
 
         {/* Empty State */}
-        {!showPresetManager && presets.length === 0 && !presetsLoading && (
+        {presets.length === 0 && !presetsLoading && (
           <p className="text-sm text-amber-600 dark:text-amber-400 italic">
             {t('editor.aiTransformer.noPresets')}
           </p>
         )}
 
         {/* Selection Hints */}
-        {!showPreview && !showPresetManager && presets.length > 0 && (
+        {!showPreview && presets.length > 0 && (
           <>
             {!hasSelection && (
               <p className="text-xs text-gray-500 dark:text-gray-400 italic">
@@ -180,6 +169,17 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
           />
         )}
       </div>
+
+      {/* Preset Manager Dialog */}
+      <PresetManagerDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        presets={presets}
+        onAdd={addPreset}
+        onUpdate={updatePreset}
+        onDelete={deletePreset}
+        isLoading={presetsLoading}
+      />
     </div>
   );
 };

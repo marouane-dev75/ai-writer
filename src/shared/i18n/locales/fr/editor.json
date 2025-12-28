@@ -24,14 +24,16 @@
     "aiTransformer": {
       "title": "Transformateur IA",
       "description": "Transformez le texte sélectionné avec des préréglages IA",
-      "managePresets": "Gérer les préréglages",
-      "hidePresets": "Masquer les préréglages",
+      "managePresetsButton": "⚙️ Gérer les préréglages",
       "presetLabel": "Sélectionner un préréglage",
       "selectPreset": "Choisissez un préréglage de transformation...",
       "transform": "Transformer",
       "noPresets": "Aucun préréglage disponible. Cliquez sur 'Gérer les préréglages' pour en créer un.",
       "selectText": "Sélectionnez du texte pour activer les transformations",
       "singleNodeOnly": "La sélection doit être dans un seul nœud",
+      "presetDialog": {
+        "title": "Gérer les préréglages de transformation"
+      },
       "preview": {
         "title": "Aperçu de la transformation",
         "original": "Original",

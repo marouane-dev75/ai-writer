@@ -1,4 +1,5 @@
 export { Button } from './Button';
+export { Dialog } from './Dialog';
 export { DirectoryInput } from './DirectoryInput';
 export { FormInput } from './FormInput';
 export { LoadingSpinner } from './LoadingSpinner';
