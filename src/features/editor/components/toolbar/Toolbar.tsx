@@ -1,9 +1,9 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { FORMAT_TEXT_COMMAND, $getRoot } from 'lexical';
+import { FORMAT_TEXT_COMMAND, $getRoot, CLEAR_EDITOR_COMMAND } from 'lexical';
 import { $convertToMarkdownString, $convertFromMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 import { useTranslation } from '@/shared/i18n';
 import { BlockTypeDropdown } from './BlockTypeDropdown';
-import { FiDownload, FiUpload } from 'react-icons/fi';
+import { FiDownload, FiUpload, FiTrash2 } from 'react-icons/fi';
 import { invoke } from '@tauri-apps/api/core';
 
 export const Toolbar: React.FC = () => {
@@ -55,6 +55,10 @@ export const Toolbar: React.FC = () => {
     }
   };
 
+  const handleClear = () => {
+    editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+  };
+
   return (
     <div className="flex items-center gap-2 p-2 border-b border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
       <BlockTypeDropdown />
@@ -96,6 +100,15 @@ export const Toolbar: React.FC = () => {
       >
         <FiDownload />
         <span>{t('editor.toolbar.export')}</span>
+      </button>
+      <div className="w-px bg-gray-300 dark:bg-gray-600" />
+      <button
+        onClick={handleClear}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-300"
+        title={t('editor.toolbar.clear')}
+      >
+        <FiTrash2 />
+        <span>{t('editor.toolbar.clear')}</span>
       </button>
     </div>
   );
