@@ -2,16 +2,11 @@ import { useState } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { Button, LoadingSpinner } from "@/shared/ui";
 import { ModelStatusIndicator, useAIRuntime, useAiStatus } from "@/features/ai-runtime";
-import { Editor } from "@/features/editor";
 
 export const ComponentShowcasePage = () => {
   const { t } = useTranslation();
   const { isStreaming, currentStream, error, startStream, cancelStream, clearStream } = useAIRuntime();
   const { status } = useAiStatus();
-  
-  // Separate AI runtime instances for Editor component
-  const transformerRuntime = useAIRuntime();
-  const generatorRuntime = useAIRuntime();
   
   const [systemPrompt, setSystemPrompt] = useState(t("showcase.aiStreaming.defaultSystemPrompt"));
   const [userPrompt, setUserPrompt] = useState(t("showcase.aiStreaming.defaultUserPrompt"));
@@ -33,12 +28,6 @@ export const ComponentShowcasePage = () => {
 
   return (
     <>
-      {/* Text Editor */}
-      <Editor 
-        transformerRuntime={transformerRuntime}
-        generatorRuntime={generatorRuntime}
-      />
-
       {/* AI Streaming Test */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
