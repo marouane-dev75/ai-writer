@@ -111,6 +111,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
           <div className="w-80">
             <AiTransformer
               onTransformStream={transformerRuntime.startStream}
+              onCancelStream={transformerRuntime.cancelStream}
               isStreaming={transformerRuntime.isStreaming}
               currentStream={transformerRuntime.currentStream}
               error={transformerRuntime.error}
@@ -123,6 +124,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
         <div className="w-full">
           <AiGenerator
             onGenerateStream={generatorRuntime.startStream}
+            onCancelStream={generatorRuntime.cancelStream}
             isStreaming={generatorRuntime.isStreaming}
             currentStream={generatorRuntime.currentStream}
             error={generatorRuntime.error}

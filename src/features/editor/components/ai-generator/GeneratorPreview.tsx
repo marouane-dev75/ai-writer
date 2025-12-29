@@ -8,6 +8,7 @@ interface GeneratorPreviewProps {
   error: string | null;
   onAccept: () => void;
   onReject: () => void;
+  onCancel: () => Promise<void>;
 }
 
 export const GeneratorPreview: React.FC<GeneratorPreviewProps> = ({
@@ -16,6 +17,7 @@ export const GeneratorPreview: React.FC<GeneratorPreviewProps> = ({
   error,
   onAccept,
   onReject,
+  onCancel,
 }) => {
   const { t } = useTranslation();
 
@@ -63,22 +65,33 @@ export const GeneratorPreview: React.FC<GeneratorPreviewProps> = ({
 
         {/* Action Buttons */}
         <div className="flex gap-2 pt-2">
-          <Button
-            onClick={onAccept}
-            disabled={!canAccept}
-            variant="primary"
-            className="flex-1 text-sm"
-          >
-            {t('editor.aiGenerator.preview.accept')}
-          </Button>
-          <Button
-            onClick={onReject}
-            disabled={isStreaming}
-            variant="secondary"
-            className="flex-1 text-sm"
-          >
-            {t('editor.aiGenerator.preview.reject')}
-          </Button>
+          {isStreaming ? (
+            <Button
+              onClick={onCancel}
+              variant="secondary"
+              className="w-full text-sm"
+            >
+              {t('common.cancel')}
+            </Button>
+          ) : (
+            <>
+              <Button
+                onClick={onAccept}
+                disabled={!canAccept}
+                variant="primary"
+                className="flex-1 text-sm"
+              >
+                {t('editor.aiGenerator.preview.accept')}
+              </Button>
+              <Button
+                onClick={onReject}
+                variant="secondary"
+                className="flex-1 text-sm"
+              >
+                {t('editor.aiGenerator.preview.reject')}
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

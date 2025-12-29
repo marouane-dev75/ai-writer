@@ -7,6 +7,7 @@ import { GeneratorPreview } from './GeneratorPreview';
 
 interface AiGeneratorProps {
   onGenerateStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
+  onCancelStream: () => Promise<void>;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;
@@ -15,6 +16,7 @@ interface AiGeneratorProps {
 
 export const AiGenerator: React.FC<AiGeneratorProps> = ({
   onGenerateStream,
+  onCancelStream,
   isStreaming,
   currentStream,
   error,
@@ -166,6 +168,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
             error={error}
             onAccept={handleAccept}
             onReject={handleReject}
+            onCancel={onCancelStream}
           />
         )}
       </div>

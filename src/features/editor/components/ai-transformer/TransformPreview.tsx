@@ -9,6 +9,7 @@ interface TransformPreviewProps {
   error: string | null;
   onAccept: () => void;
   onReject: () => void;
+  onCancel: () => Promise<void>;
 }
 
 export const TransformPreview: React.FC<TransformPreviewProps> = ({
@@ -18,6 +19,7 @@ export const TransformPreview: React.FC<TransformPreviewProps> = ({
   error,
   onAccept,
   onReject,
+  onCancel,
 }) => {
   const { t } = useTranslation();
 
@@ -43,7 +45,7 @@ export const TransformPreview: React.FC<TransformPreviewProps> = ({
           <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">
             {t('editor.aiTransformer.preview.transformed')}
           </label>
-          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-green-300 dark:border-green-600 text-sm text-gray-800 dark:text-gray-200 min-h-[80px] max-h-32 overflow-y-auto relative">
+          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-green-300 dark:border-green-600 text-sm text-gray-800 dark:text-gray-200 min-h-20 max-h-32 overflow-y-auto relative">
             {error ? (
               <div className="text-red-600 dark:text-red-400">
                 {error}
@@ -74,22 +76,33 @@ export const TransformPreview: React.FC<TransformPreviewProps> = ({
 
         {/* Action Buttons */}
         <div className="flex gap-2 pt-2">
-          <Button
-            onClick={onAccept}
-            variant="primary"
-            className="flex-1 text-sm"
-            disabled={isStreaming || !!error || !transformedText}
-          >
-            {t('editor.aiTransformer.preview.accept')}
-          </Button>
-          <Button
-            onClick={onReject}
-            variant="secondary"
-            className="flex-1 text-sm"
-            disabled={isStreaming}
-          >
-            {t('editor.aiTransformer.preview.reject')}
-          </Button>
+          {isStreaming ? (
+            <Button
+              onClick={onCancel}
+              variant="secondary"
+              className="w-full text-sm"
+            >
+              {t('common.cancel')}
+            </Button>
+          ) : (
+            <>
+              <Button
+                onClick={onAccept}
+                variant="primary"
+                className="flex-1 text-sm"
+                disabled={!!error || !transformedText}
+              >
+                {t('editor.aiTransformer.preview.accept')}
+              </Button>
+              <Button
+                onClick={onReject}
+                variant="secondary"
+                className="flex-1 text-sm"
+              >
+                {t('editor.aiTransformer.preview.reject')}
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

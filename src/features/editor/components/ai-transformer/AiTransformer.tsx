@@ -10,6 +10,7 @@ import { PresetManagerDialog } from './PresetManagerDialog';
 
 interface AiTransformerProps {
   onTransformStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
+  onCancelStream: () => Promise<void>;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;
@@ -18,6 +19,7 @@ interface AiTransformerProps {
 
 export const AiTransformer: React.FC<AiTransformerProps> = ({
   onTransformStream,
+  onCancelStream,
   isStreaming,
   currentStream,
   error,
@@ -181,6 +183,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
             error={error}
             onAccept={handleAccept}
             onReject={handleReject}
+            onCancel={onCancelStream}
           />
         )}
       </div>
