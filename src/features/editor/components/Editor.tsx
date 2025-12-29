@@ -69,10 +69,6 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
     });
   };
 
-  const handleClear = () => {
-    onChange?.('');
-  };
-
   return (
     <div className="mb-12">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-6">
@@ -87,7 +83,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
       <LexicalComposer initialConfig={initialConfig}>
         <div className="flex gap-6 mb-6">
           <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-            <Toolbar onClear={handleClear} />
+            <Toolbar />
             <div className="relative">
               <RichTextPlugin
                 contentEditable={

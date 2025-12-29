@@ -1,14 +1,9 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { FORMAT_TEXT_COMMAND, CLEAR_EDITOR_COMMAND } from 'lexical';
+import { FORMAT_TEXT_COMMAND } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
-import { Button } from '@/shared/ui';
 import { BlockTypeDropdown } from './BlockTypeDropdown';
 
-interface ToolbarProps {
-  onClear: () => void;
-}
-
-export const Toolbar: React.FC<ToolbarProps> = ({ onClear }) => {
+export const Toolbar: React.FC = () => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
 
@@ -22,11 +17,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onClear }) => {
 
   const formatUnderline = () => {
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
-  };
-
-  const handleClear = () => {
-    editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-    onClear();
   };
 
   return (
@@ -54,14 +44,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onClear }) => {
       >
         U
       </button>
-      <div className="flex-1" />
-      <Button
-        variant="secondary"
-        onClick={handleClear}
-        className="text-xs"
-      >
-        {t('editor.toolbar.clear')}
-      </Button>
     </div>
   );
 };
