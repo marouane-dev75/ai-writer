@@ -23,7 +23,10 @@ interface EditorProps {
 
 export const Editor: React.FC<EditorProps> = ({ onChange }) => {
   const { t } = useTranslation();
-  const { isStreaming, currentStream, error, startStream, clearStream } = useAIRuntime();
+  
+  // Separate AI runtime instances for each component
+  const transformerRuntime = useAIRuntime();
+  const generatorRuntime = useAIRuntime();
 
   const initialConfig = {
     namespace: 'MinimalEditor',
@@ -107,11 +110,11 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
 
           <div className="w-80">
             <AiTransformer
-              onTransformStream={startStream}
-              isStreaming={isStreaming}
-              currentStream={currentStream}
-              error={error}
-              onClearStream={clearStream}
+              onTransformStream={transformerRuntime.startStream}
+              isStreaming={transformerRuntime.isStreaming}
+              currentStream={transformerRuntime.currentStream}
+              error={transformerRuntime.error}
+              onClearStream={transformerRuntime.clearStream}
             />
           </div>
         </div>
@@ -119,11 +122,11 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
         {/* AI Generator Component - Full Width Below Editor */}
         <div className="w-full">
           <AiGenerator
-            onGenerateStream={startStream}
-            isStreaming={isStreaming}
-            currentStream={currentStream}
-            error={error}
-            onClearStream={clearStream}
+            onGenerateStream={generatorRuntime.startStream}
+            isStreaming={generatorRuntime.isStreaming}
+            currentStream={generatorRuntime.currentStream}
+            error={generatorRuntime.error}
+            onClearStream={generatorRuntime.clearStream}
           />
         </div>
       </LexicalComposer>

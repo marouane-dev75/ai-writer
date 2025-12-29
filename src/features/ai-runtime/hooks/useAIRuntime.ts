@@ -38,7 +38,7 @@ export function useAIRuntime(): UseAIRuntimeReturn {
         const streamEvent = event.payload;
 
         // Only process events for the current request
-        if (currentRequestId.current !== null && streamEvent.request_id !== currentRequestId.current) {
+        if (currentRequestId.current === null || streamEvent.request_id !== currentRequestId.current) {
           return;
         }
 
@@ -50,6 +50,7 @@ export function useAIRuntime(): UseAIRuntimeReturn {
             break;
 
           case 'Chunk':
+            setIsStreaming(true);
             setCurrentStream((prev) => prev + streamEvent.content);
             break;
 
@@ -96,6 +97,7 @@ export function useAIRuntime(): UseAIRuntimeReturn {
     try {
       await aiRuntimeService.cancelStream();
       currentRequestId.current = null;
+      setIsStreaming(false);
     } catch (err) {
       console.error('Failed to cancel stream:', err);
     }
