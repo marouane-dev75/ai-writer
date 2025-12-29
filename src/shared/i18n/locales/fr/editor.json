@@ -9,7 +9,9 @@
       "italic": "Italique",
       "underline": "Souligné",
       "clear": "Effacer",
-      "blockType": "Type de bloc"
+      "blockType": "Type de bloc",
+      "export": "Exporter",
+      "import": "Importer"
     },
     "blockTypes": {
       "normal": "Normal",

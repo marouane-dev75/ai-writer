@@ -1,7 +1,10 @@
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { FORMAT_TEXT_COMMAND } from 'lexical';
+import { FORMAT_TEXT_COMMAND, $getRoot, CLEAR_EDITOR_COMMAND } from 'lexical';
+import { $convertToMarkdownString, $convertFromMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 import { useTranslation } from '@/shared/i18n';
 import { BlockTypeDropdown } from './BlockTypeDropdown';
+import { FiDownload, FiUpload, FiTrash2 } from 'react-icons/fi';
+import { invoke } from '@tauri-apps/api/core';
 
 export const Toolbar: React.FC = () => {
   const [editor] = useLexicalComposerContext();
@@ -17,6 +20,43 @@ export const Toolbar: React.FC = () => {
 
   const formatUnderline = () => {
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+  };
+
+  const handleExport = async () => {
+    try {
+      await editor.update(() => {
+        const markdown = $convertToMarkdownString(TRANSFORMERS);
+        
+        // Call Tauri command to save file
+        invoke('save_markdown_file', { content: markdown })
+          .catch((error) => {
+            console.error('Failed to save markdown file:', error);
+          });
+      });
+    } catch (error) {
+      console.error('Failed to export:', error);
+    }
+  };
+
+  const handleImport = async () => {
+    try {
+      // Call Tauri command to open file
+      const markdown = await invoke<string>('open_markdown_file');
+      
+      if (markdown) {
+        editor.update(() => {
+          const root = $getRoot();
+          root.clear();
+          $convertFromMarkdownString(markdown, TRANSFORMERS);
+        });
+      }
+    } catch (error) {
+      console.error('Failed to import:', error);
+    }
+  };
+
+  const handleClear = () => {
+    editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
   };
 
   return (
@@ -43,6 +83,32 @@ export const Toolbar: React.FC = () => {
         title={t('editor.toolbar.underline')}
       >
         U
+      </button>
+      <div className="w-px bg-gray-300 dark:bg-gray-600" />
+      <button
+        onClick={handleImport}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200"
+        title={t('editor.toolbar.import')}
+      >
+        <FiUpload />
+        <span>{t('editor.toolbar.import')}</span>
+      </button>
+      <button
+        onClick={handleExport}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200"
+        title={t('editor.toolbar.export')}
+      >
+        <FiDownload />
+        <span>{t('editor.toolbar.export')}</span>
+      </button>
+      <div className="w-px bg-gray-300 dark:bg-gray-600" />
+      <button
+        onClick={handleClear}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-300"
+        title={t('editor.toolbar.clear')}
+      >
+        <FiTrash2 />
+        <span>{t('editor.toolbar.clear')}</span>
       </button>
     </div>
   );
