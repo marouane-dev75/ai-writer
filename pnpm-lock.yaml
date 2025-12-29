@@ -14,6 +14,9 @@ importers:
       '@lexical/list':
         specifier: ^0.39.0
         version: 0.39.0
+      '@lexical/markdown':
+        specifier: ^0.39.0
+        version: 0.39.0
       '@lexical/plain-text':
         specifier: ^0.39.0
         version: 0.39.0
