@@ -12,21 +12,19 @@ import { CodeNode } from '@lexical/code';
 import { $getRoot } from 'lexical';
 import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
-import { useAIRuntime } from '@/features/ai-runtime';
+import type { AIRuntimeInstance } from '../types';
 import { Toolbar } from './toolbar/Toolbar';
 import { AiTransformer } from './ai-transformer';
 import { AiGenerator } from './ai-generator';
 
 interface EditorProps {
   onChange?: (content: string) => void;
+  transformerRuntime: AIRuntimeInstance;
+  generatorRuntime: AIRuntimeInstance;
 }
 
-export const Editor: React.FC<EditorProps> = ({ onChange }) => {
+export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, generatorRuntime }) => {
   const { t } = useTranslation();
-  
-  // Separate AI runtime instances for each component
-  const transformerRuntime = useAIRuntime();
-  const generatorRuntime = useAIRuntime();
 
   const initialConfig = {
     namespace: 'MinimalEditor',

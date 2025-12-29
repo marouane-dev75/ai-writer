@@ -9,6 +9,10 @@ export const ComponentShowcasePage = () => {
   const { isStreaming, currentStream, error, startStream, cancelStream, clearStream } = useAIRuntime();
   const { status } = useAiStatus();
   
+  // Separate AI runtime instances for Editor component
+  const transformerRuntime = useAIRuntime();
+  const generatorRuntime = useAIRuntime();
+  
   const [systemPrompt, setSystemPrompt] = useState(t("showcase.aiStreaming.defaultSystemPrompt"));
   const [userPrompt, setUserPrompt] = useState(t("showcase.aiStreaming.defaultUserPrompt"));
 
@@ -30,7 +34,10 @@ export const ComponentShowcasePage = () => {
   return (
     <>
       {/* Text Editor */}
-      <Editor/>
+      <Editor 
+        transformerRuntime={transformerRuntime}
+        generatorRuntime={generatorRuntime}
+      />
 
       {/* AI Streaming Test */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8">
