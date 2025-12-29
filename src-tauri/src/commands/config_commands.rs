@@ -295,6 +295,14 @@ pub async fn delete_transform_preset(
         return Err(error_msg);
     }
     
+    // Clear selected preset if it was the deleted one
+    if let Some(selected_id) = &config.transform_presets.selected_preset_id {
+        if selected_id == &id {
+            config.transform_presets.selected_preset_id = None;
+            log::debug!("Cleared selected preset as it was deleted");
+        }
+    }
+    
     // Save back the full config
     manager.save_config(&config)
         .map(|_| {
@@ -302,6 +310,65 @@ pub async fn delete_transform_preset(
         })
         .map_err(|e| {
             let error_msg = format!("Failed to delete transform preset: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })
+}
+
+/// Tauri command to get the selected preset ID
+#[tauri::command]
+pub async fn get_selected_preset(
+    manager: State<'_, ConfigManager<FileConfigStorage>>,
+) -> Result<Option<String>, String> {
+    log::debug!("get_selected_preset command invoked");
+    
+    manager.load_config()
+        .map(|config| {
+            log::info!("get_selected_preset command completed successfully");
+            config.transform_presets.selected_preset_id
+        })
+        .map_err(|e| {
+            let error_msg = format!("Failed to get selected preset: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })
+}
+
+/// Tauri command to set the selected preset ID
+#[tauri::command]
+pub async fn set_selected_preset(
+    preset_id: Option<String>,
+    manager: State<'_, ConfigManager<FileConfigStorage>>,
+) -> Result<(), String> {
+    log::debug!("set_selected_preset command invoked with preset_id: {:?}", preset_id);
+    
+    // Load current full config
+    let mut config = manager.load_config()
+        .map_err(|e| {
+            let error_msg = format!("Failed to load config for setting selected preset: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })?;
+    
+    // Validate that the preset exists if an ID is provided
+    if let Some(ref id) = preset_id {
+        if !config.transform_presets.presets.iter().any(|p| &p.id == id) {
+            let error_msg = format!("Preset with ID {} not found", id);
+            log::error!("{}", error_msg);
+            return Err(error_msg);
+        }
+    }
+    
+    // Update selected preset ID
+    config.transform_presets.selected_preset_id = preset_id;
+    
+    // Save back the full config
+    manager.save_config(&config)
+        .map(|_| {
+            log::info!("set_selected_preset command completed successfully");
+        })
+        .map_err(|e| {
+            let error_msg = format!("Failed to set selected preset: {}", e);
             log::error!("{}", error_msg);
             error_msg
         })

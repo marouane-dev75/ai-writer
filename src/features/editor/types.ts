@@ -7,4 +7,5 @@ export interface TransformPreset {
 
 export interface TransformPresetsConfig {
   presets: TransformPreset[];
+  selectedPresetId?: string | null;
 }

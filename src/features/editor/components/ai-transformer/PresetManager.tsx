@@ -3,6 +3,53 @@ import { useTranslation } from '@/shared/i18n';
 import { Button, FormInput } from '@/shared/ui';
 import type { TransformPreset } from '../../types';
 
+// Default presets
+const DEFAULT_ENGLISH_PRESETS = [
+  {
+    title: '🇬🇧 Make Professional',
+    description: 'Rewrite the text to be more professional and formal while maintaining the core message and key information.',
+  },
+  {
+    title: '🇬🇧 Simplify',
+    description: 'Simplify the text to make it easier to understand, using simpler words and shorter sentences while keeping the main ideas.',
+  },
+  {
+    title: '🇬🇧 Fix Grammar',
+    description: 'Correct any grammar, spelling, and punctuation errors in the text. Keep the original style and tone.',
+  },
+  {
+    title: '🇬🇧 Summarize',
+    description: 'Create a concise summary of the main points in the text, reducing it to about 30% of the original length.',
+  },
+  {
+    title: '🇬🇧 Expand',
+    description: 'Expand the text with more details, examples, and explanations to make it more comprehensive and informative.',
+  },
+];
+
+const DEFAULT_FRENCH_PRESETS = [
+  {
+    title: '🇫🇷 Rendre professionnel',
+    description: 'Réécrivez le texte pour qu\'il soit plus professionnel et formel tout en conservant le message principal et les informations clés.',
+  },
+  {
+    title: '🇫🇷 Simplifier',
+    description: 'Simplifiez le texte pour le rendre plus facile à comprendre, en utilisant des mots plus simples et des phrases plus courtes tout en gardant les idées principales.',
+  },
+  {
+    title: '🇫🇷 Corriger la grammaire',
+    description: 'Corrigez toutes les erreurs de grammaire, d\'orthographe et de ponctuation dans le texte. Conservez le style et le ton d\'origine.',
+  },
+  {
+    title: '🇫🇷 Résumer',
+    description: 'Créez un résumé concis des points principaux du texte, en le réduisant à environ 30% de la longueur d\'origine.',
+  },
+  {
+    title: '🇫🇷 Développer',
+    description: 'Développez le texte avec plus de détails, d\'exemples et d\'explications pour le rendre plus complet et informatif.',
+  },
+];
+
 interface PresetManagerProps {
   presets: TransformPreset[];
   onAdd: (title: string, description: string) => Promise<void>;
@@ -87,6 +134,23 @@ export const PresetManager: React.FC<PresetManagerProps> = ({
       console.error('Failed to delete preset:', err);
     }
   };
+
+  const handleAddDefaultPresets = async (presets: Array<{ title: string; description: string }>) => {
+    setIsSaving(true);
+    try {
+      for (const preset of presets) {
+        await onAdd(preset.title, preset.description);
+      }
+    } catch (err) {
+      console.error('Failed to add default presets:', err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleAddFrenchPresets = () => handleAddDefaultPresets(DEFAULT_FRENCH_PRESETS);
+  const handleAddEnglishPresets = () => handleAddDefaultPresets(DEFAULT_ENGLISH_PRESETS);
+  const handleAddAllPresets = () => handleAddDefaultPresets([...DEFAULT_FRENCH_PRESETS, ...DEFAULT_ENGLISH_PRESETS]);
 
   const showForm = isAdding || editingId !== null;
 
@@ -190,11 +254,39 @@ export const PresetManager: React.FC<PresetManagerProps> = ({
         </div>
       )}
 
-      {/* Empty State */}
+      {/* Empty State - Default Preset Buttons */}
       {presets.length === 0 && !showForm && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 italic text-center">
-          {t('editor.aiTransformer.presetManager.empty')}
-        </p>
+        <div className="space-y-2">
+          <p className="text-xs text-gray-500 dark:text-gray-400 italic text-center mb-3">
+            {t('editor.aiTransformer.presetManager.empty')}
+          </p>
+          <div className="space-y-2">
+            <Button
+              onClick={handleAddFrenchPresets}
+              variant="secondary"
+              className="w-full text-sm"
+              disabled={isSaving}
+            >
+              {isSaving ? t('common.loading') : t('editor.aiTransformer.presetManager.addFrenchPresets')}
+            </Button>
+            <Button
+              onClick={handleAddEnglishPresets}
+              variant="secondary"
+              className="w-full text-sm"
+              disabled={isSaving}
+            >
+              {isSaving ? t('common.loading') : t('editor.aiTransformer.presetManager.addEnglishPresets')}
+            </Button>
+            <Button
+              onClick={handleAddAllPresets}
+              variant="secondary"
+              className="w-full text-sm"
+              disabled={isSaving}
+            >
+              {isSaving ? t('common.loading') : t('editor.aiTransformer.presetManager.addAllPresets')}
+            </Button>
+          </div>
+        </div>
       )}
     </div>
   );

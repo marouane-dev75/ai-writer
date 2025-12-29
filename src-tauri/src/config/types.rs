@@ -26,6 +26,8 @@ pub struct TransformPreset {
 #[serde(rename_all = "camelCase")]
 pub struct TransformPresetsConfig {
     pub presets: Vec<TransformPreset>,
+    #[serde(default)]
+    pub selected_preset_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -167,6 +169,7 @@ impl Default for TransformPresetsConfig {
     fn default() -> Self {
         Self {
             presets: Vec::new(),
+            selected_preset_id: None,
         }
     }
 }

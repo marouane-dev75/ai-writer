@@ -24,14 +24,16 @@
     "aiTransformer": {
       "title": "AI Transformer",
       "description": "Transform selected text with AI-powered presets",
-      "managePresets": "Manage Presets",
-      "hidePresets": "Hide Presets",
+      "managePresetsButton": "⚙️ Manage Presets",
       "presetLabel": "Select Preset",
       "selectPreset": "Choose a transformation preset...",
       "transform": "Transform",
       "noPresets": "No presets available. Click 'Manage Presets' to create one.",
       "selectText": "Select text to enable transformations",
       "singleNodeOnly": "Selection must be within a single node",
+      "presetDialog": {
+        "title": "Manage Transformation Presets"
+      },
       "preview": {
         "title": "Preview Transformation",
         "original": "Original",
@@ -49,7 +51,10 @@
         "descriptionLabel": "System Prompt (Instructions for AI)",
         "descriptionPlaceholder": "e.g., Rewrite the text to be more professional and formal...",
         "empty": "No presets yet. Create your first preset!",
-        "confirmDelete": "Are you sure you want to delete this preset?"
+        "confirmDelete": "Are you sure you want to delete this preset?",
+        "addFrenchPresets": "🇫🇷 Add French Presets",
+        "addEnglishPresets": "🇬🇧 Add English Presets",
+        "addAllPresets": "🇫🇷 🇬🇧 Add All Presets"
       }
     },
     "aiGenerator": {

@@ -124,6 +124,8 @@ pub fn run() {
             commands::add_transform_preset,
             commands::update_transform_preset,
             commands::delete_transform_preset,
+            commands::get_selected_preset,
+            commands::set_selected_preset,
             commands::get_logs,
             commands::get_all_logs,
             commands::clear_logs,

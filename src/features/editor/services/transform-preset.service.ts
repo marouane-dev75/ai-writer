@@ -37,3 +37,18 @@ export async function updatePreset(preset: TransformPreset): Promise<void> {
 export async function deletePreset(id: string): Promise<void> {
   await invoke('delete_transform_preset', { id });
 }
+
+/**
+ * Get the currently selected preset ID
+ */
+export async function getSelectedPreset(): Promise<string | null> {
+  const result = await invoke<string | null>('get_selected_preset');
+  return result;
+}
+
+/**
+ * Set the currently selected preset ID
+ */
+export async function setSelectedPreset(presetId: string | null): Promise<void> {
+  await invoke('set_selected_preset', { presetId });
+}
