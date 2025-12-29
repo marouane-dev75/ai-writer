@@ -98,7 +98,7 @@ export const Editor: React.FC<EditorProps> = ({ onChange }) => {
                     {t('editor.placeholder')}
                   </div>
                 }
-                ErrorBoundary={() => <div className="p-4 text-red-600">An error occurred</div>}
+                ErrorBoundary={() => <div className="p-4 text-red-600">{t('editor.error')}</div>}
               />
             </div>
             <HistoryPlugin />
