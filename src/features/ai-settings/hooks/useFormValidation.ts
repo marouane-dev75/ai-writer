@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from '@/shared/i18n';
-import type { ZodSchema, ZodError, ZodIssue } from 'zod';
+import { z } from 'zod';
 
 /**
  * Field-level validation errors
@@ -23,7 +23,7 @@ export type ValidationErrors = Record<string, string>;
  * ```
  */
 export function useFormValidation<T>(
-  schema: ZodSchema<T>,
+  schema: z.ZodType<T>,
   data: T
 ): { errors: ValidationErrors; isValid: boolean } {
   const { t } = useTranslation();
@@ -36,8 +36,8 @@ export function useFormValidation<T>(
       return { errors: validationErrors, isValid: true };
     } catch (error) {
       if (error && typeof error === 'object' && 'issues' in error) {
-        const zodError = error as ZodError;
-        zodError.issues.forEach((err: ZodIssue) => {
+        const zodError = error as z.ZodError;
+        zodError.issues.forEach((err) => {
           const field = err.path[0] as string;
           // Use the error message as i18n key
           const i18nKey = `ai.${err.message}`;
