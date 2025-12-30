@@ -1,6 +1,7 @@
 export { Button } from './Button';
 export { Dialog } from './Dialog';
 export { DirectoryInput } from './DirectoryInput';
+export { FieldError } from './FieldError';
 export { FormInput } from './FormInput';
 export { LoadingSpinner } from './LoadingSpinner';
 export { MultiSelect } from './MultiSelect';

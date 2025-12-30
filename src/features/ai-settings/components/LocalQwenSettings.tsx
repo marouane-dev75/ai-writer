@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { DirectoryInput, FormInput, Slider, Switch, Select, LoadingSpinner } from "@/shared/ui";
+import { DirectoryInput, FormInput, Slider, Switch, Select, LoadingSpinner, FieldError } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 import { useQwenModels } from "../hooks/useQwenModels";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { localQwenConfigSchema } from "../validation";
 import type { LocalQwenConfig } from "../types";
 
 interface LocalQwenSettingsProps {
@@ -20,6 +22,7 @@ export const LocalQwenSettings = ({
 }: LocalQwenSettingsProps) => {
   const { t } = useTranslation();
   const [dismissedError, setDismissedError] = useState(false);
+  const { errors } = useFormValidation(localQwenConfigSchema, config);
   const {
     availableModels,
     downloadedModels,
@@ -66,6 +69,7 @@ export const LocalQwenSettings = ({
           onChange={handleChange('modelPath')}
           placeholder={t("ai.localQwen.basePath")}
         />
+        <FieldError error={errors.modelPath} />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
           {t("ai.localQwen.basePathHelper")}
         </p>
@@ -274,6 +278,7 @@ export const LocalQwenSettings = ({
             options={modelOptions}
             placeholder={t("ai.localQwen.selectModel")}
           />
+          <FieldError error={errors.selectedModelId} />
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
             {t("ai.localQwen.selectedModelHelper")}
           </p>
@@ -289,22 +294,28 @@ export const LocalQwenSettings = ({
           {t("ai.localQwen.configuration")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormInput
-            label={t("ai.localQwen.contextSize")}
-            type="number"
-            value={config.contextSize.toString()}
-            onChange={(e) => handleChange('contextSize')(Number(e.target.value))}
-            placeholder="16384"
-          />
+          <div>
+            <FormInput
+              label={t("ai.localQwen.contextSize")}
+              type="number"
+              value={config.contextSize.toString()}
+              onChange={(e) => handleChange('contextSize')(Number(e.target.value))}
+              placeholder="16384"
+            />
+            <FieldError error={errors.contextSize} />
+          </div>
 
-          <Slider
-            label={t("ai.localQwen.temperature")}
-            value={config.temperature}
-            onChange={handleChange('temperature')}
-            min={0}
-            max={2}
-            step={0.1}
-          />
+          <div>
+            <Slider
+              label={t("ai.localQwen.temperature")}
+              value={config.temperature}
+              onChange={handleChange('temperature')}
+              min={0}
+              max={2}
+              step={0.1}
+            />
+            <FieldError error={errors.temperature} />
+          </div>
 
           <div>
             <FormInput
@@ -314,27 +325,34 @@ export const LocalQwenSettings = ({
               onChange={(e) => handleChange('seed')(Number(e.target.value))}
               placeholder="-1"
             />
+            <FieldError error={errors.seed} />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-1">
               {t("ai.localQwen.seedHelper")}
             </p>
           </div>
 
-          <Slider
-            label={t("ai.localQwen.repeatPenalty")}
-            value={config.repeatPenalty}
-            onChange={handleChange('repeatPenalty')}
-            min={1}
-            max={2}
-            step={0.1}
-          />
+          <div>
+            <Slider
+              label={t("ai.localQwen.repeatPenalty")}
+              value={config.repeatPenalty}
+              onChange={handleChange('repeatPenalty')}
+              min={1}
+              max={2}
+              step={0.1}
+            />
+            <FieldError error={errors.repeatPenalty} />
+          </div>
 
-          <FormInput
-            label={t("ai.localQwen.repeatLastN")}
-            type="number"
-            value={config.repeatLastN.toString()}
-            onChange={(e) => handleChange('repeatLastN')(Number(e.target.value))}
-            placeholder="64"
-          />
+          <div>
+            <FormInput
+              label={t("ai.localQwen.repeatLastN")}
+              type="number"
+              value={config.repeatLastN.toString()}
+              onChange={(e) => handleChange('repeatLastN')(Number(e.target.value))}
+              placeholder="64"
+            />
+            <FieldError error={errors.repeatLastN} />
+          </div>
 
           <Switch 
             label={t("ai.localQwen.useThinkingMode")} 

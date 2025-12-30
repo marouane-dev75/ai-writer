@@ -1,7 +1,9 @@
 import { useCallback } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
+import { FormInput, Slider, Select, SelectOption, FieldError } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { anthropicConfigSchema } from "../validation";
 import type { AnthropicConfig } from "../types";
 
 interface AnthropicSettingsProps {
@@ -24,6 +26,7 @@ export const AnthropicSettings = ({
   onSetActive 
 }: AnthropicSettingsProps) => {
   const { t } = useTranslation();
+  const { errors } = useFormValidation(anthropicConfigSchema, config);
 
   const handleChange = useCallback(
     (field: keyof AnthropicConfig) => (value: string | number | null) => {
@@ -40,36 +43,48 @@ export const AnthropicSettings = ({
         {t('ai.anthropic.title')}
       </h2>
       <div className="space-y-4">
-        <FormInput
-          label={t('ai.anthropic.apiKey')}
-          type="password"
-          value={config.apiKey}
-          onChange={(e) => handleChange('apiKey')(e.target.value)}
-          placeholder={t('ai.anthropic.apiKey')}
-        />
-        <Select
-          label={t('ai.anthropic.model')}
-          options={ANTHROPIC_MODELS}
-          value={config.model}
-          onChange={(value) => handleChange('model')(value)}
-          placeholder={t('ai.anthropic.modelPlaceholder')}
-        />
-        <Slider
-          label={t('ai.anthropic.temperature')}
-          value={config.temperature}
-          onChange={handleChange('temperature')}
-          min={0}
-          max={1}
-          step={0.1}
-        />
-        <Slider
-          label={t('ai.anthropic.maxTokens')}
-          value={config.maxTokens}
-          onChange={handleChange('maxTokens')}
-          min={100}
-          max={4096}
-          step={100}
-        />
+        <div>
+          <FormInput
+            label={t('ai.anthropic.apiKey')}
+            type="password"
+            value={config.apiKey}
+            onChange={(e) => handleChange('apiKey')(e.target.value)}
+            placeholder={t('ai.anthropic.apiKey')}
+          />
+          <FieldError error={errors.apiKey} />
+        </div>
+        <div>
+          <Select
+            label={t('ai.anthropic.model')}
+            options={ANTHROPIC_MODELS}
+            value={config.model}
+            onChange={(value) => handleChange('model')(value)}
+            placeholder={t('ai.anthropic.modelPlaceholder')}
+          />
+          <FieldError error={errors.model} />
+        </div>
+        <div>
+          <Slider
+            label={t('ai.anthropic.temperature')}
+            value={config.temperature}
+            onChange={handleChange('temperature')}
+            min={0}
+            max={1}
+            step={0.1}
+          />
+          <FieldError error={errors.temperature} />
+        </div>
+        <div>
+          <Slider
+            label={t('ai.anthropic.maxTokens')}
+            value={config.maxTokens}
+            onChange={handleChange('maxTokens')}
+            min={100}
+            max={4096}
+            step={100}
+          />
+          <FieldError error={errors.maxTokens} />
+        </div>
         
         <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
       </div>

@@ -1,7 +1,9 @@
 import { useCallback } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { FormInput, Slider, Select, SelectOption } from "@/shared/ui";
+import { FormInput, Slider, Select, SelectOption, FieldError } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { openAIConfigSchema } from "../validation";
 import type { OpenAIConfig } from "../types";
 
 interface OpenAISettingsProps {
@@ -25,6 +27,7 @@ export const OpenAISettings = ({
   onSetActive 
 }: OpenAISettingsProps) => {
   const { t } = useTranslation();
+  const { errors } = useFormValidation(openAIConfigSchema, config);
 
   const handleChange = useCallback(
     (field: keyof OpenAIConfig) => (value: string | number | null) => {
@@ -41,36 +44,48 @@ export const OpenAISettings = ({
         {t('ai.openai.title')}
       </h2>
       <div className="space-y-4">
-        <FormInput
-          label={t('ai.openai.apiKey')}
-          type="password"
-          value={config.apiKey}
-          onChange={(e) => handleChange('apiKey')(e.target.value)}
-          placeholder={t('ai.openai.apiKey')}
-        />
-        <Select
-          label={t('ai.openai.model')}
-          options={OPENAI_MODELS}
-          value={config.model}
-          onChange={(value) => handleChange('model')(value)}
-          placeholder={t('ai.openai.modelPlaceholder')}
-        />
-        <Slider
-          label={t('ai.openai.temperature')}
-          value={config.temperature}
-          onChange={handleChange('temperature')}
-          min={0}
-          max={2}
-          step={0.1}
-        />
-        <Slider
-          label={t('ai.openai.maxTokens')}
-          value={config.maxTokens}
-          onChange={handleChange('maxTokens')}
-          min={100}
-          max={4096}
-          step={100}
-        />
+        <div>
+          <FormInput
+            label={t('ai.openai.apiKey')}
+            type="password"
+            value={config.apiKey}
+            onChange={(e) => handleChange('apiKey')(e.target.value)}
+            placeholder={t('ai.openai.apiKey')}
+          />
+          <FieldError error={errors.apiKey} />
+        </div>
+        <div>
+          <Select
+            label={t('ai.openai.model')}
+            options={OPENAI_MODELS}
+            value={config.model}
+            onChange={(value) => handleChange('model')(value)}
+            placeholder={t('ai.openai.modelPlaceholder')}
+          />
+          <FieldError error={errors.model} />
+        </div>
+        <div>
+          <Slider
+            label={t('ai.openai.temperature')}
+            value={config.temperature}
+            onChange={handleChange('temperature')}
+            min={0}
+            max={2}
+            step={0.1}
+          />
+          <FieldError error={errors.temperature} />
+        </div>
+        <div>
+          <Slider
+            label={t('ai.openai.maxTokens')}
+            value={config.maxTokens}
+            onChange={handleChange('maxTokens')}
+            min={100}
+            max={4096}
+            step={100}
+          />
+          <FieldError error={errors.maxTokens} />
+        </div>
         
         <ActiveProviderButton isActive={isActive} onSetActive={onSetActive} />
       </div>
