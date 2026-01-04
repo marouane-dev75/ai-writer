@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use serde::{Deserialize, Serialize};
 use sysinfo::{Disks, System};
 use tauri::AppHandle;
@@ -74,96 +74,164 @@ fn get_system_info_impl() -> Result<SystemInfo> {
     })
 }
 
-/// Attempt to detect GPU information
-/// This is a basic implementation - for production, consider platform-specific crates
+/// Helper function to run a command and get its output
+fn run_command_with_error_handling(
+    command: &str,
+    args: &[&str],
+) -> Result<String> {
+    log::debug!("Running command: {} {:?}", command, args);
+    
+    let output = std::process::Command::new(command)
+        .args(args)
+        .output()
+        .with_context(|| format!("Failed to execute '{}'", command))?;
+    
+    if !output.status.success() {
+        anyhow::bail!(
+            "Command '{}' failed with status: {}",
+            command,
+            output.status
+        );
+    }
+    
+    String::from_utf8(output.stdout)
+        .with_context(|| format!("Failed to parse output from '{}'", command))
+}
+
+/// Detect GPU on Linux using lspci
+#[cfg(target_os = "linux")]
+fn detect_gpu_linux() -> Result<Vec<String>> {
+    let output = run_command_with_error_handling("lspci", &[])?;
+    
+    let gpus: Vec<String> = output
+        .lines()
+        .filter(|line| {
+            let lower = line.to_lowercase();
+            lower.contains("vga") || lower.contains("3d") || lower.contains("display")
+        })
+        .filter_map(|line| {
+            line.split(':').nth(2).map(|s| s.trim().to_string())
+        })
+        .collect();
+    
+    if gpus.is_empty() {
+        anyhow::bail!("No GPU devices found in lspci output");
+    }
+    
+    log::debug!("Found {} GPU(s) via lspci: {:?}", gpus.len(), gpus);
+    Ok(gpus)
+}
+
+/// Detect GPU on Windows using wmic
+#[cfg(target_os = "windows")]
+fn detect_gpu_windows() -> Result<Vec<String>> {
+    let output = run_command_with_error_handling(
+        "wmic",
+        &["path", "win32_VideoController", "get", "name"],
+    )?;
+    
+    let gpus: Vec<String> = output
+        .lines()
+        .skip(1) // Skip header
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| line.trim().to_string())
+        .collect();
+    
+    if gpus.is_empty() {
+        anyhow::bail!("No GPU devices found in wmic output");
+    }
+    
+    log::debug!("Found {} GPU(s) via wmic: {:?}", gpus.len(), gpus);
+    Ok(gpus)
+}
+
+/// Detect GPU on macOS using system_profiler
+#[cfg(target_os = "macos")]
+fn detect_gpu_macos() -> Result<Vec<String>> {
+    let output = run_command_with_error_handling(
+        "system_profiler",
+        &["SPDisplaysDataType"],
+    )?;
+    
+    let gpus: Vec<String> = output
+        .lines()
+        .filter(|line| line.trim().starts_with("Chipset Model:"))
+        .filter_map(|line| {
+            line.split(':').nth(1).map(|s| s.trim().to_string())
+        })
+        .collect();
+    
+    if gpus.is_empty() {
+        anyhow::bail!("No GPU devices found in system_profiler output");
+    }
+    
+    log::debug!("Found {} GPU(s) via system_profiler: {:?}", gpus.len(), gpus);
+    Ok(gpus)
+}
+
+/// Get fallback GPU info with helpful hints
+fn get_fallback_gpu_info() -> Vec<String> {
+    #[cfg(target_os = "linux")]
+    let hint = "Install 'pciutils' package for GPU detection (e.g., apt install pciutils)";
+    
+    #[cfg(target_os = "windows")]
+    let hint = "GPU detection requires 'wmic' command (usually available by default)";
+    
+    #[cfg(target_os = "macos")]
+    let hint = "GPU detection requires 'system_profiler' command (usually available by default)";
+    
+    #[cfg(not(any(target_os = "linux", target_os = "windows", target_os = "macos")))]
+    let hint = "GPU detection not supported on this platform";
+    
+    vec![format!("GPU detection unavailable ({})", hint)]
+}
+
+/// Attempt to detect GPU information with proper error handling and logging
+/// This is a basic implementation using platform-specific command-line tools
 fn detect_gpu_info() -> Vec<String> {
-    // On Linux, we could read from /proc or use vulkan/opencl
-    // On Windows, we could use DXGI
-    // On macOS, we could use Metal
-    // For now, we'll return a placeholder
+    log::debug!("Starting GPU detection...");
     
     #[cfg(target_os = "linux")]
     {
-        // Try to detect GPU on Linux
-        if let Ok(output) = std::process::Command::new("lspci")
-            .output()
-        {
-            if let Ok(stdout) = String::from_utf8(output.stdout) {
-                let gpus: Vec<String> = stdout
-                    .lines()
-                    .filter(|line| {
-                        line.to_lowercase().contains("vga") 
-                        || line.to_lowercase().contains("3d") 
-                        || line.to_lowercase().contains("display")
-                    })
-                    .map(|line| {
-                        // Extract GPU name from lspci output
-                        line.split(':')
-                            .nth(2)
-                            .unwrap_or(line)
-                            .trim()
-                            .to_string()
-                    })
-                    .collect();
-                
-                if !gpus.is_empty() {
-                    return gpus;
-                }
+        match detect_gpu_linux() {
+            Ok(gpus) => {
+                log::info!("Successfully detected {} GPU(s) on Linux", gpus.len());
+                return gpus;
+            }
+            Err(e) => {
+                log::warn!("Linux GPU detection failed: {}", e);
             }
         }
     }
-
+    
     #[cfg(target_os = "windows")]
     {
-        // On Windows, we could use wmic or DirectX
-        if let Ok(output) = std::process::Command::new("wmic")
-            .args(&["path", "win32_VideoController", "get", "name"])
-            .output()
-        {
-            if let Ok(stdout) = String::from_utf8(output.stdout) {
-                let gpus: Vec<String> = stdout
-                    .lines()
-                    .skip(1) // Skip header
-                    .filter(|line| !line.trim().is_empty())
-                    .map(|line| line.trim().to_string())
-                    .collect();
-                
-                if !gpus.is_empty() {
-                    return gpus;
-                }
+        match detect_gpu_windows() {
+            Ok(gpus) => {
+                log::info!("Successfully detected {} GPU(s) on Windows", gpus.len());
+                return gpus;
+            }
+            Err(e) => {
+                log::warn!("Windows GPU detection failed: {}", e);
             }
         }
     }
-
+    
     #[cfg(target_os = "macos")]
     {
-        // On macOS, we could use system_profiler
-        if let Ok(output) = std::process::Command::new("system_profiler")
-            .args(&["SPDisplaysDataType"])
-            .output()
-        {
-            if let Ok(stdout) = String::from_utf8(output.stdout) {
-                let gpus: Vec<String> = stdout
-                    .lines()
-                    .filter(|line| line.trim().starts_with("Chipset Model:"))
-                    .map(|line| {
-                        line.split(':')
-                            .nth(1)
-                            .unwrap_or("")
-                            .trim()
-                            .to_string()
-                    })
-                    .collect();
-                
-                if !gpus.is_empty() {
-                    return gpus;
-                }
+        match detect_gpu_macos() {
+            Ok(gpus) => {
+                log::info!("Successfully detected {} GPU(s) on macOS", gpus.len());
+                return gpus;
+            }
+            Err(e) => {
+                log::warn!("macOS GPU detection failed: {}", e);
             }
         }
     }
-
-    // Fallback if detection fails
-    vec!["GPU detection not available".to_string()]
+    
+    log::warn!("All GPU detection methods failed, using fallback");
+    get_fallback_gpu_info()
 }
 
 /// Restart the application
