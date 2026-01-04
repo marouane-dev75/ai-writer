@@ -15,6 +15,26 @@ class BackendAppRestartService implements AppRestartService {
       );
     }
   }
+
+  async isDevMode(): Promise<boolean> {
+    try {
+      return await invoke<boolean>('is_dev_mode');
+    } catch (error) {
+      throw new Error(
+        `Failed to check dev mode: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
+
+  async close(): Promise<void> {
+    try {
+      await invoke('close_app');
+    } catch (error) {
+      throw new Error(
+        `Failed to close application: ${error instanceof Error ? error.message : String(error)}`
+      );
+    }
+  }
 }
 
 /**

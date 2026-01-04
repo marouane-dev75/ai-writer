@@ -175,6 +175,45 @@ pub async fn restart_app(app: AppHandle) -> Result<(), String> {
 fn restart_app_impl(app: AppHandle) -> Result<()> {
     log::info!("Application restart requested");
     
-    // app.restart() never returns - it terminates and restarts the process
-    app.restart();
+    // Spawn a task to restart after a short delay
+    // This allows the frontend to receive the response before the app terminates
+    tauri::async_runtime::spawn(async move {
+        tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+        log::info!("Restarting application now...");
+        app.restart();
+    });
+    
+    Ok(())
+}
+
+/// Check if running in development mode
+#[tauri::command]
+pub async fn is_dev_mode() -> Result<bool, String> {
+    Ok(is_dev_mode_impl())
+}
+
+fn is_dev_mode_impl() -> bool {
+    // In debug builds (dev mode), this will be true
+    // In release builds (production), this will be false
+    cfg!(debug_assertions)
+}
+
+/// Close the application gracefully
+#[tauri::command]
+pub async fn close_app(app: AppHandle) -> Result<(), String> {
+    close_app_impl(app).map_err(|e| e.to_string())
+}
+
+fn close_app_impl(app: AppHandle) -> Result<()> {
+    log::info!("Application close requested");
+    
+    // Spawn a task to close after a short delay
+    // This allows the frontend to receive the response before the app terminates
+    tauri::async_runtime::spawn(async move {
+        tokio::time::sleep(tokio::time::Duration::from_millis(300)).await;
+        log::info!("Closing application now...");
+        app.exit(0);
+    });
+    
+    Ok(())
 }

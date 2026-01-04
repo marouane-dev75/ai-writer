@@ -135,7 +135,9 @@ pub fn run() {
             commands::save_markdown_file,
             commands::open_markdown_file,
             commands::get_system_info,
-            commands::restart_app
+            commands::restart_app,
+            commands::is_dev_mode,
+            commands::close_app
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
