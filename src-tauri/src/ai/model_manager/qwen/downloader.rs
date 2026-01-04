@@ -4,9 +4,11 @@ use anyhow::{Context, Result};
 use std::fs::{self, File};
 use std::io::Write;
 use std::path::PathBuf;
+use std::time::{Duration, Instant};
 use tauri::{AppHandle, Emitter};
 
 const TOKENIZER_FILE: &str = "tokenizer.json";
+const PROGRESS_THROTTLE_MS: u64 = 300; // Emit progress updates every 300ms
 
 /// Downloads a Qwen model and its tokenizer to the specified base path
 pub async fn download_qwen_model(
@@ -90,6 +92,9 @@ async fn download_file(
     // Create file
     let mut file = File::create(dest).context("Failed to create file")?;
     let mut downloaded: u64 = 0;
+    let mut last_emit_time = Instant::now();
+    let throttle_duration = Duration::from_millis(PROGRESS_THROTTLE_MS);
+    let mut is_first_chunk = true;
 
     // Download in chunks and emit progress
     loop {
@@ -110,26 +115,49 @@ async fn download_file(
                     0.0
                 };
 
-                // Emit progress event
-                let progress = DownloadProgress {
-                    file: file_type.to_string(),
-                    downloaded,
-                    total: total_size,
-                    percentage,
-                };
+                // Throttle progress events: emit only if enough time has passed or it's the first chunk
+                let now = Instant::now();
+                let should_emit = is_first_chunk || now.duration_since(last_emit_time) >= throttle_duration;
 
-                if let Err(e) = app_handle.emit("model-download-progress", &progress) {
-                    log::warn!("Failed to emit progress event: {}", e);
+                if should_emit {
+                    // Emit progress event
+                    let progress = DownloadProgress {
+                        file: file_type.to_string(),
+                        downloaded,
+                        total: total_size,
+                        percentage,
+                    };
+
+                    if let Err(e) = app_handle.emit("model-download-progress", &progress) {
+                        log::warn!("Failed to emit progress event: {}", e);
+                    }
+
+                    log::debug!(
+                        "Progress: {:.2}% ({:.2} MB / {:.2} MB)",
+                        percentage,
+                        downloaded as f64 / 1_048_576.0,
+                        total_size.unwrap_or(0) as f64 / 1_048_576.0
+                    );
+
+                    last_emit_time = now;
+                    is_first_chunk = false;
                 }
-
-                log::debug!(
-                    "Progress: {:.2}% ({:.2} MB / {:.2} MB)",
-                    percentage,
-                    downloaded as f64 / 1_048_576.0,
-                    total_size.unwrap_or(0) as f64 / 1_048_576.0
-                );
             }
             None => break,
+        }
+    }
+
+    // Emit final progress event (100%) to ensure UI shows completion
+    if let Some(_total) = total_size {
+        let final_progress = DownloadProgress {
+            file: file_type.to_string(),
+            downloaded,
+            total: total_size,
+            percentage: 100.0,
+        };
+
+        if let Err(e) = app_handle.emit("model-download-progress", &final_progress) {
+            log::warn!("Failed to emit final progress event: {}", e);
         }
     }
 

@@ -1,0 +1,16 @@
+{
+  "systemInfo": {
+    "title": "Informations Système",
+    "subtitle": "Capacité matérielle et détails du système",
+    "cpu": "Processeur",
+    "cores": "{{count}} cœurs",
+    "memory": "Mémoire (RAM)",
+    "gpu": "Graphiques",
+    "disk": "Stockage",
+    "os": "Système d'exploitation",
+    "architecture": "Architecture",
+    "total": "Total",
+    "available": "Disponible",
+    "failedToLoad": "Échec du chargement des informations système"
+  }
+}

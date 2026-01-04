@@ -1,8 +1,10 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "@/shared/i18n";
-import { DirectoryInput, FormInput, Slider, Switch, Select, LoadingSpinner } from "@/shared/ui";
+import { DirectoryInput, FormInput, Slider, Switch, Select, FieldError } from "@/shared/ui";
 import { ActiveProviderButton } from "./ActiveProviderButton";
 import { useQwenModels } from "../hooks/useQwenModels";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { localQwenConfigSchema } from "../validation";
 import type { LocalQwenConfig } from "../types";
 
 interface LocalQwenSettingsProps {
@@ -20,6 +22,7 @@ export const LocalQwenSettings = ({
 }: LocalQwenSettingsProps) => {
   const { t } = useTranslation();
   const [dismissedError, setDismissedError] = useState(false);
+  const { errors } = useFormValidation(localQwenConfigSchema, config);
   const {
     availableModels,
     downloadedModels,
@@ -66,6 +69,7 @@ export const LocalQwenSettings = ({
           onChange={handleChange('modelPath')}
           placeholder={t("ai.localQwen.basePath")}
         />
+        <FieldError error={errors.modelPath} />
         <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
           {t("ai.localQwen.basePathHelper")}
         </p>
@@ -73,7 +77,7 @@ export const LocalQwenSettings = ({
 
       {/* Empty State - No Path Selected */}
       {!config.modelPath && (
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-lg border-2 border-dashed border-blue-300 dark:border-blue-700 p-8">
+        <div className="bg-linear-to-br from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900 rounded-lg border-2 border-dashed border-blue-300 dark:border-blue-700 p-8">
           <div className="text-center">
             <svg className="mx-auto h-12 w-12 text-blue-400 dark:text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
@@ -123,7 +127,7 @@ export const LocalQwenSettings = ({
           {error && !dismissedError && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4 animate-fade-in">
               <div className="flex items-start">
-                <svg className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 mr-3 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
                 <div className="flex-1">
@@ -133,7 +137,7 @@ export const LocalQwenSettings = ({
                 </div>
                 <button
                   onClick={() => setDismissedError(true)}
-                  className="ml-3 flex-shrink-0 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition-colors"
+                  className="ml-3 shrink-0 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 transition-colors"
                   aria-label="Dismiss error"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -217,7 +221,7 @@ export const LocalQwenSettings = ({
 
           {/* Download Progress */}
           {isDownloading && downloadProgress && (
-            <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 animate-fade-in">
+            <div className="mt-4 p-4 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 animate-fade-in">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full animate-pulse mr-2" />
@@ -231,7 +235,7 @@ export const LocalQwenSettings = ({
               </div>
               <div className="w-full bg-blue-200 dark:bg-blue-900/50 rounded-full h-3 mb-2 overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 h-3 rounded-full transition-all duration-300 ease-out"
+                  className="bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 h-3 rounded-full transition-all duration-300 ease-out"
                   style={{ width: `${downloadProgress.percentage}%` }}
                 ></div>
               </div>
@@ -274,6 +278,7 @@ export const LocalQwenSettings = ({
             options={modelOptions}
             placeholder={t("ai.localQwen.selectModel")}
           />
+          <FieldError error={errors.selectedModelId} />
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 ml-1">
             {t("ai.localQwen.selectedModelHelper")}
           </p>
@@ -289,22 +294,28 @@ export const LocalQwenSettings = ({
           {t("ai.localQwen.configuration")}
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormInput
-            label={t("ai.localQwen.contextSize")}
-            type="number"
-            value={config.contextSize.toString()}
-            onChange={(e) => handleChange('contextSize')(Number(e.target.value))}
-            placeholder="16384"
-          />
+          <div>
+            <FormInput
+              label={t("ai.localQwen.contextSize")}
+              type="number"
+              value={config.contextSize.toString()}
+              onChange={(e) => handleChange('contextSize')(Number(e.target.value))}
+              placeholder="16384"
+            />
+            <FieldError error={errors.contextSize} />
+          </div>
 
-          <Slider
-            label={t("ai.localQwen.temperature")}
-            value={config.temperature}
-            onChange={handleChange('temperature')}
-            min={0}
-            max={2}
-            step={0.1}
-          />
+          <div>
+            <Slider
+              label={t("ai.localQwen.temperature")}
+              value={config.temperature}
+              onChange={handleChange('temperature')}
+              min={0}
+              max={2}
+              step={0.1}
+            />
+            <FieldError error={errors.temperature} />
+          </div>
 
           <div>
             <FormInput
@@ -314,27 +325,34 @@ export const LocalQwenSettings = ({
               onChange={(e) => handleChange('seed')(Number(e.target.value))}
               placeholder="-1"
             />
+            <FieldError error={errors.seed} />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-1">
               {t("ai.localQwen.seedHelper")}
             </p>
           </div>
 
-          <Slider
-            label={t("ai.localQwen.repeatPenalty")}
-            value={config.repeatPenalty}
-            onChange={handleChange('repeatPenalty')}
-            min={1}
-            max={2}
-            step={0.1}
-          />
+          <div>
+            <Slider
+              label={t("ai.localQwen.repeatPenalty")}
+              value={config.repeatPenalty}
+              onChange={handleChange('repeatPenalty')}
+              min={1}
+              max={2}
+              step={0.1}
+            />
+            <FieldError error={errors.repeatPenalty} />
+          </div>
 
-          <FormInput
-            label={t("ai.localQwen.repeatLastN")}
-            type="number"
-            value={config.repeatLastN.toString()}
-            onChange={(e) => handleChange('repeatLastN')(Number(e.target.value))}
-            placeholder="64"
-          />
+          <div>
+            <FormInput
+              label={t("ai.localQwen.repeatLastN")}
+              type="number"
+              value={config.repeatLastN.toString()}
+              onChange={(e) => handleChange('repeatLastN')(Number(e.target.value))}
+              placeholder="64"
+            />
+            <FieldError error={errors.repeatLastN} />
+          </div>
 
           <Switch 
             label={t("ai.localQwen.useThinkingMode")} 

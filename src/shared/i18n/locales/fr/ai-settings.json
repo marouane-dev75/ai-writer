@@ -60,6 +60,18 @@
       "modelPlaceholder": "Sélectionner des modèles...",
       "temperature": "Température",
       "maxTokens": "Tokens Maximum"
+    },
+    "validation": {
+      "apiKeyRequired": "La clé API est requise",
+      "apiKeyTooShort": "La clé API doit contenir au moins 10 caractères",
+      "modelRequired": "Veuillez sélectionner un modèle",
+      "temperatureRange": "La température doit être entre 0 et 2",
+      "maxTokensMin": "Le nombre de tokens maximum doit être au moins 100",
+      "modelPathRequired": "Le chemin du modèle est requis",
+      "selectedModelRequired": "Veuillez sélectionner un modèle",
+      "contextSizeMin": "La taille du contexte doit être au moins 512",
+      "repeatPenaltyRange": "La pénalité de répétition doit être entre 1 et 2",
+      "repeatLastNPositive": "Répéter les N derniers doit être positif"
     }
   }
 }

@@ -1,8 +1,15 @@
 import { useTranslation } from "@/shared/i18n";
 import { AIProviderSettings, aiProviderService } from "@/features/ai-settings";
+import { SystemInfo, systemInfoService } from "@/features/system-info";
+import { useAppRestartPrompt } from "@/features/app-restart";
 
 export const SettingsPage = () => {
   const { t } = useTranslation();
+  const { setShowRestartPrompt } = useAppRestartPrompt();
+
+  const handleConfigSaved = () => {
+    setShowRestartPrompt(true);
+  };
 
   return (
     <>
@@ -16,7 +23,11 @@ export const SettingsPage = () => {
       </div>
 
       <div className="space-y-8">
-        <AIProviderSettings service={aiProviderService} />
+        <SystemInfo service={systemInfoService} />
+        <AIProviderSettings 
+          service={aiProviderService} 
+          onConfigSaved={handleConfigSaved}
+        />
       </div>
     </>
   );

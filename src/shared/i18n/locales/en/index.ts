@@ -8,6 +8,8 @@ import logs from './logs.json';
 import aiSettings from './ai-settings.json';
 import editor from './editor.json';
 import footer from './footer.json';
+import systemInfo from './system-info.json';
+import appRestart from './app-restart.json';
 
 export default {
   ...app,
@@ -20,4 +22,6 @@ export default {
   ...aiSettings,
   ...editor,
   ...footer,
+  ...systemInfo,
+  ...appRestart,
 };

@@ -1,0 +1,16 @@
+{
+  "systemInfo": {
+    "title": "System Information",
+    "subtitle": "Hardware capacity and system details",
+    "cpu": "Processor",
+    "cores": "{{count}} cores",
+    "memory": "Memory (RAM)",
+    "gpu": "Graphics",
+    "disk": "Storage",
+    "os": "Operating System",
+    "architecture": "Architecture",
+    "total": "Total",
+    "available": "Available",
+    "failedToLoad": "Failed to load system information"
+  }
+}

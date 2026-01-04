@@ -7,13 +7,16 @@ import { AnthropicSettings } from "./AnthropicSettings";
 import { LocalQwenSettings } from "./LocalQwenSettings";
 import { OpenAISettings } from "./OpenAISettings";
 import { useProviderSettings } from "../hooks/useProviderSettings";
+import { useFormValidation } from "../hooks/useFormValidation";
+import { openAIConfigSchema, anthropicConfigSchema, localQwenConfigSchema } from "../validation";
 import type { AIProviderService } from "../services/ai-provider.service";
 
 interface AIProviderSettingsProps {
   service: AIProviderService;
+  onConfigSaved?: () => void;
 }
 
-export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
+export const AIProviderSettings = ({ service, onConfigSaved }: AIProviderSettingsProps) => {
   const { t } = useTranslation();
   const {
     config,
@@ -28,6 +31,46 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
     error,
   } = useProviderSettings(service);
 
+  // Validate current provider config
+  const { isValid: isOpenAIValid } = useFormValidation(
+    openAIConfigSchema,
+    config?.openai ?? { apiKey: '', model: '', temperature: 0, maxTokens: 100 }
+  );
+  const { isValid: isAnthropicValid } = useFormValidation(
+    anthropicConfigSchema,
+    config?.anthropic ?? { apiKey: '', model: '', temperature: 0, maxTokens: 100 }
+  );
+  const { isValid: isLocalQwenValid } = useFormValidation(
+    localQwenConfigSchema,
+    config?.localQwen ?? {
+      modelPath: '',
+      selectedModelId: '',
+      contextSize: 512,
+      temperature: 0,
+      seed: -1,
+      repeatPenalty: 1,
+      repeatLastN: 1,
+      useThinkingMode: false,
+      useGpu: false,
+    }
+  );
+
+  // Determine if current config is valid
+  const isCurrentConfigValid = useMemo(() => {
+    if (!config) return false;
+    
+    switch (config.activeProvider) {
+      case 'openai':
+        return isOpenAIValid;
+      case 'anthropic':
+        return isAnthropicValid;
+      case 'localQwen':
+        return isLocalQwenValid;
+      default:
+        return false;
+    }
+  }, [config, isOpenAIValid, isAnthropicValid, isLocalQwenValid]);
+
   const providers = useMemo(
     () => [
       { id: 'localQwen' as const, label: t('ai.localQwen.title'), icon: <HiCpuChip className="w-5 h-5" /> },
@@ -38,9 +81,14 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
   );
 
   const handleSave = async () => {
+    if (!isCurrentConfigValid) {
+      return; // Don't save if validation fails
+    }
+    
     try {
       await save();
-      // TODO: Show success toast notification
+      // Call the callback if provided
+      onConfigSaved?.();
     } catch (err) {
       // Error already handled by hook with error state
     }
@@ -141,7 +189,7 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
         <Button
           onClick={handleSave}
           variant="primary"
-          disabled={!isDirty || isSaving}
+          disabled={!isDirty || isSaving || !isCurrentConfigValid}
         >
           {isSaving ? t('common.saving') : t('common.save')}
         </Button>
