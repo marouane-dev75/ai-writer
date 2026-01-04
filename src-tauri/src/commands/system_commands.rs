@@ -1,6 +1,7 @@
-use anyhow::{Result};
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use sysinfo::{Disks, System};
+use tauri::AppHandle;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -163,4 +164,17 @@ fn detect_gpu_info() -> Vec<String> {
 
     // Fallback if detection fails
     vec!["GPU detection not available".to_string()]
+}
+
+/// Restart the application
+#[tauri::command]
+pub async fn restart_app(app: AppHandle) -> Result<(), String> {
+    restart_app_impl(app).map_err(|e| e.to_string())
+}
+
+fn restart_app_impl(app: AppHandle) -> Result<()> {
+    log::info!("Application restart requested");
+    
+    // app.restart() never returns - it terminates and restarts the process
+    app.restart();
 }

@@ -134,7 +134,8 @@ pub fn run() {
             commands::download_qwen_model_cmd,
             commands::save_markdown_file,
             commands::open_markdown_file,
-            commands::get_system_info
+            commands::get_system_info,
+            commands::restart_app
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
