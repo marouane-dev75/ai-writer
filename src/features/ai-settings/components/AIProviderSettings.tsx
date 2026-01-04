@@ -13,9 +13,10 @@ import type { AIProviderService } from "../services/ai-provider.service";
 
 interface AIProviderSettingsProps {
   service: AIProviderService;
+  onConfigSaved?: () => void;
 }
 
-export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
+export const AIProviderSettings = ({ service, onConfigSaved }: AIProviderSettingsProps) => {
   const { t } = useTranslation();
   const {
     config,
@@ -86,7 +87,8 @@ export const AIProviderSettings = ({ service }: AIProviderSettingsProps) => {
     
     try {
       await save();
-      // TODO: Show success toast notification
+      // Call the callback if provided
+      onConfigSaved?.();
     } catch (err) {
       // Error already handled by hook with error state
     }
