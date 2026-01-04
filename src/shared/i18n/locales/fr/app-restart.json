@@ -1,0 +1,7 @@
+{
+  "appRestart": {
+    "message": "L'application doit redémarrer pour appliquer les modifications",
+    "button": "Redémarrer maintenant",
+    "error": "Échec du redémarrage de l'application"
+  }
+}

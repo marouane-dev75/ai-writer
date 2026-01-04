@@ -1,0 +1,7 @@
+{
+  "appRestart": {
+    "message": "The application needs to restart to apply changes",
+    "button": "Restart Now",
+    "error": "Failed to restart application"
+  }
+}
