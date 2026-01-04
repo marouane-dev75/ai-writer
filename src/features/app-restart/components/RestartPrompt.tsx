@@ -2,19 +2,22 @@ import { useTranslation } from '@/shared/i18n';
 import { Button } from '@/shared/ui';
 import { HiArrowPath } from 'react-icons/hi2';
 import { useAppRestart } from '../hooks/useAppRestart';
-import type { AppRestartService } from '../types';
-
-interface RestartPromptProps {
-  service: AppRestartService;
-}
+import { useAppRestartContext } from '../contexts/AppRestartContext';
 
 /**
  * Component that displays a restart prompt with a button to restart the application
  * Designed to be shown as an overlay at the highest level of the app
+ * Automatically controlled by AppRestartContext - only renders when showRestartPrompt is true
  */
-export const RestartPrompt = ({ service }: RestartPromptProps) => {
+export const RestartPrompt = () => {
   const { t } = useTranslation();
+  const { showRestartPrompt, service } = useAppRestartContext();
   const { restart, isRestarting, error } = useAppRestart(service);
+
+  // Don't render if not shown
+  if (!showRestartPrompt) {
+    return null;
+  }
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-blue-600 dark:bg-blue-700 text-white shadow-lg">
