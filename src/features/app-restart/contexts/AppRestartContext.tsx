@@ -15,7 +15,7 @@ interface AppRestartProviderProps {
 }
 
 export const AppRestartProvider: React.FC<AppRestartProviderProps> = ({ children, service }) => {
-  const [showRestartPrompt, setShowRestartPrompt] = useState(true);
+  const [showRestartPrompt, setShowRestartPrompt] = useState(false);
 
   const value: AppRestartContextType = {
     showRestartPrompt,

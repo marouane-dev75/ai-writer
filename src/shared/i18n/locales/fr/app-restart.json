@@ -4,6 +4,7 @@
     "devMessage": "Les modifications nécessitent un redémarrage. Veuillez fermer l'application et redémarrer le serveur de développement manuellement",
     "button": "Redémarrer maintenant",
     "closeButton": "Fermer l'application",
-    "error": "Échec du redémarrage de l'application"
+    "error": "Échec du redémarrage de l'application",
+    "dismiss": "Ignorer"
   }
 }

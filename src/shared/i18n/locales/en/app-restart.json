@@ -4,6 +4,7 @@
     "devMessage": "Changes require restart. Please close the app and restart the dev server manually",
     "button": "Restart Now",
     "closeButton": "Close App",
-    "error": "Failed to restart application"
+    "error": "Failed to restart application",
+    "dismiss": "Dismiss"
   }
 }
