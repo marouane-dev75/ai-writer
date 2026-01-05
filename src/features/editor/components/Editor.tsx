@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -25,6 +26,8 @@ interface EditorProps {
 
 export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, generatorRuntime }) => {
   const { t } = useTranslation();
+  const [showTransformer, setShowTransformer] = useState(true);
+  const [showGenerator, setShowGenerator] = useState(true);
 
   const initialConfig = {
     namespace: 'MinimalEditor',
@@ -96,26 +99,32 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
 
         {/* AI Components - Side by Side */}
         <div className="flex gap-6">
-          <div className="flex-1">
-            <AiTransformer
-              onTransformStream={transformerRuntime.startStream}
-              onCancelStream={transformerRuntime.cancelStream}
-              isStreaming={transformerRuntime.isStreaming}
-              currentStream={transformerRuntime.currentStream}
-              error={transformerRuntime.error}
-              onClearStream={transformerRuntime.clearStream}
-            />
-          </div>
-          <div className="flex-1">
-            <AiGenerator
-              onGenerateStream={generatorRuntime.startStream}
-              onCancelStream={generatorRuntime.cancelStream}
-              isStreaming={generatorRuntime.isStreaming}
-              currentStream={generatorRuntime.currentStream}
-              error={generatorRuntime.error}
-              onClearStream={generatorRuntime.clearStream}
-            />
-          </div>
+          {showTransformer && (
+            <div className="flex-1">
+              <AiTransformer
+                onTransformStream={transformerRuntime.startStream}
+                onCancelStream={transformerRuntime.cancelStream}
+                isStreaming={transformerRuntime.isStreaming}
+                currentStream={transformerRuntime.currentStream}
+                error={transformerRuntime.error}
+                onClearStream={transformerRuntime.clearStream}
+                onClose={() => setShowTransformer(false)}
+              />
+            </div>
+          )}
+          {showGenerator && (
+            <div className="flex-1">
+              <AiGenerator
+                onGenerateStream={generatorRuntime.startStream}
+                onCancelStream={generatorRuntime.cancelStream}
+                isStreaming={generatorRuntime.isStreaming}
+                currentStream={generatorRuntime.currentStream}
+                error={generatorRuntime.error}
+                onClearStream={generatorRuntime.clearStream}
+                onClose={() => setShowGenerator(false)}
+              />
+            </div>
+          )}
         </div>
       </LexicalComposer>
     </div>

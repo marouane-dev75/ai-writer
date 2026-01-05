@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection } from 'lexical';
+import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Select } from '@/shared/ui';
 import { useSelectionState } from '../../hooks/useSelectionState';
@@ -15,6 +16,7 @@ interface AiTransformerProps {
   currentStream: string;
   error: string | null;
   onClearStream: () => void;
+  onClose?: () => void;
 }
 
 export const AiTransformer: React.FC<AiTransformerProps> = ({
@@ -24,6 +26,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
   currentStream,
   error,
   onClearStream,
+  onClose,
 }) => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
@@ -108,9 +111,20 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6 h-full">
-      <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
-        {t('editor.aiTransformer.title')}
-      </h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+          {t('editor.aiTransformer.title')}
+        </h3>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+            aria-label="Close"
+          >
+            <MdClose className="h-5 w-5" />
+          </button>
+        )}
+      </div>
       <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
         {t('editor.aiTransformer.description')}
       </p>
