@@ -1,7 +1,5 @@
 {
   "editor": {
-    "title": "Text Editor",
-    "description": "A minimal rich text editor powered by Lexical",
     "placeholder": "Start typing...",
     "error": "An error occurred",
     "toolbar": {

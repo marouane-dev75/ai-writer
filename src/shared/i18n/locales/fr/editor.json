@@ -1,7 +1,5 @@
 {
   "editor": {
-    "title": "Éditeur de texte",
-    "description": "Un éditeur de texte riche minimal propulsé par Lexical",
     "placeholder": "Commencez à taper...",
     "error": "Une erreur s'est produite",
     "toolbar": {

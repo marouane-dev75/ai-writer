@@ -69,15 +69,6 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
 
   return (
     <div className="mb-12">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-8 mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-          {t('editor.title')}
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300 mb-6">
-          {t('editor.description')}
-        </p>
-      </div>
-
       <LexicalComposer initialConfig={initialConfig}>
         <div className="flex gap-6 mb-6">
           <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
@@ -101,8 +92,11 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
             <OnChangePlugin onChange={handleEditorChange} />
             <ClearEditorPlugin />
           </div>
+        </div>
 
-          <div className="w-80">
+        {/* AI Components - Side by Side */}
+        <div className="flex gap-6">
+          <div className="flex-1">
             <AiTransformer
               onTransformStream={transformerRuntime.startStream}
               onCancelStream={transformerRuntime.cancelStream}
@@ -112,18 +106,16 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
               onClearStream={transformerRuntime.clearStream}
             />
           </div>
-        </div>
-
-        {/* AI Generator Component - Full Width Below Editor */}
-        <div className="w-full">
-          <AiGenerator
-            onGenerateStream={generatorRuntime.startStream}
-            onCancelStream={generatorRuntime.cancelStream}
-            isStreaming={generatorRuntime.isStreaming}
-            currentStream={generatorRuntime.currentStream}
-            error={generatorRuntime.error}
-            onClearStream={generatorRuntime.clearStream}
-          />
+          <div className="flex-1">
+            <AiGenerator
+              onGenerateStream={generatorRuntime.startStream}
+              onCancelStream={generatorRuntime.cancelStream}
+              isStreaming={generatorRuntime.isStreaming}
+              currentStream={generatorRuntime.currentStream}
+              error={generatorRuntime.error}
+              onClearStream={generatorRuntime.clearStream}
+            />
+          </div>
         </div>
       </LexicalComposer>
     </div>
