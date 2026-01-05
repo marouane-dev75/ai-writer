@@ -9,7 +9,9 @@
       "clear": "Effacer",
       "blockType": "Type de bloc",
       "export": "Exporter",
-      "import": "Importer"
+      "import": "Importer",
+      "toggleTransformer": "Basculer le transformateur IA",
+      "toggleGenerator": "Basculer le générateur IA"
     },
     "blockTypes": {
       "normal": "Normal",

@@ -3,10 +3,18 @@ import { FORMAT_TEXT_COMMAND, $getRoot, CLEAR_EDITOR_COMMAND } from 'lexical';
 import { $convertToMarkdownString, $convertFromMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 import { useTranslation } from '@/shared/i18n';
 import { BlockTypeDropdown } from './BlockTypeDropdown';
-import { FiDownload, FiUpload, FiTrash2 } from 'react-icons/fi';
+import { FiDownload, FiUpload, FiTrash2, FiRefreshCw, FiZap } from 'react-icons/fi';
 import { invoke } from '@tauri-apps/api/core';
 
-export const Toolbar: React.FC = () => {
+interface ToolbarProps {
+  onToggleTransformer: () => void;
+  onToggleGenerator: () => void;
+}
+
+export const Toolbar: React.FC<ToolbarProps> = ({
+  onToggleTransformer,
+  onToggleGenerator,
+}) => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
 
@@ -109,6 +117,23 @@ export const Toolbar: React.FC = () => {
       >
         <FiTrash2 />
         <span>{t('editor.toolbar.clear')}</span>
+      </button>
+      <div className="w-px bg-gray-300 dark:bg-gray-600" />
+      <button
+        onClick={onToggleTransformer}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-300"
+        title={t('editor.toolbar.toggleTransformer')}
+      >
+        <FiRefreshCw />
+        <span>{t('editor.toolbar.toggleTransformer')}</span>
+      </button>
+      <button
+        onClick={onToggleGenerator}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-purple-100 dark:hover:bg-purple-900/30 text-purple-600 dark:text-purple-300"
+        title={t('editor.toolbar.toggleGenerator')}
+      >
+        <FiZap />
+        <span>{t('editor.toolbar.toggleGenerator')}</span>
       </button>
     </div>
   );

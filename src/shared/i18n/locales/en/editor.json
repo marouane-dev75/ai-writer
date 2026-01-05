@@ -9,7 +9,9 @@
       "clear": "Clear",
       "blockType": "Block Type",
       "export": "Export",
-      "import": "Import"
+      "import": "Import",
+      "toggleTransformer": "Toggle AI Transformer",
+      "toggleGenerator": "Toggle AI Generator"
     },
     "blockTypes": {
       "normal": "Normal",

@@ -29,6 +29,9 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
   const [showTransformer, setShowTransformer] = useState(true);
   const [showGenerator, setShowGenerator] = useState(true);
 
+  const toggleTransformer = () => setShowTransformer((prev) => !prev);
+  const toggleGenerator = () => setShowGenerator((prev) => !prev);
+
   const initialConfig = {
     namespace: 'MinimalEditor',
     nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, CodeNode],
@@ -75,7 +78,10 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
       <LexicalComposer initialConfig={initialConfig}>
         <div className="flex gap-6 mb-6">
           <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
-            <Toolbar />
+            <Toolbar 
+              onToggleTransformer={toggleTransformer}
+              onToggleGenerator={toggleGenerator}
+            />
             <div className="relative">
               <RichTextPlugin
                 contentEditable={
