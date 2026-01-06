@@ -9,6 +9,7 @@
 mod ai;
 mod commands;
 mod config;
+mod editor;
 mod logging;
 
 use ai::AIManager;
@@ -134,6 +135,9 @@ pub fn run() {
             commands::download_qwen_model_cmd,
             commands::save_markdown_file,
             commands::open_markdown_file,
+            commands::save_editor_state,
+            commands::load_editor_state,
+            commands::clear_editor_state,
             commands::get_system_info,
             commands::restart_app,
             commands::is_dev_mode,

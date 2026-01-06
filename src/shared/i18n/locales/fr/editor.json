@@ -2,6 +2,7 @@
   "editor": {
     "placeholder": "Commencez à taper...",
     "error": "Une erreur s'est produite",
+    "loadError": "Échec du chargement du contenu sauvegardé",
     "toolbar": {
       "bold": "Gras",
       "italic": "Italique",
