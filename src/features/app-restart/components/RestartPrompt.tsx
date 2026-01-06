@@ -13,7 +13,7 @@ export const RestartPrompt = () => {
   const { t } = useTranslation();
   const { showRestartPrompt, setShowRestartPrompt } = useAppRestartContext();
   const { service } = useAppRestartContext();
-  const { restart, close, isDevMode, isRestarting, error } = useAppRestart(service);
+  const { restart, close, isRestarting, error } = useAppRestart(service);
 
   // Don't render if not shown
   if (!showRestartPrompt) {
@@ -21,6 +21,7 @@ export const RestartPrompt = () => {
   }
 
   // Choose action and message based on dev mode
+  const isDevMode = import.meta.env.DEV;
   const handleAction = isDevMode ? close : restart;
   const buttonText = isDevMode 
     ? (isRestarting ? t('common.loading') : t('appRestart.closeButton'))

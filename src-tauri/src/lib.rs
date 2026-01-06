@@ -140,7 +140,6 @@ pub fn run() {
             commands::clear_editor_state,
             commands::get_system_info,
             commands::restart_app,
-            commands::is_dev_mode,
             commands::close_app
         ])
         .run(tauri::generate_context!())

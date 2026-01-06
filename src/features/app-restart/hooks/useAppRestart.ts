@@ -1,10 +1,9 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { AppRestartService } from '../types';
 
 interface UseAppRestartReturn {
   restart: () => Promise<void>;
   close: () => Promise<void>;
-  isDevMode: boolean;
   isRestarting: boolean;
   error: string | null;
 }
@@ -12,17 +11,11 @@ interface UseAppRestartReturn {
 /**
  * Hook to handle application restart
  * @param service - The app restart service to use
- * @returns Object containing restart/close functions, dev mode flag, loading state, and error
+ * @returns Object containing restart/close functions, loading state, and error
  */
 export const useAppRestart = (service: AppRestartService): UseAppRestartReturn => {
   const [isRestarting, setIsRestarting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isDevMode, setIsDevMode] = useState(false);
-
-  useEffect(() => {
-    // Check if running in dev mode
-    service.isDevMode().then(setIsDevMode).catch(() => setIsDevMode(false));
-  }, [service]);
 
   const restart = useCallback(async () => {
     setIsRestarting(true);
@@ -54,5 +47,5 @@ export const useAppRestart = (service: AppRestartService): UseAppRestartReturn =
     }
   }, [service]);
 
-  return { restart, close, isDevMode, isRestarting, error };
+  return { restart, close, isRestarting, error };
 };
