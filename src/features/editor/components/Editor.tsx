@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -13,7 +13,9 @@ import { CodeNode } from '@lexical/code';
 import { $getRoot } from 'lexical';
 import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
+import { LoadingSpinner } from '@/shared/ui';
 import type { AIRuntimeInstance } from '../types';
+import { useEditorPersistence } from '../hooks/useEditorPersistence';
 import { Toolbar } from './toolbar/Toolbar';
 import { AiTransformer } from './ai-transformer';
 import { AiGenerator } from './ai-generator';
@@ -28,13 +30,18 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
   const { t } = useTranslation();
   const [showTransformer, setShowTransformer] = useState(true);
   const [showGenerator, setShowGenerator] = useState(true);
+  
+  // Use persistence hook
+  const { initialState, isLoading, error, saveState } = useEditorPersistence();
 
   const toggleTransformer = () => setShowTransformer((prev) => !prev);
   const toggleGenerator = () => setShowGenerator((prev) => !prev);
 
-  const initialConfig = {
+  // Memoize initial config with persisted state
+  const initialConfig = useMemo(() => ({
     namespace: 'MinimalEditor',
     nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, CodeNode],
+    editorState: initialState || undefined,
     theme: {
       paragraph: 'mb-2',
       heading: {
@@ -63,9 +70,13 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
     onError: (error: Error) => {
       console.error('Lexical error:', error);
     },
-  };
+  }), [initialState]);
 
   const handleEditorChange = (editorState: EditorState) => {
+    // Save state for persistence
+    saveState(editorState.toJSON());
+    
+    // Call onChange callback if provided
     editorState.read(() => {
       const root = $getRoot();
       const textContent = root.getTextContent();
@@ -73,8 +84,22 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
     });
   };
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="mb-12 flex items-center justify-center min-h-96">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="mb-12">
+      {error && (
+        <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg">
+          {t('editor.loadError')}: {error}
+        </div>
+      )}
       <LexicalComposer initialConfig={initialConfig}>
         <div className="flex gap-6 mb-6">
           <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">

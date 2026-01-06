@@ -2,6 +2,7 @@
   "editor": {
     "placeholder": "Start typing...",
     "error": "An error occurred",
+    "loadError": "Failed to load saved content",
     "toolbar": {
       "bold": "Bold",
       "italic": "Italic",
