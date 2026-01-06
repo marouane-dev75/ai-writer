@@ -24,6 +24,9 @@ export const Navbar = () => {
             <NavLink to="/">{t('nav.home')}</NavLink>
             <NavLink to="/settings">{t('nav.settings')}</NavLink>
             <NavLink to="/logs">{t('nav.logs')}</NavLink>
+            {import.meta.env.DEV && (
+              <NavLink to="/showcase">{t('nav.components')}</NavLink>
+            )}
             <LanguageSelector />
             <DarkModeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           </nav>

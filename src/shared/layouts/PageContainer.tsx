@@ -1,6 +1,5 @@
 import { Outlet } from "react-router";
 import { Navbar } from "./Navbar";
-import { Footer } from "./Footer";
 
 export const PageContainer = () => {
   return (
@@ -9,7 +8,6 @@ export const PageContainer = () => {
       <main className="max-w-7xl mx-auto px-4 py-12">
         <Outlet />
       </main>
-      <Footer />
     </div>
   );
 };
