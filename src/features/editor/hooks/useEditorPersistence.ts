@@ -84,37 +84,6 @@ export const useEditorPersistence = (): UseEditorPersistenceResult => {
     }
   }, []);
 
-  // Auto-save on window beforeunload (app close)
-  useEffect(() => {
-    const handleBeforeUnload = async () => {
-      // Cancel any pending debounced save
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-
-      // Save immediately if there's a state
-      if (lastStateRef.current) {
-        try {
-          await EditorPersistenceService.saveEditorState(lastStateRef.current);
-          console.debug('Editor state saved on app close');
-        } catch (err) {
-          console.error('Failed to save editor state on close:', err);
-        }
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      
-      // Cleanup timeout on unmount
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-    };
-  }, []);
-
   return {
     initialState,
     isLoading,
