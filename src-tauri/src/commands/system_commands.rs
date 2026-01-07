@@ -254,18 +254,6 @@ fn restart_app_impl(app: AppHandle) -> Result<()> {
     Ok(())
 }
 
-/// Check if running in development mode
-#[tauri::command]
-pub async fn is_dev_mode() -> Result<bool, String> {
-    Ok(is_dev_mode_impl())
-}
-
-fn is_dev_mode_impl() -> bool {
-    // In debug builds (dev mode), this will be true
-    // In release builds (production), this will be false
-    cfg!(debug_assertions)
-}
-
 /// Close the application gracefully
 #[tauri::command]
 pub async fn close_app(app: AppHandle) -> Result<(), String> {

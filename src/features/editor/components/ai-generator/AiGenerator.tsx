@@ -110,7 +110,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
   const isSendEnabled = promptText.trim().length > 0 && !isStreaming && !showPreview;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:ring-gray-700 p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 h-full">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xl font-bold text-gray-800 dark:text-white">
           {t('editor.aiGenerator.title')}

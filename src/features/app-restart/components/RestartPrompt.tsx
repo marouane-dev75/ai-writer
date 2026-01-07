@@ -1,6 +1,7 @@
 import { useTranslation } from '@/shared/i18n';
 import { Button } from '@/shared/ui';
 import { HiExclamationTriangle, HiXMark } from 'react-icons/hi2';
+import { ImSpinner2 } from 'react-icons/im';
 import { useAppRestart } from '../hooks/useAppRestart';
 import { useAppRestartContext } from '../contexts/AppRestartContext';
 
@@ -13,7 +14,7 @@ export const RestartPrompt = () => {
   const { t } = useTranslation();
   const { showRestartPrompt, setShowRestartPrompt } = useAppRestartContext();
   const { service } = useAppRestartContext();
-  const { restart, close, isDevMode, isRestarting, error } = useAppRestart(service);
+  const { restart, close, isRestarting, error } = useAppRestart(service);
 
   // Don't render if not shown
   if (!showRestartPrompt) {
@@ -21,6 +22,7 @@ export const RestartPrompt = () => {
   }
 
   // Choose action and message based on dev mode
+  const isDevMode = import.meta.env.DEV;
   const handleAction = isDevMode ? close : restart;
   const buttonText = isDevMode 
     ? (isRestarting ? t('common.loading') : t('appRestart.closeButton'))
@@ -38,7 +40,7 @@ export const RestartPrompt = () => {
       aria-live="assertive"
     >
       {/* Gradient background banner */}
-      <div className="bg-gradient-to-r from-red-500 via-red-600 to-red-700 dark:from-red-600 dark:via-red-700 dark:to-red-800 shadow-lg">
+      <div className="bg-linear-to-r from-red-500 via-red-600 to-red-700 dark:from-red-600 dark:via-red-700 dark:to-red-800 shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-start md:items-center gap-4">
             {/* Warning Icon */}
@@ -68,26 +70,7 @@ export const RestartPrompt = () => {
               >
                 <span className="flex items-center gap-2">
                   {isRestarting && (
-                    <svg 
-                      className="animate-spin h-4 w-4" 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      fill="none" 
-                      viewBox="0 0 24 24"
-                    >
-                      <circle 
-                        className="opacity-25" 
-                        cx="12" 
-                        cy="12" 
-                        r="10" 
-                        stroke="currentColor" 
-                        strokeWidth="4"
-                      />
-                      <path 
-                        className="opacity-75" 
-                        fill="currentColor" 
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
+                    <ImSpinner2 className="animate-spin h-4 w-4" />
                   )}
                   {buttonText}
                 </span>
@@ -110,7 +93,7 @@ export const RestartPrompt = () => {
       </div>
 
       {/* Bottom shadow for depth */}
-      <div className="h-1 bg-gradient-to-b from-black/10 to-transparent" />
+      <div className="h-1 bg-linear-to-b from-black/10 to-transparent" />
     </div>
   );
 };
