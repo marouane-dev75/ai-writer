@@ -94,23 +94,24 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
   }
 
   return (
-    <div className="mb-12">
+    <div className="h-full">
       {error && (
         <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 rounded-lg">
           {t('editor.loadError')}: {error}
         </div>
       )}
       <LexicalComposer initialConfig={initialConfig}>
-        <div className="flex gap-6 mb-6">
-          <div className="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
+        <div className="flex gap-4 h-full">
+          {/* Text Editor - Left Side */}
+          <div className="flex-1 flex flex-col border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
             <Toolbar 
               onToggleTransformer={toggleTransformer}
               onToggleGenerator={toggleGenerator}
             />
-            <div className="relative">
+            <div className="relative flex-1 overflow-y-auto">
               <RichTextPlugin
                 contentEditable={
-                  <ContentEditable className="min-h-96 p-4 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
+                  <ContentEditable className="min-h-full p-4 outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100" />
                 }
                 placeholder={
                   <div className="absolute top-4 left-4 text-gray-400 dark:text-gray-500 pointer-events-none">
@@ -126,36 +127,36 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
             <OnChangePlugin onChange={handleEditorChange} />
             <ClearEditorPlugin />
           </div>
-        </div>
 
-        {/* AI Components - Side by Side */}
-        <div className="flex gap-6">
-          {showTransformer && (
-            <div className="flex-1">
-              <AiTransformer
-                onTransformStream={transformerRuntime.startStream}
-                onCancelStream={transformerRuntime.cancelStream}
-                isStreaming={transformerRuntime.isStreaming}
-                currentStream={transformerRuntime.currentStream}
-                error={transformerRuntime.error}
-                onClearStream={transformerRuntime.clearStream}
-                onClose={() => setShowTransformer(false)}
-              />
-            </div>
-          )}
-          {showGenerator && (
-            <div className="flex-1">
-              <AiGenerator
-                onGenerateStream={generatorRuntime.startStream}
-                onCancelStream={generatorRuntime.cancelStream}
-                isStreaming={generatorRuntime.isStreaming}
-                currentStream={generatorRuntime.currentStream}
-                error={generatorRuntime.error}
-                onClearStream={generatorRuntime.clearStream}
-                onClose={() => setShowGenerator(false)}
-              />
-            </div>
-          )}
+          {/* AI Panels - Right Side */}
+          <div className="w-96 h-full flex flex-col gap-4">
+            {showTransformer && (
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <AiTransformer
+                  onTransformStream={transformerRuntime.startStream}
+                  onCancelStream={transformerRuntime.cancelStream}
+                  isStreaming={transformerRuntime.isStreaming}
+                  currentStream={transformerRuntime.currentStream}
+                  error={transformerRuntime.error}
+                  onClearStream={transformerRuntime.clearStream}
+                  onClose={() => setShowTransformer(false)}
+                />
+              </div>
+            )}
+            {showGenerator && (
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <AiGenerator
+                  onGenerateStream={generatorRuntime.startStream}
+                  onCancelStream={generatorRuntime.cancelStream}
+                  isStreaming={generatorRuntime.isStreaming}
+                  currentStream={generatorRuntime.currentStream}
+                  error={generatorRuntime.error}
+                  onClearStream={generatorRuntime.clearStream}
+                  onClose={() => setShowGenerator(false)}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </LexicalComposer>
     </div>
