@@ -12,6 +12,7 @@ import { PresetManagerDialog } from './PresetManagerDialog';
 interface AiTransformerProps {
   onTransformStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
   onCancelStream: () => Promise<void>;
+  isLoading: boolean;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;
@@ -22,6 +23,7 @@ interface AiTransformerProps {
 export const AiTransformer: React.FC<AiTransformerProps> = ({
   onTransformStream,
   onCancelStream,
+  isLoading,
   isStreaming,
   currentStream,
   error,
@@ -44,12 +46,12 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Show preview when streaming starts or completes
+  // Show preview when loading, streaming starts or completes
   useEffect(() => {
-    if (isStreaming || currentStream || error) {
+    if (isLoading || isStreaming || currentStream || error) {
       setShowPreview(true);
     }
-  }, [isStreaming, currentStream, error]);
+  }, [isLoading, isStreaming, currentStream, error]);
 
   const handleTransform = useCallback(async () => {
     if (!hasSelection || !isSingleNode || !selectedPresetId) {
@@ -101,7 +103,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
     setShowPreview(false);
   }, [onClearStream]);
 
-  const isTransformEnabled = hasSelection && isSingleNode && selectedPresetId && !isStreaming && !showPreview;
+  const isTransformEnabled = hasSelection && isSingleNode && selectedPresetId && !isLoading && !isStreaming && !showPreview;
 
   // Prepare preset options for Select component
   const presetOptions = presets.map((preset) => ({
@@ -135,7 +137,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
           onClick={() => setIsDialogOpen(true)}
           variant="secondary"
           className="w-full text-sm"
-          disabled={isStreaming || showPreview}
+          disabled={isLoading || isStreaming || showPreview}
         >
           {t('editor.aiTransformer.managePresetsButton')}
         </Button>
@@ -148,7 +150,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
               options={presetOptions}
               value={selectedPresetId || null}
               onChange={handlePresetChange}
-              disabled={isStreaming || showPreview}
+              disabled={isLoading || isStreaming || showPreview}
               placeholder={t('editor.aiTransformer.selectPreset')}
             />
 
@@ -159,7 +161,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
               variant="primary"
               className="w-full text-sm"
             >
-              {t('editor.aiTransformer.transform')}
+              {isLoading ? t('editor.aiTransformer.loading') : t('editor.aiTransformer.transform')}
             </Button>
           </>
         )}
@@ -193,7 +195,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
           <TransformPreview
             originalText={selectedText}
             transformedText={currentStream}
-            isStreaming={isStreaming}
+            isStreaming={isLoading || isStreaming}
             error={error}
             onAccept={handleAccept}
             onReject={handleReject}

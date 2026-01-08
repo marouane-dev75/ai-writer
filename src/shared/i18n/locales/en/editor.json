@@ -32,6 +32,7 @@
       "presetLabel": "Select Preset",
       "selectPreset": "Choose a transformation preset...",
       "transform": "Transform",
+      "loading": "Loading...",
       "noPresets": "No presets available. Click 'Manage Presets' to create one.",
       "selectText": "Select text to enable transformations",
       "singleNodeOnly": "Selection must be within a single node",
@@ -66,6 +67,7 @@
       "description": "Generate new content with AI",
       "placeholder": "Describe what you want to generate...",
       "send": "Generate",
+      "loading": "Loading...",
       "useSystemPrompt": "Use Custom System Prompt",
       "systemPromptPlaceholder": "Enter system instructions (e.g., 'You are a helpful assistant that...')",
       "preview": {

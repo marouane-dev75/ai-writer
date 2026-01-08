@@ -9,6 +9,7 @@ import { GeneratorPreview } from './GeneratorPreview';
 interface AiGeneratorProps {
   onGenerateStream: (systemPrompt: string, userPrompt: string) => Promise<void>;
   onCancelStream: () => Promise<void>;
+  isLoading: boolean;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;
@@ -19,6 +20,7 @@ interface AiGeneratorProps {
 export const AiGenerator: React.FC<AiGeneratorProps> = ({
   onGenerateStream,
   onCancelStream,
+  isLoading,
   isStreaming,
   currentStream,
   error,
@@ -32,12 +34,12 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
   const [useSystemPrompt, setUseSystemPrompt] = useState(false);
   const [systemPromptText, setSystemPromptText] = useState('');
 
-  // Show preview when streaming starts or completes
+  // Show preview when loading, streaming starts or completes
   useEffect(() => {
-    if (isStreaming || currentStream || error) {
+    if (isLoading || isStreaming || currentStream || error) {
       setShowPreview(true);
     }
-  }, [isStreaming, currentStream, error]);
+  }, [isLoading, isStreaming, currentStream, error]);
 
   const handleGenerate = useCallback(async () => {
     if (!promptText.trim()) {
@@ -107,7 +109,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
     setShowPreview(false);
   }, [onClearStream]);
 
-  const isSendEnabled = promptText.trim().length > 0 && !isStreaming && !showPreview;
+  const isSendEnabled = promptText.trim().length > 0 && !isLoading && !isStreaming && !showPreview;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 h-full">
@@ -135,7 +137,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
           label={t('editor.aiGenerator.useSystemPrompt')}
           checked={useSystemPrompt}
           onChange={(e) => setUseSystemPrompt(e.target.checked)}
-          disabled={isStreaming || showPreview}
+          disabled={isLoading || isStreaming || showPreview}
         />
 
         {/* System Prompt Textarea (conditional) */}
@@ -145,7 +147,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
               value={systemPromptText}
               onChange={(e) => setSystemPromptText(e.target.value)}
               placeholder={t('editor.aiGenerator.systemPromptPlaceholder')}
-              disabled={isStreaming || showPreview}
+              disabled={isLoading || isStreaming || showPreview}
               className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
               rows={4}
             />
@@ -158,7 +160,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
             placeholder={t('editor.aiGenerator.placeholder')}
-            disabled={isStreaming || showPreview}
+            disabled={isLoading || isStreaming || showPreview}
             className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
             rows={4}
           />
@@ -171,14 +173,14 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
           variant="primary"
           className="w-full text-sm"
         >
-          {t('editor.aiGenerator.send')}
+          {isLoading ? t('editor.aiGenerator.loading') : t('editor.aiGenerator.send')}
         </Button>
 
         {/* Preview Component */}
         {showPreview && (
           <GeneratorPreview
             generatedText={currentStream}
-            isStreaming={isStreaming}
+            isStreaming={isLoading || isStreaming}
             error={error}
             onAccept={handleAccept}
             onReject={handleReject}

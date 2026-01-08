@@ -15,6 +15,7 @@ export interface TransformPresetsConfig {
  * This follows DIP: editor depends on abstraction, not concrete implementation
  */
 export interface AIRuntimeInstance {
+  isLoading: boolean;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;

@@ -8,6 +8,7 @@ import type { StreamEvent } from '../types';
 import * as aiRuntimeService from '../services/ai-runtime.service';
 
 export interface UseAIRuntimeReturn {
+  isLoading: boolean;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;
@@ -17,6 +18,7 @@ export interface UseAIRuntimeReturn {
 }
 
 export function useAIRuntime(): UseAIRuntimeReturn {
+  const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [currentStream, setCurrentStream] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -44,6 +46,7 @@ export function useAIRuntime(): UseAIRuntimeReturn {
 
         switch (streamEvent.type) {
           case 'Started':
+            setIsLoading(false);
             setIsStreaming(true);
             setCurrentStream('');
             setError(null);
@@ -55,17 +58,20 @@ export function useAIRuntime(): UseAIRuntimeReturn {
             break;
 
           case 'Completed':
+            setIsLoading(false);
             setIsStreaming(false);
             currentRequestId.current = null;
             break;
 
           case 'Error':
+            setIsLoading(false);
             setIsStreaming(false);
             setError(streamEvent.error.message || 'An error occurred');
             currentRequestId.current = null;
             break;
 
           case 'Cancelled':
+            setIsLoading(false);
             setIsStreaming(false);
             currentRequestId.current = null;
             break;
@@ -85,10 +91,12 @@ export function useAIRuntime(): UseAIRuntimeReturn {
   const startStream = useCallback(async (systemPrompt: string, userPrompt: string) => {
     try {
       setError(null);
+      setIsLoading(true);
       const requestId = await aiRuntimeService.generateStream(systemPrompt, userPrompt);
       currentRequestId.current = requestId;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to start stream');
+      setIsLoading(false);
       setIsStreaming(false);
     }
   }, []);
@@ -97,6 +105,7 @@ export function useAIRuntime(): UseAIRuntimeReturn {
     try {
       await aiRuntimeService.cancelStream();
       currentRequestId.current = null;
+      setIsLoading(false);
       setIsStreaming(false);
     } catch (err) {
       console.error('Failed to cancel stream:', err);
@@ -109,6 +118,7 @@ export function useAIRuntime(): UseAIRuntimeReturn {
   }, []);
 
   return {
+    isLoading,
     isStreaming,
     currentStream,
     error,
