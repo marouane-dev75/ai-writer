@@ -2,6 +2,7 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Configure your application preferences",
+    "aiModelStatus": "AI Model Status",
     "appearance": "Appearance",
     "themeMode": "Theme Mode",
     "currentTheme": "Current theme",

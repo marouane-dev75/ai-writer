@@ -114,7 +114,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 h-full flex flex-col">
       {/* Fixed Header */}
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">
             {t('editor.aiTransformer.title')}

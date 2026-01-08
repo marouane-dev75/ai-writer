@@ -2,6 +2,7 @@
   "settings": {
     "title": "Paramètres",
     "subtitle": "Configurez vos préférences d'application",
+    "aiModelStatus": "Statut du modèle IA",
     "appearance": "Apparence",
     "themeMode": "Mode de thème",
     "currentTheme": "Thème actuel",
