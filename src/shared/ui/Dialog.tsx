@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useRef } from 'react';
-import { Button } from './Button';
 
 interface DialogProps {
   isOpen: boolean;
