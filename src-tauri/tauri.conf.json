@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "platejs-test",
+  "productName": "ai editor",
   "version": "0.1.0",
-  "identifier": "com.marouane.platejs-test",
+  "identifier": "com.marouane.ai-editor",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "platejs-test",
+        "title": "ai editor",
         "width": 800,
         "height": 600
       }

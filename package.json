@@ -1,27 +1,47 @@
 {
-  "name": "platejs-test",
+  "name": "ai-writer",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "depcruise": "depcruise src",
+    "depcruise:graph": "depcruise src --output-type dot | dot -T svg > dependency-graph.svg",
+    "depcruise:graph:png": "depcruise src --output-type dot | dot -T png > dependency-graph.png"
   },
   "dependencies": {
+    "@lexical/code": "^0.39.0",
+    "@lexical/list": "^0.39.0",
+    "@lexical/markdown": "^0.39.0",
+    "@lexical/plain-text": "^0.39.0",
+    "@lexical/react": "^0.39.0",
+    "@lexical/rich-text": "^0.39.0",
+    "@lexical/selection": "^0.39.0",
+    "@lexical/utils": "^0.39.0",
     "@tailwindcss/vite": "^4.1.17",
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-dialog": "~2.4.2",
     "@tauri-apps/plugin-opener": "^2",
+    "i18next": "^25.6.3",
+    "lexical": "^0.39.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.1.17"
+    "react-i18next": "^16.3.5",
+    "react-icons": "^5.5.0",
+    "react-router": "^7.9.6",
+    "tailwindcss": "^4.1.17",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
+    "@welldone-software/why-did-you-render": "^10.0.1",
+    "dependency-cruiser": "^17.3.2",
     "typescript": "~5.8.3",
     "vite": "^7.0.4"
   }

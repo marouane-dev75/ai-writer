@@ -1,0 +1,77 @@
+{
+  "ai": {
+    "comingSoon": "Bientôt disponible...",
+    "selectProvider": "Sélectionner le fournisseur IA",
+    "setActive": "Définir comme actif",
+    "activeProvider": "Actif",
+    "failedToLoad": "Échec du chargement de la configuration du fournisseur IA",
+    "modelStatus": {
+      "noModel": "Aucun modèle",
+      "loading": "Chargement {{provider}}...",
+      "loaded": "{{provider}}: {{model}}",
+      "error": "Erreur : {{provider}}"
+    },
+    "localQwen": {
+      "title": "Qwen 3 (Local)",
+      "modelPath": "Chemin du modèle",
+      "basePath": "Chemin de base des modèles",
+      "basePathHelper": "Sélectionnez un répertoire où vos modèles Qwen seront stockés. Chaque modèle sera enregistré dans son propre sous-dossier.",
+      "selectedModel": "Modèle actif",
+      "selectModel": "Sélectionner un modèle",
+      "selectedModelHelper": "Choisissez quel modèle téléchargé utiliser pour les opérations d'IA.",
+      "useGpu": "Utiliser le GPU",
+      "contextSize": "Taille du contexte",
+      "temperature": "Température",
+      "seed": "Graine",
+      "seedHelper": "-1 pour une graine aléatoire",
+      "repeatPenalty": "Pénalité de répétition",
+      "repeatLastN": "Répéter les N derniers",
+      "useThinkingMode": "Utiliser le mode réflexion",
+      "configuration": "Configuration",
+      "modelManager": "Gestionnaire de modèles",
+      "availableModels": "Modèles disponibles",
+      "downloaded": "Téléchargé",
+      "notDownloaded": "Non téléchargé",
+      "ready": "Prêt",
+      "downloadModel": "Télécharger",
+      "downloading": "Téléchargement...",
+      "downloadingFile": "Téléchargement de {{file}}...",
+      "downloadProgress": "{{percentage}}% ({{downloaded}} Mo / {{total}} Mo)",
+      "scanning": "Analyse des modèles...",
+      "noModelsDownloaded": "Aucun modèle téléchargé",
+      "noModelsAvailable": "Aucun modèle disponible",
+      "checkCatalog": "Consultez le catalogue de modèles pour les téléchargements disponibles",
+      "selectPathFirst": "Veuillez d'abord sélectionner un chemin de base",
+      "selectPathDescription": "Choisissez un répertoire ci-dessus pour commencer à télécharger et gérer vos modèles Qwen.",
+      "downloadComplete": "Téléchargement terminé",
+      "downloadFailed": "Échec du téléchargement"
+    },
+    "anthropic": {
+      "title": "Anthropic",
+      "apiKey": "Clé API",
+      "model": "Modèle",
+      "modelPlaceholder": "Sélectionner des modèles...",
+      "maxTokens": "Tokens Maximum"
+    },
+    "openai": {
+      "title": "OpenAI",
+      "apiKey": "Clé API",
+      "model": "Modèle",
+      "modelPlaceholder": "Sélectionner des modèles...",
+      "temperature": "Température",
+      "maxTokens": "Tokens Maximum"
+    },
+    "validation": {
+      "apiKeyRequired": "La clé API est requise",
+      "apiKeyTooShort": "La clé API doit contenir au moins 10 caractères",
+      "modelRequired": "Veuillez sélectionner un modèle",
+      "temperatureRange": "La température doit être entre 0 et 2",
+      "maxTokensMin": "Le nombre de tokens maximum doit être au moins 100",
+      "modelPathRequired": "Le chemin du modèle est requis",
+      "selectedModelRequired": "Veuillez sélectionner un modèle",
+      "contextSizeMin": "La taille du contexte doit être au moins 512",
+      "repeatPenaltyRange": "La pénalité de répétition doit être entre 1 et 2",
+      "repeatLastNPositive": "Répéter les N derniers doit être positif"
+    }
+  }
+}

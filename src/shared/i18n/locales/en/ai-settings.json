@@ -1,0 +1,77 @@
+{
+  "ai": {
+    "comingSoon": "Coming soon...",
+    "selectProvider": "Select AI Provider",
+    "setActive": "Set Active",
+    "activeProvider": "Active",
+    "failedToLoad": "Failed to load AI provider configuration",
+    "modelStatus": {
+      "noModel": "No Model",
+      "loading": "Loading {{provider}}...",
+      "loaded": "{{provider}}: {{model}}",
+      "error": "Error: {{provider}}"
+    },
+    "localQwen": {
+      "title": "Qwen 3 (Local)",
+      "modelPath": "Model Path",
+      "basePath": "Models Base Path",
+      "basePathHelper": "Select a directory where your Qwen models will be stored. Each model will be saved in its own subfolder.",
+      "selectedModel": "Active Model",
+      "selectModel": "Select a model",
+      "selectedModelHelper": "Choose which downloaded model to use for AI operations.",
+      "useGpu": "Use GPU",
+      "contextSize": "Context Size",
+      "temperature": "Temperature",
+      "seed": "Seed",
+      "seedHelper": "-1 for random seed",
+      "repeatPenalty": "Repeat Penalty",
+      "repeatLastN": "Repeat Last N",
+      "useThinkingMode": "Use Thinking Mode",
+      "configuration": "Configuration",
+      "modelManager": "Model Manager",
+      "availableModels": "Available Models",
+      "downloaded": "Downloaded",
+      "notDownloaded": "Not Downloaded",
+      "ready": "Ready",
+      "downloadModel": "Download",
+      "downloading": "Downloading...",
+      "downloadingFile": "Downloading {{file}}...",
+      "downloadProgress": "{{percentage}}% ({{downloaded}} MB / {{total}} MB)",
+      "scanning": "Scanning models...",
+      "noModelsDownloaded": "No models downloaded yet",
+      "noModelsAvailable": "No models available",
+      "checkCatalog": "Check the model catalog for available downloads",
+      "selectPathFirst": "Please select a base path first",
+      "selectPathDescription": "Choose a directory above to start downloading and managing your Qwen models.",
+      "downloadComplete": "Download complete",
+      "downloadFailed": "Download failed"
+    },
+    "anthropic": {
+      "title": "Anthropic",
+      "apiKey": "API Key",
+      "model": "Model",
+      "modelPlaceholder": "Select models...",
+      "maxTokens": "Max Tokens"
+    },
+    "openai": {
+      "title": "OpenAI",
+      "apiKey": "API Key",
+      "model": "Model",
+      "modelPlaceholder": "Select models...",
+      "temperature": "Temperature",
+      "maxTokens": "Max Tokens"
+    },
+    "validation": {
+      "apiKeyRequired": "API key is required",
+      "apiKeyTooShort": "API key must be at least 10 characters",
+      "modelRequired": "Please select a model",
+      "temperatureRange": "Temperature must be between 0 and 2",
+      "maxTokensMin": "Max tokens must be at least 100",
+      "modelPathRequired": "Model path is required",
+      "selectedModelRequired": "Please select a model",
+      "contextSizeMin": "Context size must be at least 512",
+      "repeatPenaltyRange": "Repeat penalty must be between 1 and 2",
+      "repeatLastNPositive": "Repeat last N must be positive"
+    }
+  }
+}

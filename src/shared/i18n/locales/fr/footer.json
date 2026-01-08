@@ -1,0 +1,8 @@
+{
+  "footer": {
+    "description": "Un éditeur de texte puissant alimenté par l'IA et construit avec des technologies web modernes",
+    "copyright": "© 2025 AI Editor. Conçu avec passion pour les développeurs.",
+    "techStack": "Propulsé par React, TypeScript, Tailwind CSS, Tauri & Plate.js",
+    "developerTools": "🎨 Composants"
+  }
+}

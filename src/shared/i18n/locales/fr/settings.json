@@ -1,0 +1,19 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Configurez vos préférences d'application",
+    "aiModelStatus": "Statut du modèle IA",
+    "appearance": "Apparence",
+    "themeMode": "Mode de thème",
+    "currentTheme": "Thème actuel",
+    "dark": "Sombre",
+    "light": "Clair",
+    "useToggle": "Utilisez le bouton dans la barre de navigation",
+    "application": "Application",
+    "language": "Langue",
+    "actions": "Actions",
+    "saveSettings": "Enregistrer les paramètres",
+    "resetDefaults": "Réinitialiser par défaut",
+    "clearData": "Effacer toutes les données"
+  }
+}

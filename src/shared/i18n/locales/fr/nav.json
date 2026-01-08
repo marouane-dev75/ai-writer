@@ -1,0 +1,8 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "components": "Composants",
+    "settings": "Paramètres",
+    "logs": "Journaux"
+  }
+}

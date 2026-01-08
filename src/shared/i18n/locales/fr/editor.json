@@ -1,0 +1,81 @@
+{
+  "editor": {
+    "placeholder": "Commencez à taper...",
+    "error": "Une erreur s'est produite",
+    "loadError": "Échec du chargement du contenu sauvegardé",
+    "toolbar": {
+      "bold": "Gras",
+      "italic": "Italique",
+      "underline": "Souligné",
+      "clear": "Effacer",
+      "blockType": "Type de bloc",
+      "export": "Exporter",
+      "import": "Importer",
+      "toggleTransformer": "Basculer le transformateur IA",
+      "toggleGenerator": "Basculer le générateur IA"
+    },
+    "blockTypes": {
+      "normal": "Normal",
+      "heading1": "Titre 1",
+      "heading2": "Titre 2",
+      "heading3": "Titre 3",
+      "numberedList": "Liste numérotée",
+      "bulletList": "Liste à puces",
+      "checkList": "Liste de contrôle",
+      "quote": "Citation",
+      "codeBlock": "Bloc de code"
+    },
+    "aiTransformer": {
+      "title": "Transformateur IA",
+      "description": "Transformez le texte sélectionné avec des préréglages IA",
+      "managePresetsButton": "⚙️ Gérer les préréglages",
+      "presetLabel": "Sélectionner un préréglage",
+      "selectPreset": "Choisissez un préréglage de transformation...",
+      "transform": "Transformer",
+      "loading": "Chargement...",
+      "noPresets": "Aucun préréglage disponible. Cliquez sur 'Gérer les préréglages' pour en créer un.",
+      "selectText": "Sélectionnez du texte pour activer les transformations",
+      "singleNodeOnly": "La sélection doit être dans un seul nœud",
+      "presetDialog": {
+        "title": "Gérer les préréglages de transformation"
+      },
+      "preview": {
+        "title": "Aperçu de la transformation",
+        "original": "Original",
+        "transformed": "Transformé",
+        "streaming": "Génération de la transformation...",
+        "noContent": "Aucun contenu généré",
+        "accept": "Accepter",
+        "reject": "Rejeter"
+      },
+      "presetManager": {
+        "title": "Gestionnaire de préréglages",
+        "addNew": "Ajouter un nouveau préréglage",
+        "titleLabel": "Titre du préréglage",
+        "titlePlaceholder": "ex: Rendre professionnel, Simplifier, Corriger la grammaire",
+        "descriptionLabel": "Prompt système (Instructions pour l'IA)",
+        "descriptionPlaceholder": "ex: Réécrivez le texte pour qu'il soit plus professionnel et formel...",
+        "empty": "Aucun préréglage pour le moment. Créez votre premier préréglage !",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce préréglage ?",
+        "addFrenchPresets": "🇫🇷 Ajouter les préréglages français",
+        "addEnglishPresets": "🇬🇧 Ajouter les préréglages anglais",
+        "addAllPresets": "🇫🇷 🇬🇧 Ajouter tous les préréglages"
+      }
+    },
+    "aiGenerator": {
+      "title": "Générateur de contenu IA",
+      "description": "Générez du nouveau contenu avec l'IA",
+      "placeholder": "Décrivez ce que vous voulez générer...",
+      "send": "Générer",
+      "loading": "Chargement...",
+      "useSystemPrompt": "Utiliser une invite système personnalisée",
+      "systemPromptPlaceholder": "Entrez les instructions système (ex: 'Vous êtes un assistant utile qui...')",
+      "preview": {
+        "title": "Aperçu du contenu généré",
+        "content": "Contenu à insérer",
+        "accept": "Insérer le contenu",
+        "reject": "Rejeter"
+      }
+    }
+  }
+}

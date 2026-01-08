@@ -1,0 +1,14 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "error": "Erreur",
+    "loading": "Chargement...",
+    "loadingLanguage": "Chargement de la langue...",
+    "loadingTheme": "Chargement du thème...",
+    "browse": "Parcourir"
+  }
+}

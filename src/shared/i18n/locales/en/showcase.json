@@ -1,0 +1,35 @@
+{
+  "showcase": {
+    "buttons": {
+      "title": "Button Styles",
+      "primary": "Primary Button",
+      "secondary": "Secondary Button",
+      "success": "Success Button",
+      "danger": "Danger Button",
+      "outline": "Outline Button"
+    },
+    "loading": {
+      "title": "Loading Spinners",
+      "description": "Dark mode friendly loading indicators with different sizes",
+      "small": "Small spinner",
+      "medium": "Medium spinner",
+      "large": "Large spinner",
+      "withText": "Loading with text..."
+    },
+    "aiStreaming": {
+      "title": "AI Streaming Test",
+      "description": "Test the AI streaming system with custom prompts",
+      "systemPrompt": "System Prompt",
+      "userPrompt": "User Prompt",
+      "startStream": "Start Stream",
+      "cancelStream": "Cancel Stream",
+      "clearOutput": "Clear Output",
+      "output": "Stream Output",
+      "noOutput": "No output yet. Start a stream to see results.",
+      "streaming": "Streaming...",
+      "modelNotLoaded": "Model not loaded. Configure AI settings first.",
+      "defaultSystemPrompt": "You are a helpful assistant.",
+      "defaultUserPrompt": "Write a short poem about coding."
+    }
+  }
+}
