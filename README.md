@@ -1,30 +1,61 @@
-# AI Editor - Tauri + React + TypeScript
+# AI Writer - Intelligent Writing Assistant
 
-A modern desktop application built with Tauri, React 19, and TypeScript, featuring a rich text editor with persistent configuration and theme management.
+A modern desktop application that combines powerful rich text editing with AI-powered content generation and transformation. Built with Tauri for native performance and security.
 
-## Features
+## Overview
 
-- 🎨 **Theme System** - Dark/light mode with persistent storage
-- ⚙️ **Configuration Management** - Persistent app settings using Rust backend
-- ✍️ **Rich Text Editor** - Block-styled editor powered by EditorJS
-- 🏗️ **Clean Architecture** - Built with SOLID principles and DIP
-- 🚀 **Modern Stack** - React 19, TypeScript, Tailwind CSS 4, Rust
+AI Writer is a desktop writing assistant that helps you create and transform content using multiple AI providers. Whether you're drafting documents, transforming existing text, or generating new ideas, AI Writer provides a seamless, privacy-focused writing experience with persistent workspace management.
+
+## Key Features
+
+- **🤖 Multi-Provider AI Support** - Choose between OpenAI, Anthropic, or Local Qwen models
+- **✍️ Rich Text Editor** - Professional editing experience powered by Lexical
+- **⚡ Real-Time AI Streaming** - Watch content generate and transform in real-time
+- **🎯 Transformation Presets** - Save and reuse custom text transformation prompts
+- **💾 Persistent Workspace** - Automatic saving of editor content and settings
+- **🌓 Dark/Light Themes** - Comfortable writing in any lighting condition
+- **📊 System Monitoring** - View AI model status, application logs, and system information
+- **🌍 Internationalization** - Multi-language support (English, French)
+- **🔒 Privacy-First** - Desktop app with local storage and optional local AI models
+
+## What You Can Do
+
+### Write with AI Assistance
+- Generate content from prompts using streaming AI responses
+- Insert AI-generated text directly into your document
+- Cancel or restart generation at any time
+
+### Transform Existing Text
+- Select text and apply AI transformations
+- Create custom transformation presets (e.g., "Make it professional", "Simplify", "Expand")
+- Save frequently used transformations for quick access
+
+### Manage AI Providers
+- Configure multiple AI providers (OpenAI, Anthropic, Local Qwen)
+- Switch between providers based on your needs
+- Adjust model parameters (temperature, max tokens, top-p)
+- Use local models for complete privacy
+
+### Monitor & Debug
+- View real-time AI model loading status
+- Access application logs with filtering and search
+- Check system specifications (CPU, memory, disk, GPU)
 
 ## Quick Start
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [pnpm](https://pnpm.io/) (v8 or higher)
-- [Rust](https://www.rust-lang.org/) (latest stable)
-- [Tauri Prerequisites](https://tauri.app/v2/guides/prerequisites/)
+- [Node.js](https://nodejs.org/) v18 or higher
+- [pnpm](https://pnpm.io/) v8 or higher
+- [Rust](https://www.rust-lang.org/) latest stable
+- [Tauri Prerequisites](https://tauri.app/v2/guides/prerequisites/) for your platform
 
 ### Installation
 
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd platejs-test
+cd ai-writer
 
 # Install dependencies
 pnpm install
@@ -33,195 +64,129 @@ pnpm install
 pnpm tauri dev
 ```
 
-### Build
+### Build for Production
 
 ```bash
-# Build for production
+# Build the application
 pnpm tauri build
 ```
 
-The built application will be in `src-tauri/target/release/`.
-
-## Project Structure
-
-```
-.
-├── src/                          # Frontend source
-│   ├── features/                 # Feature modules
-│   │   ├── configuration/        # Config management
-│   │   └── editor/               # Editor feature
-│   ├── components/               # Shared components
-│   ├── layouts/                  # Layout components
-│   ├── pages/                    # Page components
-│   ├── theme/                    # Theme system
-│   └── main.tsx                  # Entry point
-│
-├── src-tauri/                    # Backend source
-│   └── src/
-│       ├── commands/             # Tauri commands
-│       ├── config/               # Config module
-│       └── lib.rs                # Library entry
-│
-└── docs/                         # Documentation
-    ├── features/                 # Feature docs
-    ├── architecture.md           # Architecture overview
-    └── developer-guide.md        # Development guide
-```
-
-## Documentation
-
-- [Architecture Overview](./docs/architecture.md) - System design and principles
-- [Configuration Management](./docs/features/configuration.md) - Config system details
-- [Theme System](./docs/features/theme.md) - Theme implementation
-- [Editor Feature](./docs/features/editor.md) - Editor documentation
-- [Developer Guide](./docs/developer-guide.md) - Development guidelines
-- [Contributing](./docs/contributing.md) - Contribution guidelines
+The built application will be available in `src-tauri/target/release/`.
 
 ## Technology Stack
 
 ### Frontend
-- **React 19** - UI library with latest features
-- **TypeScript** - Type-safe JavaScript
-- **Tailwind CSS 4** - Utility-first CSS
-- **Vite** - Fast build tool
+- **React 19** - Modern UI library with latest features
+- **TypeScript** - Type-safe development
+- **Tailwind CSS 4** - Utility-first styling
+- **Lexical** - Extensible rich text editor framework
+- **Vite** - Fast build tooling
 - **React Router 7** - Client-side routing
-- **EditorJS** - Block-styled editor
 
 ### Backend
-- **Rust** - Systems programming language
-- **Tauri 2** - Desktop app framework
-- **Serde** - Serialization framework
+- **Rust** - High-performance systems language
+- **Tauri 2** - Secure desktop application framework
+- **Serde** - Serialization/deserialization
+- **Tokio** - Async runtime for AI streaming
 
-## Key Features
+### AI Integration
+- **OpenAI API** - GPT models
+- **Anthropic API** - Claude models
+- **Local Qwen** - Privacy-focused local models
 
-### Configuration Management
+## Project Structure
 
-Persistent storage for application settings with a clean architecture:
+```
+ai-writer3/
+├── src/                          # Frontend application
+│   ├── features/                 # Feature modules
+│   │   ├── ai-runtime/          # AI streaming & status monitoring
+│   │   ├── ai-settings/         # AI provider configuration
+│   │   ├── editor/              # Rich text editor with AI
+│   │   ├── logging/             # Application logging viewer
+│   │   ├── system-info/         # System information display
+│   │   └── app-restart/         # Application restart management
+│   ├── pages/                   # Page components
+│   ├── shared/                  # Shared utilities & components
+│   │   ├── ui/                  # Reusable UI components
+│   │   ├── i18n/                # Internationalization
+│   │   ├── theme/               # Theme management
+│   │   └── layouts/             # Layout components
+│   └── main.tsx                 # Application entry point
+│
+└── src-tauri/                   # Backend application
+    └── src/
+        ├── ai/                  # AI provider implementations
+        ├── commands/            # Tauri command handlers
+        ├── config/              # Configuration management
+        ├── editor/              # Editor persistence
+        └── logging/             # Logging system
+```
 
-- Rust backend with JSON file storage
-- Dependency Inversion Principle throughout
-- Type-safe frontend-backend communication
-- Extensible for new configuration options
+## Feature Documentation
 
-[Learn more →](./docs/features/configuration.md)
+Each feature has detailed documentation in its respective directory:
 
-### Theme System
-
-Dark/light mode with seamless persistence:
-
-- Automatic theme loading on startup
-- Smooth theme transitions
-- CSS custom properties
-- Tailwind dark mode integration
-
-[Learn more →](./docs/features/theme.md)
-
-### Rich Text Editor
-
-Block-styled editor with clean JSON output:
-
-- Header blocks (H1-H6)
-- Paragraph blocks
-- List blocks (ordered/unordered)
-- Extensible tool system
-
-[Learn more →](./docs/features/editor.md)
+- [AI Runtime](src/features/ai-runtime/README.md) - AI streaming and model status
+- [AI Settings](src/features/ai-settings/README.md) - Provider configuration
+- [Editor](src/features/editor/README.md) - Rich text editing with AI
+- [Logging](src/features/logging/README.md) - Application log viewer
+- [System Info](src/features/system-info/README.md) - System specifications
+- [App Restart](src/features/app-restart/README.md) - Restart management
 
 ## Development
 
-### Available Scripts
+### Available Commands
 
 ```bash
-# Start development server
+# Frontend development server
 pnpm dev
 
-# Start Tauri development
+# Tauri development (with hot-reload)
 pnpm tauri dev
 
-# Build for production
+# Build frontend
 pnpm build
 
-# Build Tauri app
+# Build Tauri application
 pnpm tauri build
 
 # Preview production build
 pnpm preview
 ```
 
-### Code Style
+### Code Organization
 
-This project follows strict coding standards:
+This project follows clean architecture principles:
 
-- **TypeScript**: No `any` types, strict mode enabled
-- **Rust**: Clippy lints, rustfmt formatting
-- **React**: Functional components, hooks pattern
-- **Architecture**: SOLID principles, DIP
+- **Feature-based structure** - Each feature is self-contained
+- **Dependency Inversion** - High-level modules depend on abstractions
+- **SOLID principles** - Maintainable and extensible code
+- **TypeScript strict mode** - Type safety throughout
+- **Rust best practices** - Idiomatic Rust with proper error handling
 
-See [Developer Guide](./docs/developer-guide.md) for detailed guidelines.
+See individual feature READMEs for detailed implementation guidelines.
 
-## Architecture Highlights
+## Configuration
 
-### Dependency Inversion Principle
+### AI Provider Setup
 
-High-level modules depend on abstractions, not concrete implementations:
+1. Navigate to Settings page
+2. Select your preferred AI provider
+3. Enter API credentials (for OpenAI/Anthropic) or model path (for Local Qwen)
+4. Configure model parameters
+5. Click "Set as Active Provider"
 
-```typescript
-// Frontend depends on interface
-interface ThemeStorage {
-  loadTheme(): Promise<ThemeConfig>;
-  saveTheme(theme: ThemeConfig): Promise<void>;
-}
+### Local Qwen Setup
 
-// Concrete implementation
-class ConfigThemeStorage implements ThemeStorage {
-  // Implementation details
-}
-```
+For privacy-focused local AI:
 
-```rust
-// Backend depends on trait
-pub trait ConfigStorage: Send + Sync {
-    fn load(&self) -> Result<AppConfig, ConfigError>;
-    fn save(&self, config: &AppConfig) -> Result<(), ConfigError>;
-}
-
-// Concrete implementation
-pub struct FileConfigStorage {
-    // Implementation details
-}
-```
-
-### Feature-Based Organization
-
-Each feature is self-contained with clear boundaries:
-
-```
-features/feature-name/
-├── components/     # Feature components
-├── hooks/          # Feature hooks
-├── services/       # Service implementations
-├── types.ts        # Type definitions
-└── index.ts        # Public API
-```
-
-[Learn more →](./docs/architecture.md)
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guidelines](./docs/contributing.md) before submitting a PR.
-
-### Development Workflow
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Write/update tests
-5. Update documentation
-6. Submit a pull request
-
-## License
-
-[Add your license here]
+1. Download Qwen GGUF models from Hugging Face
+2. Place models in a directory on your system
+3. In Settings, select "Local Qwen" provider
+4. Browse to your models directory
+5. Select your preferred model
+6. Configure generation parameters
 
 ## Recommended IDE Setup
 
@@ -231,16 +196,30 @@ Contributions are welcome! Please read our [Contributing Guidelines](./docs/cont
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
 
+## Contributing
+
+Contributions are welcome! Please ensure:
+
+- Code follows existing patterns and conventions
+- TypeScript strict mode compliance
+- Rust code passes clippy lints
+- Features include appropriate documentation
+- Commit messages are clear and descriptive
+
 ## Support
 
-For questions and support:
-- Open an issue on GitHub
-- Check the [documentation](./docs/)
-- Review existing issues
+- **Issues**: Report bugs or request features via GitHub Issues
+- **Documentation**: Check feature READMEs for detailed information
+- **Community**: Join discussions in GitHub Discussions
 
 ## Acknowledgments
 
-- [Tauri](https://tauri.app/) - Desktop app framework
+Built with excellent open-source technologies:
+
+- [Tauri](https://tauri.app/) - Desktop application framework
 - [React](https://react.dev/) - UI library
-- [EditorJS](https://editorjs.io/) - Block-styled editor
+- [Lexical](https://lexical.dev/) - Rich text editor
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
+- [OpenAI](https://openai.com/) - AI API
+- [Anthropic](https://anthropic.com/) - Claude AI
+- [Qwen](https://github.com/QwenLM/Qwen) - Local AI models
