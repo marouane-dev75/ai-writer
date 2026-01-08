@@ -129,36 +129,38 @@ export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, ge
           </div>
 
           {/* AI Panels - Right Side */}
-          <div className="w-96 h-full flex flex-col gap-4">
-            {showTransformer && (
-              <div className="flex-1 min-h-0 overflow-y-auto">
-                <AiTransformer
-                  onTransformStream={transformerRuntime.startStream}
-                  onCancelStream={transformerRuntime.cancelStream}
-                  isLoading={transformerRuntime.isLoading}
-                  isStreaming={transformerRuntime.isStreaming}
-                  currentStream={transformerRuntime.currentStream}
-                  error={transformerRuntime.error}
-                  onClearStream={transformerRuntime.clearStream}
-                  onClose={() => setShowTransformer(false)}
-                />
-              </div>
-            )}
-            {showGenerator && (
-              <div className="flex-1 min-h-0 overflow-y-auto">
-                <AiGenerator
-                  onGenerateStream={generatorRuntime.startStream}
-                  onCancelStream={generatorRuntime.cancelStream}
-                  isLoading={generatorRuntime.isLoading}
-                  isStreaming={generatorRuntime.isStreaming}
-                  currentStream={generatorRuntime.currentStream}
-                  error={generatorRuntime.error}
-                  onClearStream={generatorRuntime.clearStream}
-                  onClose={() => setShowGenerator(false)}
-                />
-              </div>
-            )}
-          </div>
+          {(showTransformer || showGenerator) && (
+            <div className="w-96 h-full flex flex-col gap-4">
+              {showTransformer && (
+                <div className="flex-1 min-h-0 overflow-y-auto">
+                  <AiTransformer
+                    onTransformStream={transformerRuntime.startStream}
+                    onCancelStream={transformerRuntime.cancelStream}
+                    isLoading={transformerRuntime.isLoading}
+                    isStreaming={transformerRuntime.isStreaming}
+                    currentStream={transformerRuntime.currentStream}
+                    error={transformerRuntime.error}
+                    onClearStream={transformerRuntime.clearStream}
+                    onClose={() => setShowTransformer(false)}
+                  />
+                </div>
+              )}
+              {showGenerator && (
+                <div className="flex-1 min-h-0 overflow-y-auto">
+                  <AiGenerator
+                    onGenerateStream={generatorRuntime.startStream}
+                    onCancelStream={generatorRuntime.cancelStream}
+                    isLoading={generatorRuntime.isLoading}
+                    isStreaming={generatorRuntime.isStreaming}
+                    currentStream={generatorRuntime.currentStream}
+                    error={generatorRuntime.error}
+                    onClearStream={generatorRuntime.clearStream}
+                    onClose={() => setShowGenerator(false)}
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </LexicalComposer>
     </div>
