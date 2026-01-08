@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo, useEffect } from "react";
 import { useTranslation } from "@/shared/i18n";
 import { DirectoryInput, FormInput, Slider, Switch, Select, FieldError } from "@/shared/ui";
 import { HiDatabase, HiChevronDown, HiXCircle, HiX, HiCheckCircle, HiDownload, HiArchive, HiFolder, HiCog } from "react-icons/hi";
@@ -40,14 +40,23 @@ const CollapsibleModelManager = ({
   );
 
   // Collapse by default if models are downloaded, expand if none are downloaded
-  const [isExpanded, setIsExpanded] = useState(!hasDownloadedModels);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [hasInitialized, setHasInitialized] = useState(false);
 
-  // Update expansion state when download status changes
-  useMemo(() => {
-    if (!hasDownloadedModels) {
+  // Set initial state once models are loaded
+  useEffect(() => {
+    if (!hasInitialized && downloadedModels.length > 0) {
+      setIsExpanded(!hasDownloadedModels);
+      setHasInitialized(true);
+    }
+  }, [downloadedModels, hasDownloadedModels, hasInitialized]);
+
+  // Keep expanded if no models are downloaded
+  useEffect(() => {
+    if (hasInitialized && !hasDownloadedModels) {
       setIsExpanded(true);
     }
-  }, [hasDownloadedModels]);
+  }, [hasDownloadedModels, hasInitialized]);
 
   const toggleExpanded = () => setIsExpanded(!isExpanded);
 
