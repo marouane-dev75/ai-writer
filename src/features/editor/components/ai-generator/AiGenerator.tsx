@@ -112,26 +112,31 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
   const isSendEnabled = promptText.trim().length > 0 && !isLoading && !isStreaming && !showPreview;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 h-full">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xl font-bold text-gray-800 dark:text-white">
-          {t('editor.aiGenerator.title')}
-        </h3>
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-            aria-label="Close"
-          >
-            <MdClose className="h-5 w-5" />
-          </button>
-        )}
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-600 p-4 h-full flex flex-col">
+      {/* Fixed Header */}
+      <div className="shrink-0">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white">
+            {t('editor.aiGenerator.title')}
+          </h3>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+              aria-label="Close"
+            >
+              <MdClose className="h-5 w-5" />
+            </button>
+          )}
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+          {t('editor.aiGenerator.description')}
+        </p>
       </div>
-      <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-        {t('editor.aiGenerator.description')}
-      </p>
 
-      <div className="space-y-3">
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="space-y-3">
         {/* System Prompt Toggle */}
         <Switch
           label={t('editor.aiGenerator.useSystemPrompt')}
@@ -176,17 +181,18 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
           {isLoading ? t('editor.aiGenerator.loading') : t('editor.aiGenerator.send')}
         </Button>
 
-        {/* Preview Component */}
-        {showPreview && (
-          <GeneratorPreview
-            generatedText={currentStream}
-            isStreaming={isLoading || isStreaming}
-            error={error}
-            onAccept={handleAccept}
-            onReject={handleReject}
-            onCancel={onCancelStream}
-          />
-        )}
+          {/* Preview Component */}
+          {showPreview && (
+            <GeneratorPreview
+              generatedText={currentStream}
+              isStreaming={isLoading || isStreaming}
+              error={error}
+              onAccept={handleAccept}
+              onReject={handleReject}
+              onCancel={onCancelStream}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
