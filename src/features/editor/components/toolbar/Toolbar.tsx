@@ -111,15 +111,6 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       </button>
       <div className="w-px bg-gray-300 dark:bg-gray-600" />
       <button
-        onClick={handleClear}
-        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-300"
-        title={t('editor.toolbar.clear')}
-      >
-        <FiTrash2 />
-        <span>{t('editor.toolbar.clear')}</span>
-      </button>
-      <div className="w-px bg-gray-300 dark:bg-gray-600" />
-      <button
         onClick={onToggleTransformer}
         className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-600 dark:text-blue-300"
         title={t('editor.toolbar.toggleTransformer')}
@@ -135,6 +126,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         <FiZap />
         <span>{t('editor.toolbar.toggleGenerator')}</span>
       </button>
+      {/* <button
+        onClick={handleClear}
+        className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-300"
+        title={t('editor.toolbar.clear')}
+      >
+        <FiTrash2 />
+        <span>{t('editor.toolbar.clear')}</span>
+      </button> */}
     </div>
   );
 };
