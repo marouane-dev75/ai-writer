@@ -107,6 +107,8 @@ pub struct EditorLayoutConfig {
 pub struct AiGeneratorConfig {
     pub use_system_prompt: bool,
     pub system_prompt_text: String,
+    pub system_prompt_height: u32,
+    pub user_prompt_height: u32,
 }
 
 impl Default for AppConfig {
@@ -208,6 +210,8 @@ impl Default for AiGeneratorConfig {
         Self {
             use_system_prompt: false,
             system_prompt_text: String::new(),
+            system_prompt_height: 120,
+            user_prompt_height: 120,
         }
     }
 }

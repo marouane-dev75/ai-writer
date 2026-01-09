@@ -37,8 +37,12 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
   const {
     useSystemPrompt,
     systemPromptText,
+    systemPromptHeight,
+    userPromptHeight,
     setUseSystemPrompt,
     setSystemPromptText,
+    setSystemPromptHeight,
+    setUserPromptHeight,
   } = useAiGeneratorConfig();
 
   // Show preview when loading, streaming starts or completes
@@ -160,8 +164,14 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
               onChange={(e) => setSystemPromptText(e.target.value)}
               placeholder={t('editor.aiGenerator.systemPromptPlaceholder')}
               disabled={isLoading || isStreaming || showPreview}
-              className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
-              rows={4}
+              style={{ height: `${systemPromptHeight}px` }}
+              onMouseUp={(e) => {
+                const newHeight = e.currentTarget.offsetHeight;
+                if (newHeight !== systemPromptHeight) {
+                  setSystemPromptHeight(newHeight);
+                }
+              }}
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         )}
@@ -173,8 +183,14 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
             onChange={(e) => setPromptText(e.target.value)}
             placeholder={t('editor.aiGenerator.placeholder')}
             disabled={isLoading || isStreaming || showPreview}
-            className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
-            rows={4}
+            style={{ height: `${userPromptHeight}px` }}
+            onMouseUp={(e) => {
+              const newHeight = e.currentTarget.offsetHeight;
+              if (newHeight !== userPromptHeight) {
+                setUserPromptHeight(newHeight);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
 

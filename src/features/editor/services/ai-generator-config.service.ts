@@ -3,6 +3,8 @@ import { invoke } from '@tauri-apps/api/core';
 export interface AiGeneratorConfig {
   useSystemPrompt: boolean;
   systemPromptText: string;
+  systemPromptHeight: number;
+  userPromptHeight: number;
 }
 
 /**
@@ -18,6 +20,8 @@ export const loadAiGeneratorConfig = async (): Promise<AiGeneratorConfig> => {
     return {
       useSystemPrompt: false,
       systemPromptText: '',
+      systemPromptHeight: 120,
+      userPromptHeight: 120,
     };
   }
 };
