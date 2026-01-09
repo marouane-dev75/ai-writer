@@ -1,5 +1,5 @@
 import { useTranslation } from "@/shared/i18n";
-import { HiCpuChip, HiCircleStack, HiServerStack, HiComputerDesktop } from "react-icons/hi2";
+import { HiCpuChip, HiCircleStack, HiServerStack, HiComputerDesktop, HiCommandLine } from "react-icons/hi2";
 import { useSystemInfo } from "../hooks/useSystemInfo";
 import type { SystemInfoService } from "../services/system-info.service";
 
@@ -50,6 +50,21 @@ export const SystemInfo = ({ service }: SystemInfoProps) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* OS Information */}
+        <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+          <div className="shrink-0">
+            <HiCommandLine className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+              {t('systemInfo.os')}
+            </h3>
+            <p className="text-sm text-gray-900 dark:text-white font-medium">
+              {systemInfo.osName} {systemInfo.osVersion} {systemInfo.architecture}
+            </p>
+          </div>
+        </div>
+
         {/* CPU Information */}
         <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
           <div className="shrink-0">
@@ -86,27 +101,6 @@ export const SystemInfo = ({ service }: SystemInfoProps) => {
           </div>
         </div>
 
-        {/* GPU Information */}
-        <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-          <div className="shrink-0">
-            <HiComputerDesktop className="w-8 h-8 text-purple-600 dark:text-purple-400" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-              {t('systemInfo.gpu')}
-            </h3>
-            {systemInfo.gpuInfo.map((gpu, index) => (
-              <p 
-                key={index} 
-                className="text-sm text-gray-900 dark:text-white font-medium truncate" 
-                title={gpu}
-              >
-                {gpu}
-              </p>
-            ))}
-          </div>
-        </div>
-
         {/* Disk Information */}
         <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
           <div className="shrink-0">
@@ -125,17 +119,24 @@ export const SystemInfo = ({ service }: SystemInfoProps) => {
           </div>
         </div>
 
-        {/* OS Information */}
+        {/* GPU Information */}
         <div className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg md:col-span-2">
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                {t('systemInfo.os')}
-              </h3>
-              <p className="text-sm text-gray-900 dark:text-white font-medium">
-                {systemInfo.osName} {systemInfo.osVersion} {systemInfo.architecture}
+          <div className="shrink-0">
+            <HiComputerDesktop className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+              {t('systemInfo.gpu')}
+            </h3>
+            {systemInfo.gpuInfo.map((gpu, index) => (
+              <p 
+                key={index} 
+                className="text-sm text-gray-900 dark:text-white font-medium truncate" 
+                title={gpu}
+              >
+                {gpu}
               </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
