@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
@@ -16,6 +16,7 @@ import { useTranslation } from '@/shared/i18n';
 import { LoadingSpinner } from '@/shared/ui';
 import type { AIRuntimeInstance } from '../types';
 import { useEditorPersistence } from '../hooks/useEditorPersistence';
+import { useEditorLayout } from '../hooks/useEditorLayout';
 import { Toolbar } from './toolbar/Toolbar';
 import { AiTransformer } from './ai-transformer';
 import { AiGenerator } from './ai-generator';
@@ -28,14 +29,20 @@ interface EditorProps {
 
 export const Editor: React.FC<EditorProps> = ({ onChange, transformerRuntime, generatorRuntime }) => {
   const { t } = useTranslation();
-  const [showTransformer, setShowTransformer] = useState(true);
-  const [showGenerator, setShowGenerator] = useState(true);
   
   // Use persistence hook
   const { initialState, isLoading, error, saveState } = useEditorPersistence();
+  
+  // Use layout hook for panel visibility
+  const {
+    showTransformer,
+    showGenerator,
+    setShowTransformer,
+    setShowGenerator,
+  } = useEditorLayout();
 
-  const toggleTransformer = () => setShowTransformer((prev) => !prev);
-  const toggleGenerator = () => setShowGenerator((prev) => !prev);
+  const toggleTransformer = () => setShowTransformer(!showTransformer);
+  const toggleGenerator = () => setShowGenerator(!showGenerator);
 
   // Memoize initial config with persisted state
   const initialConfig = useMemo(() => ({

@@ -127,6 +127,8 @@ pub fn run() {
             commands::delete_transform_preset,
             commands::get_selected_preset,
             commands::set_selected_preset,
+            commands::load_editor_layout_config,
+            commands::save_editor_layout_config,
             commands::get_logs,
             commands::get_all_logs,
             commands::clear_logs,

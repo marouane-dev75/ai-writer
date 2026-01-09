@@ -11,6 +11,8 @@ pub struct AppConfig {
     pub ai_providers: AIProvidersConfig,
     #[serde(default)]
     pub transform_presets: TransformPresetsConfig,
+    #[serde(default)]
+    pub editor_layout: EditorLayoutConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -91,6 +93,13 @@ pub struct LocalQwenConfig {
     pub use_gpu: bool,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EditorLayoutConfig {
+    pub show_transformer: bool,
+    pub show_generator: bool,
+}
+
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
@@ -98,6 +107,7 @@ impl Default for AppConfig {
             locale: LocaleConfig::default(),
             ai_providers: AIProvidersConfig::default(),
             transform_presets: TransformPresetsConfig::default(),
+            editor_layout: EditorLayoutConfig::default(),
         }
     }
 }
@@ -170,6 +180,15 @@ impl Default for TransformPresetsConfig {
         Self {
             presets: Vec::new(),
             selected_preset_id: None,
+        }
+    }
+}
+
+impl Default for EditorLayoutConfig {
+    fn default() -> Self {
+        Self {
+            show_transformer: true,
+            show_generator: true,
         }
     }
 }
