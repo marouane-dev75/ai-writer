@@ -133,15 +133,7 @@ export const SystemInfo = ({ service }: SystemInfoProps) => {
                 {t('systemInfo.os')}
               </h3>
               <p className="text-sm text-gray-900 dark:text-white font-medium">
-                {systemInfo.osName} {systemInfo.osVersion}
-              </p>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                {t('systemInfo.architecture')}
-              </h3>
-              <p className="text-sm text-gray-900 dark:text-white font-medium">
-                {systemInfo.architecture}
+                {systemInfo.osName} {systemInfo.osVersion} {systemInfo.architecture}
               </p>
             </div>
           </div>
