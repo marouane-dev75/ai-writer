@@ -7,13 +7,14 @@ export interface SelectOption {
 }
 
 interface SelectProps {
-  label: string;
+  label?: string;
   options: SelectOption[];
   value: string | null;
   onChange: (selected: string | null) => void;
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  enableSearch?: boolean;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -24,6 +25,7 @@ export const Select: React.FC<SelectProps> = ({
   disabled = false,
   placeholder = 'Select an option...',
   className = '',
+  enableSearch = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,9 +44,11 @@ export const Select: React.FC<SelectProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const filteredOptions = options.filter(option =>
-    option.label.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOptions = enableSearch 
+    ? options.filter(option =>
+        option.label.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : options;
 
   const selectOption = (optionValue: string) => {
     if (disabled) return;
@@ -59,9 +63,11 @@ export const Select: React.FC<SelectProps> = ({
 
   return (
     <div className={className} ref={dropdownRef}>
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        {label}
-      </label>
+      {label && (
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {label}
+        </label>
+      )}
 
       {/* Dropdown trigger */}
       <div className="relative">
@@ -88,16 +94,18 @@ export const Select: React.FC<SelectProps> = ({
         {isOpen && !disabled && (
           <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-hidden">
             {/* Search input */}
-            <div className="p-2 border-b border-gray-200 dark:border-gray-700">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search..."
-                className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
+            {enableSearch && (
+              <div className="p-2 border-b border-gray-200 dark:border-gray-700">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            )}
 
             {/* Options list */}
             <div className="overflow-y-auto max-h-48">
