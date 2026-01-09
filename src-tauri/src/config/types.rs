@@ -13,6 +13,8 @@ pub struct AppConfig {
     pub transform_presets: TransformPresetsConfig,
     #[serde(default)]
     pub editor_layout: EditorLayoutConfig,
+    #[serde(default)]
+    pub ai_generator: AiGeneratorConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -100,6 +102,13 @@ pub struct EditorLayoutConfig {
     pub show_generator: bool,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AiGeneratorConfig {
+    pub use_system_prompt: bool,
+    pub system_prompt_text: String,
+}
+
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
@@ -108,6 +117,7 @@ impl Default for AppConfig {
             ai_providers: AIProvidersConfig::default(),
             transform_presets: TransformPresetsConfig::default(),
             editor_layout: EditorLayoutConfig::default(),
+            ai_generator: AiGeneratorConfig::default(),
         }
     }
 }
@@ -189,6 +199,15 @@ impl Default for EditorLayoutConfig {
         Self {
             show_transformer: true,
             show_generator: true,
+        }
+    }
+}
+
+impl Default for AiGeneratorConfig {
+    fn default() -> Self {
+        Self {
+            use_system_prompt: false,
+            system_prompt_text: String::new(),
         }
     }
 }

@@ -129,6 +129,8 @@ pub fn run() {
             commands::set_selected_preset,
             commands::load_editor_layout_config,
             commands::save_editor_layout_config,
+            commands::load_ai_generator_config,
+            commands::save_ai_generator_config,
             commands::get_logs,
             commands::get_all_logs,
             commands::clear_logs,

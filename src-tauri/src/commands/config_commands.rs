@@ -1,4 +1,4 @@
-use crate::config::{ConfigManager, FileConfigStorage, AIProvidersConfig, LocaleConfig, ThemeConfig, TransformPresetsConfig, TransformPreset, EditorLayoutConfig};
+use crate::config::{ConfigManager, FileConfigStorage, AIProvidersConfig, LocaleConfig, ThemeConfig, TransformPresetsConfig, TransformPreset, EditorLayoutConfig, AiGeneratorConfig};
 use tauri::State;
 
 /// Tauri command to load AI providers configuration
@@ -419,6 +419,56 @@ pub async fn save_editor_layout_config(
         })
         .map_err(|e| {
             let error_msg = format!("Failed to save editor layout config: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })
+}
+
+/// Tauri command to load AI generator configuration
+#[tauri::command]
+pub async fn load_ai_generator_config(
+    manager: State<'_, ConfigManager<FileConfigStorage>>,
+) -> Result<AiGeneratorConfig, String> {
+    log::debug!("load_ai_generator_config command invoked");
+    
+    manager.load_config()
+        .map(|config| {
+            log::info!("load_ai_generator_config command completed successfully");
+            config.ai_generator
+        })
+        .map_err(|e| {
+            let error_msg = format!("Failed to load AI generator config: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })
+}
+
+/// Tauri command to save AI generator configuration
+#[tauri::command]
+pub async fn save_ai_generator_config(
+    ai_generator_config: AiGeneratorConfig,
+    manager: State<'_, ConfigManager<FileConfigStorage>>,
+) -> Result<(), String> {
+    log::debug!("save_ai_generator_config command invoked");
+    
+    // Load current full config
+    let mut config = manager.load_config()
+        .map_err(|e| {
+            let error_msg = format!("Failed to load config for AI generator update: {}", e);
+            log::error!("{}", error_msg);
+            error_msg
+        })?;
+    
+    // Update only AI generator section
+    config.ai_generator = ai_generator_config;
+    
+    // Save back the full config
+    manager.save_config(&config)
+        .map(|_| {
+            log::info!("save_ai_generator_config command completed successfully");
+        })
+        .map_err(|e| {
+            let error_msg = format!("Failed to save AI generator config: {}", e);
             log::error!("{}", error_msg);
             error_msg
         })

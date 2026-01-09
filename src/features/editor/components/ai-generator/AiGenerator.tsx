@@ -4,6 +4,7 @@ import { $getSelection, $isRangeSelection, $createParagraphNode, $createTextNode
 import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Switch } from '@/shared/ui';
+import { useAiGeneratorConfig } from '../../hooks/useAiGeneratorConfig';
 import { GeneratorPreview } from './GeneratorPreview';
 
 interface AiGeneratorProps {
@@ -31,8 +32,14 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
   const { t } = useTranslation();
   const [promptText, setPromptText] = useState('');
   const [showPreview, setShowPreview] = useState(false);
-  const [useSystemPrompt, setUseSystemPrompt] = useState(false);
-  const [systemPromptText, setSystemPromptText] = useState('');
+  
+  // Use persisted config hook for system prompt settings
+  const {
+    useSystemPrompt,
+    systemPromptText,
+    setUseSystemPrompt,
+    setSystemPromptText,
+  } = useAiGeneratorConfig();
 
   // Show preview when loading, streaming starts or completes
   useEffect(() => {
@@ -147,7 +154,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
 
         {/* System Prompt Textarea (conditional) */}
         {useSystemPrompt && (
-          <div>
+          <div className="px-0.5">
             <textarea
               value={systemPromptText}
               onChange={(e) => setSystemPromptText(e.target.value)}
@@ -160,7 +167,7 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
         )}
 
         {/* User Prompt Textarea */}
-        <div>
+        <div className="px-0.5">
           <textarea
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
