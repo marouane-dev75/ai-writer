@@ -209,3 +209,7 @@ src/features/editor/
 ├── types.ts
 ├── index.ts
 └── README.md
+
+# TODO:
+- [ ] Separate AI transformer into its own folder with hooks...
+- [ ] Separate AI generator into its own folder with hooks...
