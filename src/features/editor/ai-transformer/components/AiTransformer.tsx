@@ -4,9 +4,9 @@ import { $getSelection, $isRangeSelection } from 'lexical';
 import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Select } from '@/shared/ui';
-import { useSelectionState } from '../../hooks/useSelectionState';
-import { useTransformPresets } from '../../hooks/useTransformPresets';
-import { deserializeFromMarkdown } from '../../utils/markdownDeserializer';
+import { useSelectionState } from '../../editor/hooks/useSelectionState';
+import { useTransformPresets } from '../hooks/useTransformPresets';
+import { deserializeFromMarkdown } from '../../shared';
 import { TransformPreview } from './TransformPreview';
 import { PresetManagerDialog } from './PresetManagerDialog';
 

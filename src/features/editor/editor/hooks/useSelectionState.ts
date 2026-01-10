@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection } from 'lexical';
-import { serializeToMarkdown } from '../utils/markdownSerializer';
+import { serializeToMarkdown } from '../../shared';
 
 interface SelectionState {
   hasSelection: boolean;

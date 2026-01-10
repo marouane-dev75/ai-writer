@@ -4,7 +4,7 @@ import { $getSelection, $isRangeSelection, $createParagraphNode, $createTextNode
 import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Switch } from '@/shared/ui';
-import { useAiGeneratorConfig } from '../../hooks/useAiGeneratorConfig';
+import { useAiGeneratorConfig } from '../hooks/useAiGeneratorConfig';
 import { GeneratorPreview } from './GeneratorPreview';
 
 interface AiGeneratorProps {

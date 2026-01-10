@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import type { TransformPreset, TransformPresetsConfig } from '../types';
+import type { TransformPreset, TransformPresetsConfig } from '../../shared/types';
 
 /**
  * Load all transform presets from backend
