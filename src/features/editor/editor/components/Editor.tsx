@@ -14,12 +14,12 @@ import { $getRoot } from 'lexical';
 import type { EditorState } from 'lexical';
 import { useTranslation } from '@/shared/i18n';
 import { LoadingSpinner } from '@/shared/ui';
-import type { AIRuntimeInstance } from '../types';
+import type { AIRuntimeInstance } from '../../shared/types';
 import { useEditorPersistence } from '../hooks/useEditorPersistence';
 import { useEditorLayout } from '../hooks/useEditorLayout';
-import { Toolbar } from './toolbar/Toolbar';
-import { AiTransformer } from './ai-transformer';
-import { AiGenerator } from './ai-generator';
+import { Toolbar } from './Toolbar';
+import { AiTransformer } from '../../ai-transformer/components/AiTransformer';
+import { AiGenerator } from '../../ai-generator/components/AiGenerator';
 
 interface EditorProps {
   onChange?: (content: string) => void;
