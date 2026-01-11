@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { IoChevronDown, IoCheckmark } from 'react-icons/io5';
 import { useTranslation } from '../contexts';
+import "flag-icons/css/flag-icons.min.css";
 
 interface Language {
   code: string;
   label: string;
-  flag: string;
+  countryCode: string;
 }
 
 const LANGUAGES: Language[] = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'en', label: 'English', countryCode: 'gb' },
+  { code: 'fr', label: 'Français', countryCode: 'fr' },
 ];
 
 export const LanguageSelector: React.FC = () => {
@@ -44,7 +45,7 @@ export const LanguageSelector: React.FC = () => {
   return (
     <div className="relative" ref={dropdownRef}>
       <button onClick={() => setIsOpen(!isOpen)} className={buttonClass} aria-expanded={isOpen}>
-        <span className="text-xl">{currentLanguage.flag}</span>
+        <span className={`fi fi-${currentLanguage.countryCode}`}></span>
         <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
           {currentLanguage.label}
         </span>
@@ -64,7 +65,7 @@ export const LanguageSelector: React.FC = () => {
 
               return (
                 <button key={lang.code} onClick={() => handleLanguageSelect(lang.code)} className={itemClass}>
-                  <span className="text-xl">{lang.flag}</span>
+                  <span className={`fi fi-${lang.countryCode} text-xl`}></span>
                   <span className="font-medium">{lang.label}</span>
                   {isSelected && <IoCheckmark className="ml-auto w-4 h-4 text-blue-600 dark:text-blue-400" />}
                 </button>
