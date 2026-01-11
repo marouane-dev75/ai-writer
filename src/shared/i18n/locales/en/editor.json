@@ -57,9 +57,9 @@
         "descriptionPlaceholder": "e.g., Rewrite the text to be more professional and formal...",
         "empty": "No presets yet. Create your first preset!",
         "confirmDelete": "Are you sure you want to delete this preset?",
-        "addFrenchPresets": "🇫🇷 Add French Presets",
-        "addEnglishPresets": "🇬🇧 Add English Presets",
-        "addAllPresets": "🇫🇷 🇬🇧 Add All Presets"
+        "addFrenchPresets": "Add French Presets",
+        "addEnglishPresets": "Add English Presets",
+        "addAllPresets": "Add All Presets"
       }
     },
     "aiGenerator": {

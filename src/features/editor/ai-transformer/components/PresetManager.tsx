@@ -1,51 +1,52 @@
 import React, { useState } from 'react';
 import { useTranslation } from '@/shared/i18n';
 import { Button, FormInput } from '@/shared/ui';
+import Flag from 'react-country-flag';
 import type { TransformPreset } from '../../shared/types';
 
 // Default presets
 const DEFAULT_ENGLISH_PRESETS = [
   {
-    title: '🇬🇧 Make Professional',
+    title: 'EN - Make Professional',
     description: 'Rewrite the text to be more professional and formal while maintaining the core message and key information.',
   },
   {
-    title: '🇬🇧 Simplify',
+    title: 'EN - Simplify',
     description: 'Simplify the text to make it easier to understand, using simpler words and shorter sentences while keeping the main ideas.',
   },
   {
-    title: '🇬🇧 Fix Grammar',
+    title: 'EN - Fix Grammar',
     description: 'Correct any grammar, spelling, and punctuation errors in the text. Keep the original style and tone.',
   },
   {
-    title: '🇬🇧 Summarize',
+    title: 'EN - Summarize',
     description: 'Create a concise summary of the main points in the text, reducing it to about 30% of the original length.',
   },
   {
-    title: '🇬🇧 Expand',
+    title: 'EN - Expand',
     description: 'Expand the text with more details, examples, and explanations to make it more comprehensive and informative.',
   },
 ];
 
 const DEFAULT_FRENCH_PRESETS = [
   {
-    title: '🇫🇷 Rendre professionnel',
+    title: 'FR - Rendre professionnel',
     description: 'Réécrivez le texte pour qu\'il soit plus professionnel et formel tout en conservant le message principal et les informations clés.',
   },
   {
-    title: '🇫🇷 Simplifier',
+    title: 'FR - Simplifier',
     description: 'Simplifiez le texte pour le rendre plus facile à comprendre, en utilisant des mots plus simples et des phrases plus courtes tout en gardant les idées principales.',
   },
   {
-    title: '🇫🇷 Corriger la grammaire',
+    title: 'FR - Corriger la grammaire',
     description: 'Corrigez toutes les erreurs de grammaire, d\'orthographe et de ponctuation dans le texte. Conservez le style et le ton d\'origine.',
   },
   {
-    title: '🇫🇷 Résumer',
+    title: 'FR - Résumer',
     description: 'Créez un résumé concis des points principaux du texte, en le réduisant à environ 30% de la longueur d\'origine.',
   },
   {
-    title: '🇫🇷 Développer',
+    title: 'FR - Développer',
     description: 'Développez le texte avec plus de détails, d\'exemples et d\'explications pour le rendre plus complet et informatif.',
   },
 ];
