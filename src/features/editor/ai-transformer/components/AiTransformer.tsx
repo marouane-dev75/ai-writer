@@ -143,7 +143,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto p-0.5">
         <div className="space-y-3">
         {/* Manage Presets Button */}
         <Button

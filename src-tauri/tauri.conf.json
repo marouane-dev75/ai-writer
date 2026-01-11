@@ -15,7 +15,7 @@
         "title": "AI Writer",
         "width": 800,
         "height": 600,
-        "fullscreen": true
+        "maximized": true
       }
     ],
     "security": {
