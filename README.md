@@ -1,4 +1,4 @@
-# AI Writer - Intelligent Writing Assistant
+# AI Writer - Local Writing Assistant
 
 A modern desktop application combining rich text editing with AI-powered content generation and transformation.
 
