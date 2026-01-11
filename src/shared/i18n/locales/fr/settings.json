@@ -14,6 +14,8 @@
     "actions": "Actions",
     "saveSettings": "Enregistrer les paramètres",
     "resetDefaults": "Réinitialiser par défaut",
-    "clearData": "Effacer toutes les données"
+    "clearData": "Effacer toutes les données",
+    "seeSystemInfo": "Voir les infos système",
+    "hideSystemInfo": "Masquer les infos système"
   }
 }

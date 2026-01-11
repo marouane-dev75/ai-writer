@@ -2,8 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import { useLogStream } from '../hooks/useLogStream';
 import type { LogLevel } from '../types';
 import { useTranslation } from "@/shared/i18n";
+import { Select, type SelectOption } from '@/shared/ui';
 
 const LOG_LEVELS: LogLevel[] = ['ALL', 'TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR'];
+
+const LOG_LEVEL_OPTIONS: SelectOption[] = LOG_LEVELS.map((level) => ({
+  value: level,
+  label: level,
+}));
 
 const getLogLevelColor = (level: string): string => {
   switch (level) {
@@ -109,17 +115,13 @@ export const LogViewer: React.FC = () => {
       {/* Controls */}
       <div className="flex gap-2.5 mb-5 flex-wrap items-center">
         {/* Level Filter */}
-        <select
+        <Select
+          options={LOG_LEVEL_OPTIONS}
           value={selectedLevel}
-          onChange={(e) => handleLevelChange(e.target.value as LogLevel)}
-          className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          {LOG_LEVELS.map((level) => (
-            <option key={level} value={level}>
-              {level}
-            </option>
-          ))}
-        </select>
+          onChange={(value) => handleLevelChange(value as LogLevel)}
+          placeholder="Filter by level"
+          className="min-w-[140px]"
+        />
 
         {/* Search */}
         <input

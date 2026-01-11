@@ -32,8 +32,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "ai-editor"
-version = "0.1.0"
+name = "ai-writer"
+version = "1.0.0-alpha-2"
 dependencies = [
  "anyhow",
  "async-trait",

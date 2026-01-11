@@ -4,6 +4,7 @@ import { $getSelection, $isRangeSelection, $createParagraphNode, $createTextNode
 import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Switch } from '@/shared/ui';
+import { useAiGeneratorConfig } from '../hooks/useAiGeneratorConfig';
 import { GeneratorPreview } from './GeneratorPreview';
 
 interface AiGeneratorProps {
@@ -31,8 +32,18 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
   const { t } = useTranslation();
   const [promptText, setPromptText] = useState('');
   const [showPreview, setShowPreview] = useState(false);
-  const [useSystemPrompt, setUseSystemPrompt] = useState(false);
-  const [systemPromptText, setSystemPromptText] = useState('');
+  
+  // Use persisted config hook for system prompt settings
+  const {
+    useSystemPrompt,
+    systemPromptText,
+    systemPromptHeight,
+    userPromptHeight,
+    setUseSystemPrompt,
+    setSystemPromptText,
+    setSystemPromptHeight,
+    setUserPromptHeight,
+  } = useAiGeneratorConfig();
 
   // Show preview when loading, streaming starts or completes
   useEffect(() => {
@@ -147,27 +158,39 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
 
         {/* System Prompt Textarea (conditional) */}
         {useSystemPrompt && (
-          <div>
+          <div className="px-0.5">
             <textarea
               value={systemPromptText}
               onChange={(e) => setSystemPromptText(e.target.value)}
               placeholder={t('editor.aiGenerator.systemPromptPlaceholder')}
               disabled={isLoading || isStreaming || showPreview}
-              className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
-              rows={4}
+              style={{ height: `${systemPromptHeight}px` }}
+              onMouseUp={(e) => {
+                const newHeight = e.currentTarget.offsetHeight;
+                if (newHeight !== systemPromptHeight) {
+                  setSystemPromptHeight(newHeight);
+                }
+              }}
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
         )}
 
         {/* User Prompt Textarea */}
-        <div>
+        <div className="px-0.5">
           <textarea
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
             placeholder={t('editor.aiGenerator.placeholder')}
             disabled={isLoading || isStreaming || showPreview}
-            className="w-full min-h-[120px] p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
-            rows={4}
+            style={{ height: `${userPromptHeight}px` }}
+            onMouseUp={(e) => {
+              const newHeight = e.currentTarget.offsetHeight;
+              if (newHeight !== userPromptHeight) {
+                setUserPromptHeight(newHeight);
+              }
+            }}
+            className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 resize-y disabled:opacity-50 disabled:cursor-not-allowed"
           />
         </div>
 

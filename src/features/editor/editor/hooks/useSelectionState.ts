@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $getSelection, $isRangeSelection } from 'lexical';
+import { serializeToMarkdown } from '../../shared';
 
 interface SelectionState {
   hasSelection: boolean;
-  isSingleNode: boolean;
   selectedText: string;
+  selectedMarkdown: string;
 }
 
 export const useSelectionState = (): SelectionState => {
   const [editor] = useLexicalComposerContext();
   const [selectionState, setSelectionState] = useState<SelectionState>({
     hasSelection: false,
-    isSingleNode: false,
     selectedText: '',
+    selectedMarkdown: '',
   });
 
   useEffect(() => {
@@ -24,8 +25,8 @@ export const useSelectionState = (): SelectionState => {
         if (!$isRangeSelection(selection)) {
           setSelectionState({
             hasSelection: false,
-            isSingleNode: false,
             selectedText: '',
+            selectedMarkdown: '',
           });
           return;
         }
@@ -36,20 +37,20 @@ export const useSelectionState = (): SelectionState => {
         if (!hasSelection) {
           setSelectionState({
             hasSelection: false,
-            isSingleNode: false,
             selectedText: '',
+            selectedMarkdown: '',
           });
           return;
         }
 
-        // Get all nodes in the selection
+        // Get all nodes in the selection and serialize to markdown
         const nodes = selection.getNodes();
-        const isSingleNode = nodes.length === 1;
+        const selectedMarkdown = serializeToMarkdown(nodes);
 
         setSelectionState({
           hasSelection,
-          isSingleNode,
           selectedText,
+          selectedMarkdown,
         });
       });
     });

@@ -14,6 +14,8 @@
     "actions": "Actions",
     "saveSettings": "Save Settings",
     "resetDefaults": "Reset to Defaults",
-    "clearData": "Clear All Data"
+    "clearData": "Clear All Data",
+    "seeSystemInfo": "See System Info",
+    "hideSystemInfo": "Hide System Info"
   }
 }

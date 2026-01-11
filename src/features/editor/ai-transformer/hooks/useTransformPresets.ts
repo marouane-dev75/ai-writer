@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { TransformPreset } from '../types';
+import type { TransformPreset } from '../../shared/types';
 import * as presetService from '../services/transform-preset.service';
 
 export interface UseTransformPresetsReturn {

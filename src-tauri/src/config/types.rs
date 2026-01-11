@@ -11,6 +11,10 @@ pub struct AppConfig {
     pub ai_providers: AIProvidersConfig,
     #[serde(default)]
     pub transform_presets: TransformPresetsConfig,
+    #[serde(default)]
+    pub editor_layout: EditorLayoutConfig,
+    #[serde(default)]
+    pub ai_generator: AiGeneratorConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -91,6 +95,22 @@ pub struct LocalQwenConfig {
     pub use_gpu: bool,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EditorLayoutConfig {
+    pub show_transformer: bool,
+    pub show_generator: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AiGeneratorConfig {
+    pub use_system_prompt: bool,
+    pub system_prompt_text: String,
+    pub system_prompt_height: u32,
+    pub user_prompt_height: u32,
+}
+
 impl Default for AppConfig {
     fn default() -> Self {
         Self {
@@ -98,6 +118,8 @@ impl Default for AppConfig {
             locale: LocaleConfig::default(),
             ai_providers: AIProvidersConfig::default(),
             transform_presets: TransformPresetsConfig::default(),
+            editor_layout: EditorLayoutConfig::default(),
+            ai_generator: AiGeneratorConfig::default(),
         }
     }
 }
@@ -170,6 +192,26 @@ impl Default for TransformPresetsConfig {
         Self {
             presets: Vec::new(),
             selected_preset_id: None,
+        }
+    }
+}
+
+impl Default for EditorLayoutConfig {
+    fn default() -> Self {
+        Self {
+            show_transformer: true,
+            show_generator: true,
+        }
+    }
+}
+
+impl Default for AiGeneratorConfig {
+    fn default() -> Self {
+        Self {
+            use_system_prompt: false,
+            system_prompt_text: String::new(),
+            system_prompt_height: 120,
+            user_prompt_height: 120,
         }
     }
 }

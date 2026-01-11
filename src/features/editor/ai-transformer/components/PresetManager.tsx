@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from '@/shared/i18n';
 import { Button, FormInput } from '@/shared/ui';
-import type { TransformPreset } from '../../types';
+import type { TransformPreset } from '../../shared/types';
 
 // Default presets
 const DEFAULT_ENGLISH_PRESETS = [

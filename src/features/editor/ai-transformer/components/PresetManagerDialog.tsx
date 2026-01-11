@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog } from '@/shared/ui';
 import { useTranslation } from '@/shared/i18n';
 import { PresetManager } from './PresetManager';
-import type { TransformPreset } from '../../types';
+import type { TransformPreset } from '../../shared/types';
 
 interface PresetManagerDialogProps {
   isOpen: boolean;

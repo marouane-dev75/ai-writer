@@ -1,159 +1,180 @@
 # Editor Feature
 
+The Editor feature provides a comprehensive rich text editing experience with integrated AI capabilities for content generation and transformation. Built on Lexical, it offers a modular architecture with separate concerns for editing, AI generation, AI transformation, and shared utilities.
+
 ## Overview
 
-The Editor feature provides a rich text editor with AI-powered content transformation and generation capabilities. It integrates with AI runtimes to enhance text editing workflows, allowing users to transform existing text or generate new content using advanced language models.
+This feature enables:
+- Rich text editing with formatting toolbar
+- AI-powered content generation with customizable prompts
+- AI-powered text transformation using presets
+- Automatic state persistence and layout management
+- Real-time streaming of AI responses
+- Preview and accept/reject workflows for AI operations
 
 ## Architecture
 
-This feature follows Domain-Driven Design (DDD) principles and SOLID principles:
+The feature follows a modular architecture with clear separation of concerns:
 
-- **Bounded Context**: The editor domain is clearly separated with defined boundaries.
-- **Entities/Value Objects**: `TransformPreset` serves as a value object for reusable transformation configurations.
-- **Services**: Pure functions for text transformations, following the Single Responsibility Principle.
-- **Dependency Inversion Principle (DIP)**: The editor depends on the `AIRuntimeInstance` abstraction rather than concrete AI implementations.
+```
+src/features/editor/
+├── ai-generator/       # AI content generation functionality
+├── ai-transformer/     # AI text transformation with presets
+├── editor/            # Core rich text editor components
+├── shared/            # Common types and utilities
+└── index.ts           # Public API exports
+```
 
-## Components
+## Sub-Features
 
-### [`Editor`](components/Editor.tsx)
+### AI Generator (`ai-generator/`)
 
-The main editor component built on [Lexical](https://lexical.dev/), a powerful rich text editor framework.
+Provides functionality for generating new content using AI models.
+
+- **Components**: `AiGenerator`, `GeneratorPreview`
+- **Configuration**: Persistent prompt settings with system/user prompt support
+- **Integration**: Streams AI responses and inserts into editor
+- **Features**: Optional system prompts, height persistence, preview workflow
+
+### AI Transformer (`ai-transformer/`)
+
+Provides functionality for transforming selected text using AI with presets.
+
+- **Components**: `AiTransformer`, `TransformPreview`, `PresetManager`
+- **Presets**: User-managed transformation configurations
+- **Integration**: Selection-based operation with markdown processing
+- **Features**: Preset management, streaming transformation, accept/reject workflow
+
+### Editor Core (`editor/`)
+
+Provides the main rich text editor with persistence and layout management.
+
+- **Components**: `Editor`, `Toolbar`, `BlockTypeDropdown`
+- **Persistence**: Automatic state saving with debouncing
+- **Layout**: Configurable panel visibility for AI features
+- **Features**: Lexical-based editing, formatting toolbar, selection tracking
+
+### Shared (`shared/`)
+
+Provides common types and utilities used across editor features.
+
+- **Types**: `AIRuntimeInstance`, `TransformPreset`, `TransformPresetsConfig`
+- **Utilities**: Markdown serialization/deserialization
+- **Features**: Type-safe interfaces, bidirectional markdown conversion
+
+## Usage
+
+### Basic Editor Setup
+
+```tsx
+import { Editor } from '@/features/editor';
+import type { AIRuntimeInstance } from '@/features/editor/shared';
+
+function MyApp() {
+  const transformerRuntime: AIRuntimeInstance = {
+    // Implementation for transformation
+  };
+
+  const generatorRuntime: AIRuntimeInstance = {
+    // Implementation for generation
+  };
+
+  return (
+    <Editor
+      onChange={(content) => console.log('Content:', content)}
+      transformerRuntime={transformerRuntime}
+      generatorRuntime={generatorRuntime}
+    />
+  );
+}
+```
+
+### Using Individual Features
+
+```tsx
+import { AiGenerator, AiTransformer } from '@/features/editor';
+import { useAiGeneratorConfig, useTransformPresets } from '@/features/editor';
+
+// Use AI generator with config
+const { useSystemPrompt, systemPromptText } = useAiGeneratorConfig();
+
+// Use AI transformer with presets
+const { presets, selectedPresetId, setSelectedPreset } = useTransformPresets();
+```
+
+## API Reference
+
+### Main Exports
+
+#### `Editor`
+
+Main editor component with integrated AI panels.
 
 **Props:**
-- `onChange?: (content: string) => void` - Callback for content changes
-- `transformerRuntime: AIRuntimeInstance` - AI runtime for transformations
-- `generatorRuntime: AIRuntimeInstance` - AI runtime for content generation
+- `onChange?: (content: string) => void` - Content change callback
+- `transformerRuntime: AIRuntimeInstance` - Runtime for transformations
+- `generatorRuntime: AIRuntimeInstance` - Runtime for generation
 
-**Features:**
-- Rich text editing with support for headings, lists, quotes, and code blocks
-- Automatic persistence of editor state
-- Integrated toolbar for formatting
-- Toggleable AI transformer and generator panels
-- Error handling and loading states
+#### `AiGenerator`
 
-### [`AiTransformer`](components/ai-transformer/AiTransformer.tsx)
+Standalone AI generation component.
 
-Handles AI-powered text transformations with preset management.
+**Props:** See ai-generator README
 
-**Features:**
-- Real-time streaming of transformation results
-- Preset-based transformations
-- Stream cancellation and clearing
+#### `AiTransformer`
 
-### [`AiGenerator`](components/ai-generator/AiGenerator.tsx)
+Standalone AI transformation component.
 
-Manages AI-powered content generation.
+**Props:** See ai-transformer README
 
-**Features:**
-- Streaming content generation
-- Error handling for generation failures
-- Stream management (start, cancel, clear)
+#### `AIRuntimeInstance`
 
-### [`Toolbar`](components/toolbar/Toolbar.tsx)
+Interface for AI runtime implementations.
 
-Provides formatting controls and panel toggles.
+**Properties:** See shared README
 
-**Features:**
-- Block type selection (paragraph, headings)
-- Text formatting (bold, italic, underline)
-- List creation
-- Toggle buttons for AI panels
+## Features
 
-## Hooks
+### Rich Text Editing
 
-### [`useEditor`](hooks/useEditor.ts)
+- Headings (H1-H6)
+- Blockquotes
+- Lists (ordered/unordered, nested)
+- Code blocks with syntax highlighting
+- Text formatting (bold, italic, underline, strikethrough)
+- Checklists
 
-A simple hook for managing basic editor content state.
+### AI Integration
 
-**Returns:**
-- `content: string` - Current content
-- `setContent: (content: string) => void` - Update content
-- `clearContent: () => void` - Clear content
+- **Generation**: Create new content with AI prompts
+- **Transformation**: Modify selected text using AI presets
+- **Streaming**: Real-time response streaming
+- **Preview**: Accept/reject AI-generated content
+- **Persistence**: Save configurations and preferences
 
-### [`useEditorPersistence`](hooks/useEditorPersistence.ts)
+### User Experience
 
-Manages editor state persistence with debounced saving.
+- **Responsive Design**: Side-by-side layout with collapsible panels
+- **Persistence**: Automatic saving and layout preferences
+- **Accessibility**: Keyboard navigation and screen reader support
+- **Internationalization**: Full i18n support for all UI text
 
-**Features:**
-- Loads initial state on mount
-- Debounced auto-save (2-second delay)
-- Error handling for load/save operations
-- State clearing functionality
+### Developer Experience
 
-**Returns:**
-- `initialState: string | null` - Initial editor state
-- `isLoading: boolean` - Loading state
-- `error: string | null` - Error message
-- `saveState: (state: SerializedEditorState) => void` - Save state
-- `clearState: () => Promise<void>` - Clear persisted state
+- **Type Safety**: Full TypeScript support with strict typing
+- **Modular Architecture**: Clear separation of concerns
+- **Testable**: Isolated components and utilities
+- **Extensible**: Easy to add new AI features or editor capabilities
 
-### [`useTransformPresets`](hooks/useTransformPresets.ts)
+## Configuration
 
-Manages transformation presets with full CRUD operations.
+### AI Runtime Implementation
 
-**Features:**
-- Load/save presets from storage
-- Add, update, delete presets
-- Selected preset management
-- Validation of preset existence
-
-**Returns:**
-- `presets: TransformPreset[]` - Array of available presets
-- `isLoading: boolean` - Loading state
-- `error: string | null` - Error message
-- `selectedPresetId: string | null` - Currently selected preset
-- `addPreset: (title: string, description: string) => Promise<void>` - Add new preset
-- `updatePreset: (preset: TransformPreset) => Promise<void>` - Update existing preset
-- `deletePreset: (id: string) => Promise<void>` - Delete preset
-- `setSelectedPreset: (presetId: string | null) => Promise<void>` - Set selected preset
-- `refreshPresets: () => Promise<void>` - Reload presets
-
-## Services
-
-### [`ai-transformer.service`](services/ai-transformer.service.ts)
-
-Provides pure functions for basic text transformations.
-
-**Functions:**
-- `uppercaseTransform(text: string): string` - Convert text to uppercase
-- `lowercaseTransform(text: string): string` - Convert text to lowercase
-
-### [`editor-persistence.service`](services/editor-persistence.service.ts)
-
-Handles persistence of editor state using Tauri's storage capabilities.
-
-### [`transform-preset.service`](services/transform-preset.service.ts)
-
-Manages storage and retrieval of transformation presets.
-
-## Types
-
-### [`TransformPreset`](types.ts:1)
-
-```typescript
-interface TransformPreset {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: number;
-}
-```
-
-### [`TransformPresetsConfig`](types.ts:8)
-
-```typescript
-interface TransformPresetsConfig {
-  presets: TransformPreset[];
-  selectedPresetId?: string | null;
-}
-```
-
-### [`AIRuntimeInstance`](types.ts:17)
-
-Abstraction interface for AI runtime implementations, following DIP.
+To use the editor, you need to provide `AIRuntimeInstance` implementations:
 
 ```typescript
 interface AIRuntimeInstance {
+  isLoading: boolean;
   isStreaming: boolean;
   currentStream: string;
   error: string | null;
@@ -163,49 +184,51 @@ interface AIRuntimeInstance {
 }
 ```
 
-## Usage
+### Persistence
 
-Import the feature components and types:
+The editor automatically persists:
+- Editor content (debounced, 2-second delay)
+- Layout preferences (panel visibility)
+- AI generator configuration (prompt settings)
+- Transform presets and selection
 
-```typescript
-import { Editor, type AIRuntimeInstance } from '@/features/editor';
-```
+## Error Handling
 
-Use the Editor component with AI runtime instances:
+The feature provides comprehensive error handling:
 
-```tsx
-<Editor
-  onChange={(content) => console.log('Content changed:', content)}
-  transformerRuntime={transformerRuntime}
-  generatorRuntime={generatorRuntime}
-/>
-```
+- **Editor Errors**: State loading failures with fallbacks
+- **AI Errors**: Stream errors displayed in UI with recovery options
+- **Persistence Errors**: Logged but don't interrupt user workflow
+- **Validation**: Input validation for presets and configurations
+
+## Internationalization
+
+All UI text is internationalized using the shared i18n system. Translation keys are organized by feature:
+
+- `editor.*` - Core editor translations
+- `editor.aiGenerator.*` - AI generator translations
+- `editor.aiTransformer.*` - AI transformer translations
 
 ## Dependencies
 
 - **Lexical**: Rich text editor framework
-- **AI Runtime**: Abstract interface for AI providers (OpenAI, Anthropic, Local Qwen)
-- **Shared UI Components**: Buttons, dialogs, loading spinners
-- **i18n**: Internationalization support
-- **Theme**: Dark/light mode theming
+- **Tauri**: Backend communication for persistence
+- **React**: UI framework with hooks
+- **Shared UI**: Common UI components
+- **i18n**: Internationalization system
 
-## File Structure
+## Testing
 
-```
-src/features/editor/
-├── components/
-│   ├── Editor.tsx
-│   ├── ai-generator/
-│   ├── ai-transformer/
-│   └── toolbar/
-├── hooks/
-│   ├── useEditor.ts
-│   ├── useEditorPersistence.ts
-│   └── useTransformPresets.ts
-├── services/
-│   ├── ai-transformer.service.ts
-│   ├── editor-persistence.service.ts
-│   └── transform-preset.service.ts
-├── types.ts
-├── index.ts
-└── README.md
+The editor feature includes comprehensive testing:
+
+- **Unit Tests**: Individual components and utilities
+- **Integration Tests**: Feature interactions
+- **E2E Tests**: Full user workflows
+- **Type Tests**: TypeScript type checking
+
+## Performance
+
+- **Debounced Persistence**: Reduces save operations
+- **Lazy Loading**: Components load on demand
+- **Efficient Rendering**: Optimized React rendering
+- **Memory Management**: Proper cleanup of subscriptions

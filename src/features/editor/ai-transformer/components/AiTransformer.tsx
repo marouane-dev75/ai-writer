@@ -4,8 +4,9 @@ import { $getSelection, $isRangeSelection } from 'lexical';
 import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Select } from '@/shared/ui';
-import { useSelectionState } from '../../hooks/useSelectionState';
-import { useTransformPresets } from '../../hooks/useTransformPresets';
+import { useSelectionState } from '../../editor/hooks/useSelectionState';
+import { useTransformPresets } from '../hooks/useTransformPresets';
+import { deserializeFromMarkdown } from '../../shared';
 import { TransformPreview } from './TransformPreview';
 import { PresetManagerDialog } from './PresetManagerDialog';
 
@@ -32,7 +33,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
 }) => {
   const [editor] = useLexicalComposerContext();
   const { t } = useTranslation();
-  const { hasSelection, isSingleNode, selectedText } = useSelectionState();
+  const { hasSelection, selectedText, selectedMarkdown } = useSelectionState();
   const { 
     presets, 
     isLoading: presetsLoading, 
@@ -54,7 +55,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
   }, [isLoading, isStreaming, currentStream, error]);
 
   const handleTransform = useCallback(async () => {
-    if (!hasSelection || !isSingleNode || !selectedPresetId) {
+    if (!hasSelection || !selectedPresetId) {
       return;
     }
 
@@ -66,9 +67,9 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
     // Clear any previous stream
     onClearStream();
 
-    // Use preset description as system prompt, selected text as user input
-    await onTransformStream(selectedPreset.description, selectedText);
-  }, [hasSelection, isSingleNode, selectedPresetId, selectedText, presets, onTransformStream, onClearStream]);
+    // Use preset description as system prompt, selected markdown as user input
+    await onTransformStream(selectedPreset.description, selectedMarkdown);
+  }, [hasSelection, selectedPresetId, selectedMarkdown, presets, onTransformStream, onClearStream]);
 
   const handlePresetChange = useCallback(async (value: string | null) => {
     try {
@@ -90,7 +91,14 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
         return;
       }
 
-      selection.insertText(currentStream);
+      // Remove the current selection
+      selection.removeText();
+
+      // Parse markdown response and insert as formatted nodes
+      const nodes = deserializeFromMarkdown(currentStream);
+      for (const node of nodes) {
+        selection.insertNodes([node]);
+      }
     });
 
     // Clear state
@@ -103,7 +111,7 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
     setShowPreview(false);
   }, [onClearStream]);
 
-  const isTransformEnabled = hasSelection && isSingleNode && selectedPresetId && !isLoading && !isStreaming && !showPreview;
+  const isTransformEnabled = hasSelection && selectedPresetId && !isLoading && !isStreaming && !showPreview;
 
   // Prepare preset options for Select component
   const presetOptions = presets.map((preset) => ({
@@ -179,20 +187,10 @@ export const AiTransformer: React.FC<AiTransformerProps> = ({
         )}
 
         {/* Selection Hints */}
-        {!showPreview && presets.length > 0 && (
-          <>
-            {!hasSelection && (
-              <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                {t('editor.aiTransformer.selectText')}
-              </p>
-            )}
-
-            {hasSelection && !isSingleNode && (
-              <p className="text-xs text-amber-600 dark:text-amber-400 italic">
-                {t('editor.aiTransformer.singleNodeOnly')}
-              </p>
-            )}
-          </>
+        {!showPreview && presets.length > 0 && !hasSelection && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+            {t('editor.aiTransformer.selectText')}
+          </p>
         )}
 
           {/* Preview Component */}
