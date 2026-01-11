@@ -1,8 +1,6 @@
 import {
   $isParagraphNode,
   $isTextNode,
-  $createParagraphNode,
-  $createTextNode,
   type ParagraphNode,
   type TextNode,
   type LexicalNode,
@@ -10,22 +8,17 @@ import {
 import {
   $isHeadingNode,
   $isQuoteNode,
-  $createHeadingNode,
-  $createQuoteNode,
   type HeadingNode,
   type QuoteNode,
 } from '@lexical/rich-text';
 import {
   $isListNode,
   $isListItemNode,
-  $createListNode,
-  $createListItemNode,
   type ListNode,
   type ListItemNode,
 } from '@lexical/list';
 import {
   $isCodeNode,
-  $createCodeNode,
   type CodeNode,
 } from '@lexical/code';
 
