@@ -36,9 +36,7 @@ fn initialize_config(app_data_dir: &Path) -> Result<ConfigManager<FileConfigStor
     let config_path = app_data_dir.join("config.json");
     let storage = FileConfigStorage::new(config_path.clone())
         .context("Failed to create config storage")?;
-    
-    log::info!("Config storage initialized at {:?}", config_path);
-    
+
     Ok(ConfigManager::new(storage))
 }
 
@@ -52,7 +50,6 @@ async fn initialize_ai(config_manager: &ConfigManager<FileConfigStorage>) -> AIM
         Ok(config) => config,
         Err(e) => {
             log::error!("Failed to load app config: {:#}", e);
-            log::info!("Using default configuration");
             AppConfig::default()
         }
     };
@@ -60,7 +57,6 @@ async fn initialize_ai(config_manager: &ConfigManager<FileConfigStorage>) -> AIM
     // Initialize AI manager with config - errors are handled internally
     if let Err(e) = ai_manager.initialize(&app_config.ai_providers).await {
         log::error!("Failed to initialize AI manager: {:#}", e);
-        log::info!("AI manager will remain in error state until reconfigured");
     } else {
         log::info!("AI manager initialized successfully");
     }
