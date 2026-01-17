@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from '@/shared/i18n';
 import { Button, FormInput } from '@/shared/ui';
-import Flag from 'react-country-flag';
 import type { TransformPreset } from '../../shared/types';
 
 // Default presets
