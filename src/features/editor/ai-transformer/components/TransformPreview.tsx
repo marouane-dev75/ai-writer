@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, LoadingSpinner } from '@/shared/ui';
 import { useTranslation } from '@/shared/i18n';
+import { MarkdownPreview } from './MarkdownPreview';
 
 interface TransformPreviewProps {
   originalText: string;
@@ -35,8 +36,8 @@ export const TransformPreview: React.FC<TransformPreviewProps> = ({
           <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">
             {t('editor.aiTransformer.preview.original')}
           </label>
-          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 text-sm text-gray-800 dark:text-gray-200 max-h-32 overflow-y-auto">
-            {originalText}
+          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 text-sm max-h-32 overflow-y-auto">
+            <MarkdownPreview content={originalText} />
           </div>
         </div>
 
@@ -45,27 +46,29 @@ export const TransformPreview: React.FC<TransformPreviewProps> = ({
           <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">
             {t('editor.aiTransformer.preview.transformed')}
           </label>
-          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-green-300 dark:border-green-600 text-sm text-gray-800 dark:text-gray-200 min-h-20 max-h-32 overflow-y-auto relative">
+          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-green-300 dark:border-green-600 text-sm min-h-20 max-h-32 overflow-y-auto relative">
             {error ? (
               <div className="text-red-600 dark:text-red-400">
                 {error}
               </div>
             ) : isStreaming ? (
               <>
-                {transformedText || (
+                {transformedText ? (
+                  <>
+                    <MarkdownPreview content={transformedText} />
+                    <div className="absolute bottom-2 right-2">
+                      <LoadingSpinner size="small" />
+                    </div>
+                  </>
+                ) : (
                   <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                     <LoadingSpinner size="small" />
                     <span>{t('editor.aiTransformer.preview.streaming')}</span>
                   </div>
                 )}
-                {transformedText && (
-                  <div className="absolute bottom-2 right-2">
-                    <LoadingSpinner size="small" />
-                  </div>
-                )}
               </>
             ) : transformedText ? (
-              transformedText
+              <MarkdownPreview content={transformedText} />
             ) : (
               <span className="text-gray-400 dark:text-gray-500 italic">
                 {t('editor.aiTransformer.preview.noContent')}

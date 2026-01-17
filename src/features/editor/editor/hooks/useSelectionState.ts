@@ -45,7 +45,15 @@ export const useSelectionState = (): SelectionState => {
 
         // Get all nodes in the selection and serialize to markdown
         const nodes = selection.getNodes();
-        const selectedMarkdown = serializeToMarkdown(nodes);
+
+        // Filter to only top-level nodes to avoid duplicates
+        // (exclude nodes whose parent is also in the selection)
+        const topLevelNodes = nodes.filter((node) => {
+          const parent = node.getParent();
+          return !parent || !nodes.includes(parent);
+        });
+
+        const selectedMarkdown = serializeToMarkdown(topLevelNodes);
 
         setSelectionState({
           hasSelection,
