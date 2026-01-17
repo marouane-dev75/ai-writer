@@ -51,7 +51,8 @@ export class MarkdownDeserializer {
   private parseNextNode(): LexicalNode | null {
     const line = this.lines[this.currentIndex];
     if (!line || line.trim() === '') {
-      return null;
+      // Create empty paragraph nodes to preserve line breaks
+      return $createParagraphNode();
     }
 
     // Check for headings
