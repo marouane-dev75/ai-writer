@@ -6,47 +6,47 @@ import type { TransformPreset } from '../../shared/types';
 // Default presets
 const DEFAULT_ENGLISH_PRESETS = [
   {
-    title: 'EN - Make Professional',
-    description: 'Rewrite the text to be more professional and formal while maintaining the core message and key information.',
+    title: '🇬🇧 Make Professional',
+    description: 'Rewrite the text to be more professional and formal while maintaining the core message and key information. Provide only the transformed text without any additional explanation.',
   },
   {
-    title: 'EN - Simplify',
-    description: 'Simplify the text to make it easier to understand, using simpler words and shorter sentences while keeping the main ideas.',
+    title: '🇬🇧 Simplify',
+    description: 'Simplify the text to make it easier to understand, using simpler words and shorter sentences while keeping the main ideas. Provide only the transformed text without any additional explanation.',
   },
   {
-    title: 'EN - Fix Grammar',
-    description: 'Correct any grammar, spelling, and punctuation errors in the text. Keep the original style and tone.',
+    title: '🇬🇧 Fix Grammar',
+    description: 'Correct any grammar, spelling, and punctuation errors in the text. Keep the original style and tone. Provide only the transformed text without any additional explanation.',
   },
   {
-    title: 'EN - Summarize',
-    description: 'Create a concise summary of the main points in the text, reducing it to about 30% of the original length.',
+    title: '🇬🇧 Summarize',
+    description: 'Create a concise summary of the main points in the text, reducing it to about 30% of the original length. Provide only the transformed text without any additional explanation.',
   },
   {
-    title: 'EN - Expand',
-    description: 'Expand the text with more details, examples, and explanations to make it more comprehensive and informative.',
+    title: '🇬🇧 Expand',
+    description: 'Expand the text with more details, examples, and explanations to make it more comprehensive and informative. Provide only the transformed text without any additional explanation.',
   },
 ];
 
 const DEFAULT_FRENCH_PRESETS = [
   {
-    title: 'FR - Rendre professionnel',
-    description: 'Réécrivez le texte pour qu\'il soit plus professionnel et formel tout en conservant le message principal et les informations clés.',
+    title: '🇫🇷 Rendre professionnel',
+    description: 'Réécrivez le texte pour qu\'il soit plus professionnel et formel tout en conservant le message principal et les informations clés. Fournissez uniquement le texte transformé sans aucune explication supplémentaire.',
   },
   {
-    title: 'FR - Simplifier',
-    description: 'Simplifiez le texte pour le rendre plus facile à comprendre, en utilisant des mots plus simples et des phrases plus courtes tout en gardant les idées principales.',
+    title: '🇫🇷 Simplifier',
+    description: 'Simplifiez le texte pour le rendre plus facile à comprendre, en utilisant des mots plus simples et des phrases plus courtes tout en gardant les idées principales. Fournissez uniquement le texte transformé sans aucune explication supplémentaire.',
   },
   {
-    title: 'FR - Corriger la grammaire',
-    description: 'Corrigez toutes les erreurs de grammaire, d\'orthographe et de ponctuation dans le texte. Conservez le style et le ton d\'origine.',
+    title: '🇫🇷 Corriger la grammaire',
+    description: 'Corrigez toutes les erreurs de grammaire, d\'orthographe et de ponctuation dans le texte. Conservez le style et le ton d\'origine. Fournissez uniquement le texte transformé sans aucune explication supplémentaire.',
   },
   {
-    title: 'FR - Résumer',
-    description: 'Créez un résumé concis des points principaux du texte, en le réduisant à environ 30% de la longueur d\'origine.',
+    title: '🇫🇷 Résumer',
+    description: 'Créez un résumé concis des points principaux du texte, en le réduisant à environ 30% de la longueur d\'origine. Fournissez uniquement le texte transformé sans aucune explication supplémentaire.',
   },
   {
-    title: 'FR - Développer',
-    description: 'Développez le texte avec plus de détails, d\'exemples et d\'explications pour le rendre plus complet et informatif.',
+    title: '🇫🇷 Développer',
+    description: 'Développez le texte avec plus de détails, d\'exemples et d\'explications pour le rendre plus complet et informatif. Fournissez uniquement le texte transformé sans aucune explication supplémentaire.',
   },
 ];
 
