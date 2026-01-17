@@ -14,7 +14,6 @@ interface TransformPreviewProps {
 }
 
 export const TransformPreview: React.FC<TransformPreviewProps> = ({
-  originalText,
   transformedText,
   isStreaming,
   error,
