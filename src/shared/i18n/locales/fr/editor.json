@@ -57,9 +57,9 @@
         "descriptionPlaceholder": "ex: Réécrivez le texte pour qu'il soit plus professionnel et formel...",
         "empty": "Aucun préréglage pour le moment. Créez votre premier préréglage !",
         "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce préréglage ?",
-        "addFrenchPresets": "🇫🇷 Ajouter les préréglages français",
-        "addEnglishPresets": "🇬🇧 Ajouter les préréglages anglais",
-        "addAllPresets": "🇫🇷 🇬🇧 Ajouter tous les préréglages"
+        "addFrenchPresets": "Ajouter les préréglages français",
+        "addEnglishPresets": "Ajouter les préréglages anglais",
+        "addAllPresets": "Ajouter tous les préréglages"
       }
     },
     "aiGenerator": {

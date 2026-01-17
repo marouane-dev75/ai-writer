@@ -1,10 +1,11 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $getSelection, $isRangeSelection, $createParagraphNode, $createTextNode, $getRoot } from 'lexical';
+import { $getSelection, $isRangeSelection, $getRoot } from 'lexical';
 import { MdClose } from 'react-icons/md';
 import { useTranslation } from '@/shared/i18n';
 import { Button, Switch } from '@/shared/ui';
 import { useAiGeneratorConfig } from '../hooks/useAiGeneratorConfig';
+import { deserializeFromMarkdown } from '../../shared';
 import { GeneratorPreview } from './GeneratorPreview';
 
 interface AiGeneratorProps {
@@ -73,39 +74,15 @@ export const AiGenerator: React.FC<AiGeneratorProps> = ({
     editor.update(() => {
       const selection = $getSelection();
 
-      // Create a new paragraph node with the generated text
-      const paragraphNode = $createParagraphNode();
-      const textNode = $createTextNode(currentStream);
-      paragraphNode.append(textNode);
-
       if ($isRangeSelection(selection)) {
-        // Get the selected node and insert after it
-        const nodes = selection.getNodes();
-        if (nodes.length > 0) {
-          const lastNode = nodes[nodes.length - 1];
-          const parentNode = lastNode.getParent();
-          
-          if (parentNode) {
-            // Find the top-level block node
-            let topLevelNode = lastNode;
-            while (topLevelNode.getParent() && topLevelNode.getParent()?.getType() !== 'root') {
-              topLevelNode = topLevelNode.getParent()!;
-            }
-            
-            // Insert after the top-level node
-            topLevelNode.insertAfter(paragraphNode);
-          } else {
-            // Fallback: insert at the end
-            selection.insertNodes([paragraphNode]);
-          }
-        } else {
-          // No nodes selected, insert at current position
-          selection.insertNodes([paragraphNode]);
-        }
+        // Parse markdown response and insert as formatted nodes
+        const nodes = deserializeFromMarkdown(currentStream);
+        selection.insertNodes(nodes);
       } else {
         // No selection, append to the end of the document
         const root = $getRoot();
-        root.append(paragraphNode);
+        const nodes = deserializeFromMarkdown(currentStream);
+        nodes.forEach(node => root.append(node));
       }
     });
 

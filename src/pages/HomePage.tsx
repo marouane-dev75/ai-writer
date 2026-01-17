@@ -7,7 +7,7 @@ export const HomePage = () => {
   const generatorRuntime = useAIRuntime();
 
   return (
-    <div className="h-[calc(100vh-10rem)] overflow-hidden">      
+    <div className="h-[calc(100vh-5rem)] overflow-hidden">
       {/* Text Editor */}
       <Editor 
         transformerRuntime={transformerRuntime}

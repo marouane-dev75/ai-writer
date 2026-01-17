@@ -51,7 +51,8 @@ export class MarkdownDeserializer {
   private parseNextNode(): LexicalNode | null {
     const line = this.lines[this.currentIndex];
     if (!line || line.trim() === '') {
-      return null;
+      // Create empty paragraph nodes to preserve line breaks
+      return $createParagraphNode();
     }
 
     // Check for headings
@@ -188,101 +189,87 @@ export class MarkdownDeserializer {
    * Parse inline markdown formatting and return formatted text nodes
    */
   private parseInlineFormatting(text: string): TextNode[] {
-    const nodes: TextNode[] = [];
-    let remaining = text;
-    let match;
+    interface FormatMatch {
+      start: number;
+      end: number;
+      content: string;
+      format: 'bold' | 'italic' | 'code' | 'strikethrough';
+    }
 
-    // Process bold (**text**)
+    const matches: FormatMatch[] = [];
+
+    // Find all bold matches (**text**)
     const boldRegex = /\*\*(.*?)\*\*/g;
-    while ((match = boldRegex.exec(remaining)) !== null) {
-      // Add text before the match
-      if (match.index > 0) {
-        const beforeText = remaining.substring(0, match.index);
-        if (beforeText) {
-          nodes.push(this.createTextNode(beforeText));
-        }
-      }
-
-      // Add the bold text
-      const boldText = match[1];
-      const boldNode = $createTextNode(boldText);
-      boldNode.toggleFormat('bold');
-      nodes.push(boldNode);
-
-      // Update remaining text
-      remaining = remaining.substring(match.index + match[0].length);
-      boldRegex.lastIndex = 0; // Reset regex state
+    let match;
+    while ((match = boldRegex.exec(text)) !== null) {
+      matches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        content: match[1],
+        format: 'bold',
+      });
     }
 
-    // Process italic (*text*)
-    const italicRegex = /\*(.*?)\*/g;
-    while ((match = italicRegex.exec(remaining)) !== null) {
-      // Add text before the match
-      if (match.index > 0) {
-        const beforeText = remaining.substring(0, match.index);
-        if (beforeText) {
-          nodes.push(this.createTextNode(beforeText));
-        }
-      }
-
-      // Add the italic text
-      const italicText = match[1];
-      const italicNode = $createTextNode(italicText);
-      italicNode.toggleFormat('italic');
-      nodes.push(italicNode);
-
-      // Update remaining text
-      remaining = remaining.substring(match.index + match[0].length);
-      italicRegex.lastIndex = 0; // Reset regex state
+    // Find all italic matches (*text*) - but avoid matching bold markers
+    const italicRegex = /(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g;
+    while ((match = italicRegex.exec(text)) !== null) {
+      matches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        content: match[1],
+        format: 'italic',
+      });
     }
 
-    // Process inline code (`text`)
+    // Find all inline code matches (`text`)
     const codeRegex = /`(.*?)`/g;
-    while ((match = codeRegex.exec(remaining)) !== null) {
-      // Add text before the match
-      if (match.index > 0) {
-        const beforeText = remaining.substring(0, match.index);
-        if (beforeText) {
-          nodes.push(this.createTextNode(beforeText));
-        }
-      }
-
-      // Add the code text
-      const codeText = match[1];
-      const codeNode = $createTextNode(codeText);
-      codeNode.toggleFormat('code');
-      nodes.push(codeNode);
-
-      // Update remaining text
-      remaining = remaining.substring(match.index + match[0].length);
-      codeRegex.lastIndex = 0; // Reset regex state
+    while ((match = codeRegex.exec(text)) !== null) {
+      matches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        content: match[1],
+        format: 'code',
+      });
     }
 
-    // Process strikethrough (~~text~~)
+    // Find all strikethrough matches (~~text~~)
     const strikethroughRegex = /~~(.*?)~~/g;
-    while ((match = strikethroughRegex.exec(remaining)) !== null) {
-      // Add text before the match
-      if (match.index > 0) {
-        const beforeText = remaining.substring(0, match.index);
-        if (beforeText) {
-          nodes.push(this.createTextNode(beforeText));
-        }
-      }
-
-      // Add the strikethrough text
-      const strikethroughText = match[1];
-      const strikethroughNode = $createTextNode(strikethroughText);
-      strikethroughNode.toggleFormat('strikethrough');
-      nodes.push(strikethroughNode);
-
-      // Update remaining text
-      remaining = remaining.substring(match.index + match[0].length);
-      strikethroughRegex.lastIndex = 0; // Reset regex state
+    while ((match = strikethroughRegex.exec(text)) !== null) {
+      matches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        content: match[1],
+        format: 'strikethrough',
+      });
     }
 
-    // Add any remaining text
-    if (remaining) {
-      nodes.push(this.createTextNode(remaining));
+    // Sort matches by start position
+    matches.sort((a, b) => a.start - b.start);
+
+    // Build nodes by walking through the text
+    const nodes: TextNode[] = [];
+    let currentPos = 0;
+
+    for (const formatMatch of matches) {
+      // Add plain text before this match
+      if (currentPos < formatMatch.start) {
+        const plainText = text.substring(currentPos, formatMatch.start);
+        nodes.push(this.createTextNode(plainText));
+      }
+
+      // Add the formatted text
+      const formattedNode = $createTextNode(formatMatch.content);
+      formattedNode.toggleFormat(formatMatch.format);
+      nodes.push(formattedNode);
+
+      // Update current position
+      currentPos = formatMatch.end;
+    }
+
+    // Add any remaining plain text
+    if (currentPos < text.length) {
+      const remainingText = text.substring(currentPos);
+      nodes.push(this.createTextNode(remainingText));
     }
 
     // If no formatting was found, return the original text as a single node
