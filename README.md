@@ -38,7 +38,7 @@ A modern desktop application combining rich text editing with AI-powered content
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/marouane-dev75/ai-writer
 cd ai-writer
 
 # Install dependencies
