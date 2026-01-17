@@ -31,16 +31,6 @@ export const TransformPreview: React.FC<TransformPreviewProps> = ({
       </h4>
 
       <div className="space-y-3">
-        {/* Original Text */}
-        <div>
-          <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">
-            {t('editor.aiTransformer.preview.original')}
-          </label>
-          <div className="p-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-600 text-sm max-h-32 overflow-y-auto">
-            <MarkdownPreview content={originalText} />
-          </div>
-        </div>
-
         {/* Transformed Text */}
         <div>
           <label className="text-xs font-medium text-gray-600 dark:text-gray-400 block mb-1">
